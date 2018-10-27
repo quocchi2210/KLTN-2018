@@ -16,7 +16,13 @@ Route::group(['middleware' => 'checktoken'], function () {
 	Route::get('profile', "ProfileController@getProfile");
 	Route::put('update', "ProfileController@updateProfile");
 	Route::post('change', "Api\ChangePasswordController@change");
+	Route::group(['prefix' => 'store'], function(){
+		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
+	});
+
+
 });
+
 Route::group(['middleware' => 'checkadmin'], function () {
 	Route::get('user', "Api\Admin\DashboardController@getUser");
 	Route::get('user/search', "Api\Admin\DashboardController@searchUser");
@@ -32,3 +38,7 @@ Route::post('login', "AuthController@login");
 Route::post('register', "Api\RegisterController@register");
 Route::post('user/reset', "Api\PasswordResetController@resetUser");
 Route::post('admin/reset', "Api\Admin\DashboardController@resetAdmin");
+
+
+
+

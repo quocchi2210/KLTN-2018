@@ -11,17 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-
-    /**
-     * @param Request $request
-     * @return Request
-     */
     /**
      * @SWG\Get(
      *   path="/api/profile",
      *     tags={"User Profile"},
      *   summary="Show Profile",
-     *   @SWG\Response(
+   *   @SWG\Response(
      *     response=200,
      *     description="A list with products"
      *   ),
@@ -33,12 +28,17 @@ class ProfileController extends Controller
      * )
      */
 
+    /**
+     * @param Request $request
+     * @return Request
+     */
+    
+
     public function getProfile(Request $request)
     {
         $errorCode = $this->apiErrorCodes;
         $token = $request->headers->get('token');
-        $data = User::select('id','name', 'email',DB::raw("CONCAT(country_code,phone_number) AS 'Phone Number'"),"date_of_birth AS DOB","gender AS Gender",
-            DB::raw("CONCAT('(',init_lat,',',init_lng,')') AS 'Location'"),"address AS Address","about AS Bio")->where('id',(DB::table('token')->where('token', $token)->first()->user_token_id))->first();
+        $data = User::select('idUser','fullName', 'email')->where('idUser',(DB::table('token')->where('token', $token)->first()->user_token_id))->first();
         if (empty($data)) {
             return $this->respondWithErrorMessage(
                 $errorCode['no_user'],
