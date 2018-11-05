@@ -17,3 +17,7 @@ Route::get('/', function () {
 
 Route::get('send-message', 'RedisController@index');
 Route::post('send-message', 'RedisController@postSendMessage');
+
+Route::get('map_test', function () {
+	return view('map_test');
+});
