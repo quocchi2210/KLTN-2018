@@ -17,3 +17,6 @@ Route::get('/', function () {
 
 Route::get('send-message', 'RedisController@index');
 Route::post('send-message', 'RedisController@postSendMessage');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

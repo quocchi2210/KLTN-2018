@@ -49,6 +49,19 @@ class User extends Authenticatable {
 	public function role() {
 		return $this->belongsToMany('App\Role');
 	}
+
+    public function getJWTIdentifier() {
+        return $this->getKey(); // Eloquent Model method
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims() {
+        return [];
+    }
 //    public function friendsOfMine()
 	//    {
 	//        return $this->belongsToMany(User::class, 'user_friend', 'user_id', 'friend_id');
