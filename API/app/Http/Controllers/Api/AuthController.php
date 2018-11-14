@@ -110,8 +110,8 @@ class AuthController extends Controller {
 			]);
 			// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
 			$user = DB::table('users')
-				->join('token', 'users.idUser', '=', 'token.user_token_id')
-				->select('users.idUser', 'users.fullName', 'users.email', 'token.token', 'token.expired_at')
+				->join('tokens', 'users.idUser', '=', 'tokens.user_token_id')
+				->select('users.idUser', 'users.fullName', 'users.email', 'tokens.token', 'tokens.expired_at')
 				->get()
 				->last();
 			return response()->json([
@@ -143,14 +143,14 @@ class AuthController extends Controller {
 		if ($CountryCode != null) {
 			if (auth::attempt(['country_code' => $CountryCode, 'phone_number' => $phone, 'password' => $password])) {
 				Token::create([
-					'token' => str_random(32),
+					'tokens' => str_random(32),
 					'user_token_id' => auth()->user()->idUser,
 					'expired_at' => Carbon::now()->addDays(30),
 				]);
 				// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
 				$user = DB::table('users')
-					->join('token', 'users.idUser', '=', 'token.user_token_id')
-					->select('users.idUser', 'users.fullName', 'users.email', 'users.phone_number', 'token.token', 'token.expired_at')
+					->join('tokens', 'users.idUser', '=', 'tokens.user_token_id')
+					->select('users.idUser', 'users.fullName', 'users.email', 'users.phone_number', 'tokens.token', 'tokens.expired_at')
 					->get()
 					->last();
 				return response()->json([
@@ -171,10 +171,10 @@ class AuthController extends Controller {
 					'user_token_id' => auth()->user()->idUser,
 					'expired_at' => Carbon::now()->addDays(30),
 				]);
-				// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
+				// User::where('id', auth()->user()->id)->update(['disabled' => false]);
 				$user = DB::table('users')
-					->join('token', 'users.idUser', '=', 'token.user_token_id')
-					->select('users.idUser', 'users.name', 'users.email', 'users.phone_number', 'token.token', 'token.expired_at')
+					->join('tokens', 'users.idUser', '=', 'tokens.user_token_id')
+					->select('users.idUser', 'users.name', 'users.email', 'users.phone_number', 'tokens.token', 'tokens.expired_at')
 					->get()
 					->last();
 				return response()->json([
@@ -210,7 +210,7 @@ class AuthController extends Controller {
 		$token = $request->header('token');
 		//return array("err" => false,...)
 		//  return $this->respondWithSuccess($token);
-		$idUser = User::where('idUser', (DB::table('token')->where('token', $token)->first()->user_token_id))->first()->idUser;
+		$idUser = User::where('id', (DB::table('tokens')->where('token', $token)->first()->user_token_id))->first()->id;
 		DB::table('token')->where('user_token_id', '=', $idUser)->delete();
 		return response()->json([
 			'error' => false,

@@ -73,6 +73,7 @@ class Controller extends BaseController {
 		$this->apiSuccessMessage = Lang::get('apiSuccessMessage');
 	}
 
+
 	/**
 	 * Getter for statusCode.
 	 *

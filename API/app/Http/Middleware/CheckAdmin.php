@@ -22,7 +22,7 @@ class CheckAdmin extends Controller
         $errorCode = $this->apiErrorCodes;
         $api_token = $request->header('token');
         $token_db = DB::table('token')->where('token',$api_token)->first();
-        $role_id = User::where('id',(DB::table('token')->where('token', $api_token)->first()->user_token_id))->first()->role_id;
+        $role_id = User::where('idUser',(DB::table('tokens')->where('token', $api_token)->first()->user_token_id))->first()->role_id;
         if(!$token_db ){
             return $this->respondWithErrorMessage(
                 $errorCode['token_error'],
@@ -33,8 +33,8 @@ class CheckAdmin extends Controller
         }
 
         else {
-                $user = User::where('id',(DB::table('token')->where('token', $api_token)->first()->user_token_id))->first();
-                $authen_id = User::where('id',(DB::table('token')->where('token', $api_token)->first()->user_token_id))->first()->id;
+                $user = User::where('idUser',(DB::table('tokens')->where('token', $api_token)->first()->user_token_id))->first();
+                $authen_id = User::where('id',(DB::table('tokens')->where('token', $api_token)->first()->user_token_id))->first()->id;
                 $request->request->add(array('user' => $user));
                 $request->request->add(array('authen_id'=>$authen_id));
                 return $next($request);

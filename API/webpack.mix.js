@@ -1,4 +1,4 @@
-let mix = require('laravel-mix');
+var mix = require('laravel-mix');
 
 /*
  |--------------------------------------------------------------------------
@@ -13,3 +13,10 @@ let mix = require('laravel-mix');
 
 mix.react('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
+
+/**
+ * Mix Asset for app
+ * Login page
+ */
+mix.js('resources/assets/js/login.js', 'public/app/js')
+    .sass('resources/assets/sass/login.scss', 'public/app/css');

@@ -27,18 +27,19 @@ class CreateUsersTable extends Migration
             $table->string('username', 15)->nullable()->default(null)->unique();
             $table->string('email', 191)->nullable()->default(null)->unique();
             $table->string('fullName', 50)->nullable()->default(null);
-            $table->string('idNumber', 9)->unique()->default(null);
+            $table->string('idNumber', 9)->nullable()->default(null)->unique();
             $table->string('phoneNumber', 11)->nullable()->default(null);
-            $table->string('avatar', 191)->default(null);
+            $table->string('avatar', 191)->nullable()->default(null);
             $table->date('dateOfBirth')->nullable()->default(null);
             $table->string('gender', 10)->nullable()->default(null);
             $table->text('addressUser')->nullable()->default(null);
-            $table->string('activationCode', 191)->default(null);
-            $table->tinyInteger('isActivated')->default('0');
-            $table->string('tokenPasswordRecovery', 191)->default(null);
-            $table->dateTime('tokenExpirationTime')->default(null);
+            $table->string('activationCode', 191)->nullable()->default(null);
+            $table->tinyInteger('isActivated')->nullable()->default('0');
+            $table->string('remember_token', 191)->nullable()->default(null);
+            $table->string('tokenPasswordRecovery', 191)->nullable()->default(null);
+            $table->dateTime('tokenExpirationTime')->nullable()->default(null);
             $table->string('password', 191);
-            $table->integer('pinCode')->default(null);
+            $table->integer('pinCode')->nullable()->default(null);
             $table->integer('roleId')->default('1')->unsigned();
 
             $table->foreign('roleId')

@@ -38,7 +38,7 @@ class ProfileController extends Controller
     {
         $errorCode = $this->apiErrorCodes;
         $token = $request->headers->get('token');
-        $data = User::select('idUser','fullName', 'email')->where('idUser',(DB::table('token')->where('token', $token)->first()->user_token_id))->first();
+        $data = User::select('idUser','fullName', 'email')->where('idUser',(DB::table('tokens')->where('token', $token)->first()->user_token_id))->first();
         if (empty($data)) {
             return $this->respondWithErrorMessage(
                 $errorCode['no_user'],

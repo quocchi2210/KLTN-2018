@@ -8,7 +8,7 @@ use User;
 class Token extends Model
 {
 
-    public $table = 'token';
+    public $table = 'tokens';
     protected $fillable = [
         'token', 'user_token_id', 'expired_at',
     ];

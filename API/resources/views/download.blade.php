@@ -14,7 +14,7 @@
                                     <img id="getAndroid" src="images/icon-android.svg"/>
                                 </a>
                                 <p>Continue with
-                                <a href="">Create shipment on Website</a></p>
+                                <a href="{{route('home')}}">Create shipment on Website</a></p>
                             </div>
                         </div>
                     </div>

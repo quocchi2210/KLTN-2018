@@ -11,19 +11,21 @@
 |
  */
 
-//Route::get('/', function () {
-//	return view('welcome');
-//});
-Route::get('/', array('as' => 'home', function()
-{
-    return view('welcome');
-}));
+Route::get('/', function () {
+	return view('welcome');
+});
 Route::get('/download', function () {
     return view('download');
+});
+Route::get('/store', function () {
+    return view('welcomeStore');
 });
 
 Route::get('send-message', 'RedisController@index');
 Route::post('send-message', 'RedisController@postSendMessage');
-Auth::routes();
+Route::group(['prefix' => 'store'], function(){
+    Auth::routes();
+    Route::get('/home', 'HomeController@index')->name('home');
+});
 
-//Route::get('/home', 'HomeController@index')->name('home');
+

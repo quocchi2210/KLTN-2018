@@ -1,77 +1,136 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lux Express</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}">
-                        {{ csrf_field() }}
+    <link rel="stylesheet" href="{{ mix('app/css/login.css') }}">
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ asset('plugins/iCheck/square/blue.css') }}">
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+    <div class="register-logo">
+        <a href="{{ route('home') }}"><b>Lux </b>Express</a>
+    </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+    <div class="register-box-body">
+        <p class="login-box-msg">Register a new membership</p>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        {!! Form::open(['route' => 'register', 'method' => 'POST']) !!}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <div class="bussiness-info">
+            <div class="form-group has-feedback">
+                {!! Form::label('store-name', 'Store Name') !!}
+                {!! Form::text(
+                    'Store[name]',
+                    old('Store[name]'),
+                    [
+                        'id' => 'store-name',
+                        'class' => 'form-control',
+                        'placeholder' => 'Acme Inc.',
+                        'required autofocus'
+                    ]
+                    )
+                !!}
+                <span class="glyphicon glyphicon-bold form-control-feedback"></span>
             </div>
         </div>
+            <div class="user-info">
+                <div class="form-group has-feedback">
+                    {!! Form::label('store-name', 'Email') !!}
+                    {!! Form::email(
+                            'User[email]',
+                            old('User[email]'),
+                            [
+                                'id' => 'user-email',
+                                'class' => 'form-control',
+                                'placeholder' => 'john.doe@example.com',
+                                'autocomplete' => 'off',
+                                'required'
+                            ]
+                        )
+                    !!}
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    {!! Form::label('store-name', 'Password') !!}
+                    {!! Form::password(
+                                'User[password]',
+                                [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Password',
+                                    'required'
+                                ]
+                            )
+                        !!}
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    {!! Form::label('store-name', 'Confirm') !!}
+                    {!! Form::password(
+                                'User[password_confirmation]',
+                                [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Confirm Password',
+                                    'required'
+                                ]
+                            )
+                        !!}
+                    <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                </div>
+            </div>
+        <div class="form-group no-margin">
+            {!! Form::submit('Register', ['class' => 'btn btn-primary btn-block']) !!}
+        </div>
+        @guest
+            <div class="text-center small" style="margin-top: 1rem !important;">
+                Already have an account? <a href="{{ route('login') }}">Login here</a>
+            </div>
+        @endguest
+        {!! Form::close() !!}
+
     </div>
+    <!-- /.form-box -->
 </div>
-@endsection
+<!-- /.register-box -->
+
+<script src="{{ mix('app/js/login.js') }}"></script>
+<!-- iCheck -->
+<script src="{{ asset('plugins/iCheck/icheck.min.js') }}"></script>
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' /* optional */
+        });
+    });
+</script>
+</body>
+</html>
