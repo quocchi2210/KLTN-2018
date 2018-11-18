@@ -17,7 +17,9 @@ Route::group(['middleware' => 'checktoken'], function () {
 	Route::put('update', "ProfileController@updateProfile");
 	Route::post('change', "Api\ChangePasswordController@change");
 	Route::group(['prefix' => 'store'], function(){
+		Route::post('insertProfileStore', "Api\StoreController@insertProfileStore");
 		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
+		Route::post('showProfileStore', "Api\StoreController@showProfileStore");
 	});
 
 
