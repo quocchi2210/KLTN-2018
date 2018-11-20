@@ -11,16 +11,17 @@
 |
  */
 
-Route::group(['middleware' => 'checktoken'], function () {
-	Route::post('logout', "AuthController@logout");
-	Route::get('profile', "ProfileController@getProfile");
-	Route::put('update', "ProfileController@updateProfile");
-	Route::post('change', "Api\ChangePasswordController@change");
-	Route::group(['prefix' => 'store'], function(){
-		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
-	});
-
-
+//Route::group(['middleware' => 'checktoken'], function () {
+//
+//});
+Route::group(['middleware' => 'jwt'], function () {
+    Route::post('logout', "AuthController@logout");
+    Route::put('update', "ProfileController@updateProfile");
+    Route::get('profile', "ProfileController@getProfile");
+    Route::post('change', "Api\ChangePasswordController@change");
+    Route::group(['prefix' => 'store'], function(){
+        Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
+    });
 });
 
 Route::group(['middleware' => 'checkadmin'], function () {

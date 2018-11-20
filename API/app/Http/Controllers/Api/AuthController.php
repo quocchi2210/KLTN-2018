@@ -8,6 +8,7 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
 
 /**
@@ -21,7 +22,7 @@ use Validator;
  *   securityDefinition="api_key",
  *   type="apiKey",
  *   in="header",
- *   name="token"
+ *   name="Authorization"
  * )
  * )
  */
@@ -102,27 +103,23 @@ class AuthController extends Controller {
 		if ($validator->fails()) {
 			return $this->errorWithValidation($validator);
 		}
-		if (Auth::attempt(['email' => $email, 'password' => $password])) {
-			Token::create([
-				'token' => str_random(32),
-				'user_token_id' => auth()->user()->idUser,
-				'expired_at' => Carbon::now()->addDays(30),
-			]);
-			// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
-			$user = DB::table('users')
-				->join('tokens', 'users.idUser', '=', 'tokens.user_token_id')
-				->select('users.idUser', 'users.fullName', 'users.email', 'tokens.token', 'tokens.expired_at')
-				->get()
-				->last();
-			return response()->json([
-				'error' => false,
-				'data' => $user,
-				'errors' => null,
-			], 200);
-		}
-		return $this->respondWithErrorMessage(
-			$errorCode['authentication'],
-			$errorCode['ApiErrorCodes']['authentication'], 400);
+        $input = $request->only('email', 'password');
+        $jwt_token = null;
+
+        if (!$jwt_token = JWTAuth::attempt($input)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Email or Password',
+            ], 401);
+        }
+        return response()->json([
+            'success' => true,
+            'token' => $jwt_token,
+        ]);
+
+//		return $this->respondWithErrorMessage(
+//			$errorCode['authentication'],
+//			$errorCode['ApiErrorCodes']['authentication'], 400);
 	}
 	public function loginPhone(Request $request) {
 		$errorCode = $this->apiErrorCodes;

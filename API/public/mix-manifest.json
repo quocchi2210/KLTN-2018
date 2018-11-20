@@ -1,6 +1,9 @@
 {
+    "/app/js/login.js": "/app/js/login.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/app/css/login.css": "/app/css/login.css",
-    "/app/js/login.js": "/app/js/login.js"
+    "/backend/css/app.css": "/backend/css/app.css",
+    "/app/js/app.js": "/app/js/app.js",
+    "/js/jquery.js": "/js/jquery.js"
 }

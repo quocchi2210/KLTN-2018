@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\User;
 use DB;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProfileController extends Controller
 {
@@ -28,24 +29,13 @@ class ProfileController extends Controller
      * )
      */
 
-    /**
-     * @param Request $request
-     * @return Request
-     */
     
 
-    public function getProfile(Request $request)
+    public function getProfile()
     {
-        $errorCode = $this->apiErrorCodes;
-        $token = $request->headers->get('token');
-        $data = User::select('idUser','fullName', 'email')->where('idUser',(DB::table('tokens')->where('token', $token)->first()->user_token_id))->first();
-        if (empty($data)) {
-            return $this->respondWithErrorMessage(
-                $errorCode['no_user'],
-                $errorCode['ApiErrorCodes']['no_user'], 401);
-        }else{
-            return $this->respondWithSuccess($data);
-        }
+
+        $user = JWTAuth::authenticate();
+        return response()->json(['user' => $user]);
 
     }
     /**

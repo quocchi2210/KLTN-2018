@@ -20,3 +20,7 @@ mix.react('resources/assets/js/app.js', 'public/js')
  */
 mix.js('resources/assets/js/login.js', 'public/app/js')
     .sass('resources/assets/sass/login.scss', 'public/app/css');
+
+mix.js('resources/assets/js/app.js', 'public/app/js')
+    .sass('resources/assets/store/sass/app.scss', 'public/backend/css');
+mix.js('resources/assets/js/jquery.js', 'public/js');

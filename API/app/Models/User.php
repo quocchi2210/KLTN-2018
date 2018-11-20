@@ -4,9 +4,10 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Token;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable {
+
+class User extends Authenticatable implements JWTSubject {
 	use Notifiable;
 	protected $primaryKey = 'idUser';
 
@@ -42,17 +43,21 @@ class User extends Authenticatable {
 	 */
 
 	public function token() {
-		return $this->belongsTo('App\Token');
+		return $this->hasOne('App\Token','user_token_id','idUser');
 	}
 	public function role() {
 		return $this->belongsToMany('App\Role');
 	}
 
-    public function getJWTIdentifier() {
-        return $this->getKey(); // Eloquent Model method
-    }
-    public function store(){
-        return $this->hasOne('App\Store');
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
     }
 
     /**
@@ -60,9 +65,20 @@ class User extends Authenticatable {
      *
      * @return array
      */
-    public function getJWTCustomClaims() {
+    public function getJWTCustomClaims()
+    {
         return [];
     }
+    public function store(){
+        return $this->hasOne('App\Store','idUser','idUser');
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+
 
 	protected $hidden = [
 		'password','tokenPasswordRecovery',

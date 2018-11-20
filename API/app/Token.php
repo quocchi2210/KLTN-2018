@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use User;
 
 class Token extends Model
 {
@@ -13,6 +12,6 @@ class Token extends Model
         'token', 'user_token_id', 'expired_at',
     ];
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','user_token_id','idUser');
     }
 }

@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'api.auth' => \App\Http\Middleware\ApiAuthenticate::class,
         'checktoken'=> \App\Http\Middleware\CheckToken::class,
         'checkadmin'=> \App\Http\Middleware\CheckAdmin::class,
+        'jwt' => \App\Http\Middleware\jwt::class
     ];
 }
