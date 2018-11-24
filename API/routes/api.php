@@ -11,34 +11,6 @@
 |
  */
 
-Route::group(
-
-  ['prefix' => 'auth']
-
-, function () {
-
-    Route::post('loginJWT', 'AuthController@loginJWT');
-    Route::post('logoutJWT', 'AuthController@logoutJWT');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
-
-    Route::group(['prefix' => 'store'], function(){
-        Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
-    });
-
-});
-
-Route::group(
-
-['middleware' => 'jwt']
-, function () {
-
-    Route::group(['prefix' => 'store'], function(){
-        Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
-    });
-
-});
-
 Route::group(['middleware' => 'jwt'], function () {
     Route::post('logout', "AuthController@logout");
     Route::put('update', "ProfileController@updateProfile");
