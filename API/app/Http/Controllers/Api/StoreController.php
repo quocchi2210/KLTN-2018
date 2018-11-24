@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
+use Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class StoreController extends Controller
 {
@@ -71,43 +73,26 @@ class StoreController extends Controller
 		$start_working_time = $request->get('start_working_time');
 		$end_working_time = $request->get('end_working_time');
 
-		$user_id = $request->authen_id;
+		$idUser = $request->idUser;
+         
+		if ($request->isMethod('post')) {
 
-		$curl = curl_init();
+			$affected = DB::insert('insert into stores (idUser, nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$idUser,$name_store,$type_store,$address_store,$description_store,$latitude_store,$longitude_store ,$start_working_time,$end_working_time ]);
 
-		//curl_setopt($curl, CURLOPT_URL, 'https://maps.googleapis.com/maps/api/geocode/json?address=' . rawurlencode('TPHCM'));
-		curl_setopt($curl, CURLOPT_URL, 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDZg4UjrDXfteRf8s6NErw0BKVfDSledVE');
-		
-
-		curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
-
-		$json = curl_exec($curl);
-
-		curl_close ($curl);
-
-		return response()->json([
+			if($affected){
+				return response()->json([
 					'error' => false,
-					'data' => $json,
+					'data' => $affected,
 					'errors' => null,
 				], 200);
-
-		// if ($request->isMethod('post')) {
-
-		// 	$affected = DB::insert('insert into store (idUser, nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$user_id,$name_store,$type_store,$address_store,$description_store,$latitude_store,$longitude_store ,$start_working_time,$end_working_time ]);
-
-		// 	if($affected){
-		// 		return response()->json([
-		// 			'error' => false,
-		// 			'data' => $affected,
-		// 			'errors' => null,
-		// 		], 200);
-		// 	}else{
-		// 		return $this->respondWithErrorMessage(
-		// 			$errorCode['authentication'],
-		// 			$errorCode['ApiErrorCodes']['authentication'],
-		// 		, 400);
-		// 	}
-		// }
+			}else{
+				return response()->json([
+                         'error' => true,
+                         'data' => $affected,
+                         'errors' => null,
+                    ], 400);
+			}
+		}
 		
 	}
 }
