@@ -67,6 +67,12 @@ class CreateOrdersTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
+            $table->unsignedInteger('idOrderStatus');
+            $table->foreign('idOrderStatus')
+                ->references('idStatus')->on('order_status')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->Timestamps();
         });
     }
