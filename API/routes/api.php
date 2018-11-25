@@ -19,7 +19,14 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::group(['prefix' => 'store'], function(){
         Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
     });
+
 });
+
+  Route::group(['prefix' => 'shipper'], function(){
+        Route::post('showOrder', "Api\ShipperController@showOrder");
+        Route::post('showHistory', "Api\ShipperController@showHistory");
+        Route::post('updateStatus', "Api\ShipperController@updateStatus");
+    });
 
 Route::group(['middleware' => 'checkadmin'], function () {
 	Route::get('user', "Api\Admin\DashboardController@getUser");

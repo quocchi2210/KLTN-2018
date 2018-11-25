@@ -12,7 +12,7 @@ class StoreController extends Controller
 {
     /**
      * @SWG\POST(
-     *   path="/api/store/updateProfileStore",
+     *   path="/api/store/showOrder",
      *     tags={"Store"},
      *   summary="Show Profile",
      *   @SWG\Parameter(
