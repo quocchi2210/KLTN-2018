@@ -18,7 +18,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
         <script>
 
-        var socket = io('http://localhost:6001')
+        var socket = io('https://35.237.188.74:6001');
         socket.on('chat:message',function(data){
             console.log(data)
             $('body').append('<p>'+data+'</p>')
