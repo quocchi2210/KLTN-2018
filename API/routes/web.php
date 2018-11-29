@@ -26,6 +26,7 @@ Route::post('send-message', 'RedisController@postSendMessage');
 Route::group(['prefix' => 'store'], function(){
     Auth::routes();
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/orders', 'OrderController');
 });
 
 
