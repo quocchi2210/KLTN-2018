@@ -18,14 +18,14 @@
 <!-- Site wrapper -->
 <div class="wrapper" id="app">
 
-    @include('partials.navbar')
-    <!-- =============================================== -->
+@include('partials.admin.navbar')
+<!-- =============================================== -->
 
-    @include('partials.sidebar')
+@include('partials.admin.sidebar')
 
 
 
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -34,16 +34,16 @@
 
         <!-- Main content -->
         <section class="content">
-            @include('partials.notifications')
+            @include('partials.admin.notifications')
             @yield('content')
             <router-view></router-view>
         </section>
     </div>
     <!-- /.content-wrapper -->
 
-    @include('partials.footer')
+    @include('partials.admin.footer')
 
-    @include('partials.control_sidebar')
+    @include('partials.admin.control_sidebar')
 </div>
 <!-- ./wrapper -->
 
