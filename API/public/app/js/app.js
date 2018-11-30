@@ -19683,9 +19683,9 @@ window._ = __webpack_require__(1);
  */
 
 try {
-  // window.$ = window.jQuery = require('jquery');
+    // window.$ = window.jQuery = require('jquery');
 
-  __webpack_require__(4);
+    __webpack_require__(4);
 } catch (e) {}
 __webpack_require__(5);
 

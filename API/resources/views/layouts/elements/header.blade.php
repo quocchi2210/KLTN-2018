@@ -16,11 +16,13 @@
                                 <div class="tab-content">
                                     <div class="tab-content-inner active" data-content="signup">
                                         <h3>Tracking Your Bill</h3>
-                                        <form action="#">
+                                        <form action="{{route('tracking')}}" method="POST">
+                                            {{ csrf_field() }}
                                             <div class="row form-group">
                                                 <div class="col-md-12">
                                                     <label for="fullname">Your Bill Of Lading</label>
                                                     <input type="text" id="fullname"
+                                                           name="bill_of_lading"
                                                            placeholder="Enter the bill of lading" class="form-control">
                                                 </div>
                                             </div>
