@@ -12,6 +12,8 @@ Route::get('/download', function () {
     return view('download');
 });
 
+Route::post('/tracking', ['as' => 'tracking', 'uses' => 'OrderController@tracking']);
+
 
 
 /*Admin home route*/

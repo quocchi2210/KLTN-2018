@@ -7,6 +7,7 @@ use App\OrderStatus;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class OrderController extends Controller
@@ -21,6 +22,14 @@ class OrderController extends Controller
         $orders = Order::all();
         $status = OrderStatus::all();
         return view('order.index', ['orders' => $orders,'status' => $status]);
+    }
+
+    public function tracking(Request $request)
+    {
+        $bill = $request->get('bill_of_lading');
+        $idOrderStatus = DB::table('orders')->where('billOfLading',$bill)->first()->idOrderStatus;
+        $status = DB::table('order_status')->where('idStatus',$idOrderStatus)->first()->statusName;
+        return view('tracking.trackingStatus', ['status' => $status]);
     }
 
     /**
