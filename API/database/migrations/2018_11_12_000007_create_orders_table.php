@@ -25,12 +25,6 @@ class CreateOrdersTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('idOrder');
 
-            $table->unsignedInteger('idUser');
-            $table->foreign('idUser')
-                ->references('idUser')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
             $table->unsignedInteger('idStore');
             $table->foreign('idStore')
                 ->references('idStore')->on('stores')

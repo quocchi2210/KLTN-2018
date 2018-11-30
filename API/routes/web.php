@@ -1,31 +1,37 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
- */
 
+
+/*Home route*/
 Route::get('/', function () {
 	return view('welcome');
 });
+
+/*Download app route*/
 Route::get('/download', function () {
     return view('download');
 });
-Route::get('/store', function () {
-    return view('welcomeStore');
+
+
+
+/*Admin home route*/
+Route::get('admin/login', ['as' => 'getLogin', 'uses' => 'Admin\AuthController@getLogin']);
+Route::post('admin/login', ['as' => 'postLogin', 'uses' => 'Admin\AuthController@postLogin']);
+Route::post('admin/logout', ['as' => 'getLogout', 'uses' => 'Admin\AuthController@getLogout']);
+
+Route::group(['middleware' => 'CheckAdmin', 'prefix' => 'admin'], function() {
+    Route::get('/', ['as' => 'homeAdmin', 'uses' => 'Admin\AdminController@index']);
+    Route::get('/orders', ['as' => 'orderAdmin', 'uses' => 'Admin\AdminController@getOrders']);
 });
 
 Route::get('send-message', 'RedisController@index');
 Route::post('send-message', 'RedisController@postSendMessage');
-Route::group(['prefix' => 'store'], function(){
-    Auth::routes();
-    Route::get('/home', 'HomeController@index')->name('home');
+
+/*Store route*/
+Auth::routes();
+Route::group(['middleware' => 'CheckStore', 'prefix' => 'store'], function(){
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::resource('/orders', 'OrderController');
 });
 
 
