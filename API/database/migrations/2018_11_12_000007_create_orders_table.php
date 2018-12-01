@@ -55,7 +55,7 @@ class CreateOrdersTable extends Migration
             $table->double('priceService');
             $table->double('totalMoney');
 
-            $table->unsignedInteger('idShipper');
+            $table->unsignedInteger('idShipper')->nullable();
             $table->foreign('idShipper')
                 ->references('idShipper')->on('shippers')
                 ->onDelete('cascade')
