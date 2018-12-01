@@ -51,7 +51,6 @@ class CreateOrdersTable extends Migration
                 ->onUpdate('cascade');
 
             $table->tinyInteger('totalWeight');
-            $table->double('totalPriceProduct');
             $table->double('priceService');
             $table->double('totalMoney');
 
