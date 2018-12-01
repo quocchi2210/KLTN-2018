@@ -16,19 +16,23 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('update', "ProfileController@updateProfile");
     Route::get('profile', "ProfileController@getProfile");
     Route::post('change', "Api\ChangePasswordController@change");
- 
 
-});
-
-   Route::group(['prefix' => 'store'], function(){
+    Route::group(['prefix' => 'store'], function(){
         Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
         Route::post('showProfileStore', "Api\StoreController@showProfileStore");
         Route::post('insertProfileStore', "Api\StoreController@insertProfileStore");
 
         Route::post('showOrder', "Api\StoreController@showOrder");
         Route::post('showDetailOrder', "Api\StoreController@showDetailOrder");
+        Route::post('insertOrderStore', "Api\StoreController@insertOrderStore");
         Route::post('updateOrderStore', "Api\StoreController@updateOrderStore");
+        Route::post('deleteOrderStore', "Api\StoreController@deleteOrderStore");
     });
+ 
+
+});
+
+
 
   Route::group(['prefix' => 'shipper'], function(){
         Route::post('showOrder', "Api\ShipperController@showOrder");

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Config;
 class StoreController extends Controller
 {
     /**
@@ -363,7 +363,7 @@ class StoreController extends Controller
 
      /**
      * @SWG\POST(
-     *   path="/api/store/updateOrderStore",
+     *   path="/api/store/insertOrderStore",
      *     tags={"Store"},
      *   summary="Show Profile",
      *   @SWG\Parameter(
@@ -444,73 +444,316 @@ class StoreController extends Controller
      * )
      */
 
+     public function insertOrderStore(Request $request) {
+          if ($request->isMethod('post')) {
+
+
+               $idUser = $request->idUser;
+               $idUser = 1;
+
+               $result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+               if($result_store->count() > 0){
+
+                    $bill_of_lading = $request->get('bill_of_lading');
+                    $bill_of_lading = 'LUXABC1234';
+                    $name_receiver = $request->get('name_receiver');
+                    $address_receiver = $request->get('address_receiver');
+                    $lat = $request->get('latitude_receiver');
+                    $long = $request->get('longitude_receiver');
+                    $phone = $request->get('phone_receiver');
+                    $email = $request->get('email_receiver');
+                    $description = $request->get('description_order'); 
+                    $cod = $request->get('phone_receiver');
+                    $time_delivery = $request->get('time_delivery');
+                    $distance_shipping = $request->get('distance_shipping');
+                    $id_service_type = $request->get('id_service_type');
+                    $total_weight = $request->get('total_weight');
+                    $price_service = 400;
+                    $total_money = $request->get('total_money');
+                    $id_shipper = $request->get('id_shipper');
+                    $id_order_status = $request->get('id_order_status');
+
+
+
+                    $lat = 11.3;
+                    $long = 12.3;
+
+                    $time_delivery = '2018-12-11 00:00:00';
+                    $distance_shipping = 12;
+                    $store_id = $result_store[0]->idStore;
+                    $total_money = 123;
+
+                    $data_created = date('Y-m-d H:i:s');
+                    // $affected = DB::table('stores')->where('idStore', $store_id)->update([
+                    //           'idStore' => $store_id,
+                    //           'billOfLading' => $bill_of_lading,
+                    //           'nameReceiver' => $name_receiver,
+                    //           'addressReceiver' => $address_receiver,
+                    //           'latitudeReceiver' => $lat,
+                    //           'longitudeReceiver' => $long,
+                    //           'phoneReceiver' => $phone,
+                    //           'emailReceiver' => $email,
+                    //           'descriptionOrder' => $description,
+                    //           'COD' => $cod,
+                    //           'timeDelivery' => $time_delivery,
+                    //           'distanceShipping' => $distance_shipping,
+                    //           'idServiceType' => $id_service_type,
+                    //           'totalWeight' => $total_weight,
+                    //           'priceService' => $price_service,
+                    //           'totalMoney' => $total_money,
+                    //           'idOrderStatus' => Config::get('constants.status_type.pending'),
+                    //      ]);
+
+                    $affected = DB::insert('insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id,$bill_of_lading,$name_receiver,$address_receiver,$lat,$long,$phone ,$email,$description,$cod,$time_delivery,$distance_shipping,$id_service_type,$total_weight,$price_service,$total_money,Config::get('constants.status_type.pending'),$data_created]);
+
+                    if($affected){
+                         return response()->json([
+                              'error' => false,
+                              'data' => $affected,
+                              'errors' => null,
+                         ], 200);
+                    }else{
+
+                         response()->json([
+                              'error' => true,
+                              'data' => $affected,
+                              'errors' => null,
+                         ], 400);
+                    }
+               }
+          
+          }
+     }
+
+     /**
+     * @SWG\POST(
+     *   path="/api/store/updateOrderStore",
+     *     tags={"Store"},
+     *   summary="Show Profile",
+     *   @SWG\Parameter(
+     *     name="name_receiver",
+     *     in="query",
+     *     description="Your Name Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="address_receiver",
+     *     in="query",
+     *     description="Your Type Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="latitude_receiver",
+     *     in="query",
+     *     description="Your Address Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="longitude_receiver",
+     *     in="query",
+     *     description="Your Description Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="phone_receiver",
+     *     in="query",
+     *     description="Your Start Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="email_receiver",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="description_order",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),        
+     *   @SWG\Parameter(
+     *     name="phone_receiver",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="id_service_type",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="total_weight",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="price_service",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Parameter(
+     *     name="cod",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Response(
+     *     response=200,
+     *     description="A list with products"
+     *   ),
+     *   @SWG\Response(
+     *     response="default",
+     *     description="an ""unexpected"" error"
+     *   ),
+     *     security={{"api_key":{}}}
+     * )
+     */
+
      public function updateOrderStore(Request $request) {
           if ($request->isMethod('post')) {
 
 
                $idUser = $request->idUser;
-               $idUser = 2;
+               $idUser = 1;
 
                $result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
-          if($result_store->count() > 0){
+               if($result_store->count() > 0){
 
-               $bill_of_lading = $request->get('bill_of_lading');
-               $bill_of_lading = 'LUXABC1234';
-               $name_receiver = $request->get('name_receiver');
-               $address_receiver = $request->get('address_receiver');
-               $lat = $request->get('latitude_receiver');
-               $long = $request->get('longitude_receiver');
-               $phone = $request->get('phone_receiver');
-               $email = $request->get('email_receiver');
-               $description = $request->get('description_order'); 
-               $cod = $request->get('phone_receiver');
-               $time_delivery = $request->get('time_delivery');
-               $distance_shipping = $request->get('distance_shipping');
-               $id_service_type = $request->get('id_service_type');
-               $total_weight = $request->get('total_weight');
-               $price_service = $request->get('price_service');
-               $total_money = $request->get('total_money');
-               $id_shipper = $request->get('id_shipper');
-               $id_order_status = $request->get('id_order_status');
+                    $bill_of_lading = $request->get('bill_of_lading');
+                    $bill_of_lading = 'LUXABC1234';
+                    $name_receiver = $request->get('name_receiver');
+                    $address_receiver = $request->get('address_receiver');
+                    $lat = $request->get('latitude_receiver');
+                    $long = $request->get('longitude_receiver');
+                    $phone = $request->get('phone_receiver');
+                    $email = $request->get('email_receiver');
+                    $description = $request->get('description_order'); 
+                    $cod = $request->get('cod');
+                    $time_delivery = $request->get('time_delivery');
+                    $distance_shipping = $request->get('distance_shipping');
+                    $id_service_type = $request->get('id_service_type');
+                    $total_weight = $request->get('total_weight');
+                    $price_service = 400;
+                    $total_money = $request->get('total_money');
+                    $id_shipper = $request->get('id_shipper');
+                    $id_order_status = $request->get('id_order_status');
 
-               $lat = 11.3;
-               $long = 12.3;
+                    $lat = 11.3;
+                    $long = 12.3;
+
+                    $time_delivery = '2018-12-11 00:00:00';
+                    $distance_shipping = 12;
+                    $store_id = $result_store[0]->idStore;
+                    $order_id = 2;
+
+                    $total_money = 123;
+
+                    $data_created = date('Y-m-d H:i:s');
+                    $affected = DB::table('orders')->where('idOrder', $order_id)->update([
+                              'idStore' => $store_id,
+                              'billOfLading' => $bill_of_lading,
+                              'nameReceiver' => $name_receiver,
+                              'addressReceiver' => $address_receiver,
+                              'latitudeReceiver' => $lat,
+                              'longitudeReceiver' => $long,
+                              'phoneReceiver' => $phone,
+                              'emailReceiver' => $email,
+                              'descriptionOrder' => $description,
+                              'COD' => $cod,
+                              'timeDelivery' => $time_delivery,
+                              'distanceShipping' => $distance_shipping,
+                              'idServiceType' => $id_service_type,
+                              'totalWeight' => $total_weight,
+                              'priceService' => $price_service,
+                              'totalMoney' => $total_money,
+                              'idOrderStatus' => Config::get('constants.status_type.pending'),
+                         ]);
+
+                    if($affected){
+                         return response()->json([
+                              'error' => false,
+                              'data' => $affected,
+                              'errors' => null,
+                         ], 200);
+                    }else{
+
+                         response()->json([
+                              'error' => true,
+                              'data' => $affected,
+                              'errors' => null,
+                         ], 400);
+                    }
+               }
           
-               $store_id = $result_store[0]->idStore;
-               `idOrder`, `idStore`, `billOfLading`, `nameReceiver`, `addressReceiver`, `latitudeReceiver`, `longitudeReceiver`, `phoneReceiver`, `emailReceiver`, `descriptionOrder`, `dateCreated`, `COD`, `timeDelivery`, `distanceShipping`, `idServiceType`, `totalWeight`, `totalPriceProduct`, `priceService`, `totalMoney`, `idShipper`, `idOrderStatus`, `created_at`, `updated_at`
-               $affected = DB::table('stores')->where('idStore', $store_id)->update([
-                         'idStore' => $user_id,
-                         'billOfLading' => $name_store,
-                         'nameReceiver' => $type_store,
-                         'addressReceiver' => $address_store,
-                         'latitudeReceiver' => $description_store,
-                         'longitudeReceiver' => $latitude_store,
-                         'phoneReceiver' => $longitude_store,
-                         'emailReceiver' => $start_working_time,
-                         'descriptionOrder' => $end_working_time,
-                          'COD' => $description_store,
-                         'timeDelivery' => $latitude_store,
-                         'distanceShipping' => $longitude_store,
-                         'idServiceType' => $start_working_time,
-                         'totalWeight' => $end_working_time,
-                    ]);
+          }
+     }
 
-               if($affected){
-                    return response()->json([
-                         'error' => false,
-                         'data' => $affected,
-                         'errors' => null,
-                    ], 200);
+     /**
+     * @SWG\POST(
+     *   path="/api/store/deleteOrderStore",
+     *     tags={"Store"},
+     *   summary="Show Profile",
+     *   @SWG\Response(
+     *     response=200,
+     *     description="A list with products"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="order_id",
+     *     in="query",
+     *     description="Your End Working Store",
+     *     type="string",
+     *   ),
+     *   @SWG\Response(
+     *     response="default",
+     *     description="an ""unexpected"" error"
+     *   ),
+     *     security={{"api_key":{}}}
+     * )
+     */
+    public function deleteOrderStore(Request $request){
+          
+          if ($request->isMethod('post')) {
+               $order_id = $request->get('order_id');
+               $idUser = $request->idUser;
+               $idUser =1;
+               $result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+               Log::debug('idUser'. print_r($result_store,1));
+               if($result_store->count() > 0){
+
+                    $idStore = $result_store[0]->idStore;
+
+                    
+                    $affected = DB::table('orders')->where('idOrder', $order_id)->delete();
+
+                      if($affected){
+                         return response()->json([
+                              'error' => false,
+                              'data' => $affected,
+                              'errors' => null,
+                         ], 200);
+                    }else{
+
+                         response()->json([
+                              'error' => true,
+                              'data' => $affected,
+                              'errors' => null,
+                         ], 400);
+                    }
                }else{
-
-                    response()->json([
-                         'error' => true,
-                         'data' => $affected,
-                         'errors' => null,
-                    ], 400);
+                    return response()->json([
+                     'error' => true,
+                     'data' => null,
+                     'errors' => null,
+                ], 400);
                }
           }
-          
-     }
+    }
+     
 }
