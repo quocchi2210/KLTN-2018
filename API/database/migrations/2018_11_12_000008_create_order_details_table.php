@@ -35,7 +35,6 @@ class CreateOrderDetailsTable extends Migration
             $table->double('priceProduct');
             $table->integer('quantityProduct');
             $table->string('imgProduct', 191);
-            $table->double('amountMoney');
 
 
 
