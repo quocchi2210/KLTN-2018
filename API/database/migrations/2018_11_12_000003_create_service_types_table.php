@@ -24,7 +24,8 @@ class CreateServiceTypesTable extends Migration
         Schema::create($this->set_schema_table, function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('idService');
-            $table->string('nameService', 191)->nullable()->default(null);
+            $table->string('nameService', 191)->nullable();
+            $table->integer('price')->nullable();
             $table->Timestamps();
         });
     }
