@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Token;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable {
+
+class User extends Authenticatable implements JWTSubject {
 	use Notifiable;
+	protected $primaryKey = 'idUser';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -27,7 +29,6 @@ class User extends Authenticatable {
 		'addressUser',
 		'activationCode',
 		'isActivated',
-		'tokenPasswordRecovery',
 		'tokenExpirationTime',
 		'password',
 		'pinCode',
@@ -40,149 +41,47 @@ class User extends Authenticatable {
 	 *
 	 * @var array
 	 */
-//    public function feed(){
-	//        return $this->hasMany('App\Feed');
-	//    }
+
 	public function token() {
-		return $this->belongsTo('App\Token');
+		return $this->hasOne('App\Token','user_token_id','idUser');
 	}
 	public function role() {
 		return $this->belongsToMany('App\Role');
 	}
-//    public function friendsOfMine()
-	//    {
-	//        return $this->belongsToMany(User::class, 'user_friend', 'user_id', 'friend_id');
-	//    }
-	//    public function friendOf()
-	//    {
-	//        return $this->belongsToMany(User::class, 'user_friend', 'friend_id', 'user_id');
-	//    }
-	//
-	//    public function friendRequestsPending()
-	//    {
-	//        return $this->friendOf()->wherePivot('accepted', false)->get();
-	//    }
-	//    public function unFollowed()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('followed', true)->get()
-	//            ->merge($this->friendOf()->wherePivot('followed', true)->get());
-	//    }
-	//    public function acceptUnfollow(User $user)
-	//    {
-	//        $this->unFollowed()->where('id', $user->id)->first()->pivot->update([
-	//            'followed' => false
-	//        ]);
-	//    }
-	//    public function unFollowedResponse()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('followed', false)->get()
-	//            ->merge($this->friendOf()->wherePivot('followed', false)->get());
-	//    }
-	//    public function hasFollowResponse(user $user)
-	//    {
-	//        return (bool) $this->unFollowed()->where('id', $user->id)->count();
-	//    }
-	//    public function hasUnfollowResponse(user $user)
-	//    {
-	//        return (bool) $this->unFollowedResponse()->where('id', $user->id)->count();
-	//    }
-	//    public function acceptFollow(User $user)
-	//    {
-	//        $this->unFollowedResponse()->where('id', $user->id)->first()->pivot->update([
-	//            'followed' => true
-	//        ]);
-	//    }
-	//
-	//    public function unblock()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('blocked', true)->get()
-	//            ->merge($this->friendOf()->wherePivot('blocked', true)->get());
-	//    }
-	//    public function acceptUnblock(User $user)
-	//    {
-	//        $this->unblock()->where('id', $user->id)->first()->pivot->update([
-	//            'blocked' => false
-	//        ]);
-	//    }
-	//    public function unblockedResponse()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('blocked', false)->get()
-	//            ->merge($this->friendOf()->wherePivot('blocked', false)->get());
-	//    }
-	//    public function hasUnblockResponse(user $user)
-	//    {
-	//        return (bool) $this->unblockedResponse()->where('id', $user->id)->count();
-	//    }
-	//    public function acceptBlock(User $user)
-	//    {
-	//        $this->unblockedResponse()->where('id', $user->id)->first()->pivot->update([
-	//            'blocked' => true
-	//        ]);
-	//    }
-	//    public function hasBlockResponse(user $user)
-	//    {
-	//        return (bool) $this->unblock()->where('id', $user->id)->count();
-	//    }
-	//    public function blockList()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('blocked', true)->get()
-	//            ->merge($this->friendOf()->wherePivot('blocked', true)->get());
-	//
-	//    }
-	//    public function friendList()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('accepted', true)->get()
-	//            ->merge($this->friendOf()->wherePivot('accepted', true)->get());
-	//
-	//    }
-	//    public function hasFriendRequestPending(User $user)
-	//    {
-	//        return (bool) $this->friendRequests()->where('id', $user->id)->count();
-	//    }
-	//    public function friendRequests()
-	//    {
-	//        return $this->friendsOfMine()->wherePivot('accepted', false)->get();
-	//    }
-	//    public function hasFriendRequestReceived(user $user)
-	//    {
-	//        return (bool) $this->friendRequests()->where('id', $user->id)->count();
-	//    }
-	//    public function friendResponse()
-	//    {
-	//        return $this->friendOf()->wherePivot('accepted', true)->get();
-	//    }
-	//    public function hasFriendResponse(user $user)
-	//    {
-	//        return (bool) $this->friendResponse()->where('id', $user->id)->count();
-	//    }
-	//    public function disabledPending()
-	//    {
-	//        return $this->friendOf()->wherePivot('disabled', false)->get();
-	//    }
-	//    public function acceptDisabled(User $user)
-	//    {
-	//        $this->disabledPending()->where('id', $user->id)->first()->pivot->update([
-	//            'disabled' => true,
-	//        ]);
-	//    }
-	//    public function addFriend(User $user)
-	//    {
-	//        $this->friendsOfMine()->attach($user->id);
-	//    }
-	//    public function removeFriend(User $user)
-	//    {
-	//        $this->friendsOfMine()->detach($user->id);
-	//    }
-	//    public function acceptFriendRequest(User $user)
-	//    {
-	//        $this->friendRequestsPending()->where('id', $user->id)->first()->pivot->update([
-	//            'accepted' => true,
-	//            'followed' => true,
-	//        ]);
-	//    }
+
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    public function store(){
+        return $this->hasOne('App\Store','idUser','idUser');
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+
 
 	protected $hidden = [
-		'password',
+		'password','tokenPasswordRecovery',
 	];
 	public $ruleCustom = [
 		'RULE_USERS_CREATE' => [

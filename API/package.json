@@ -16,14 +16,16 @@
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^1.0",
-        "lodash": "^4.17.4",
+        "lodash": "^4.17.11",
         "react": "^15.6.2",
         "react-dom": "^15.6.2"
     },
     "dependencies": {
+        "admin-lte": "^2.4.8",
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
         "bootstrap": "^4.1.2",
+        "gentelella": "^1.4.0",
         "history": "^4.7.2",
         "ioredis": "^4.2.0",
         "react-bootstrap": "^0.32.1",

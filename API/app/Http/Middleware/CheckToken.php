@@ -21,7 +21,7 @@ class CheckToken extends Controller
     {
         $errorCode = $this->apiErrorCodes;
         $api_token = $request->header('token');
-        $token_db = DB::table('token')->where('token',$api_token)->first();
+        $token_db = DB::table('tokens')->where('token',$api_token)->first();
         // $user_lock = User::where('idUser',(DB::table('token')->where('token', $api_token)->first()->user_token_id))->first()->locked;
         if(!$token_db ){
             return $this->respondWithErrorMessage(
@@ -32,9 +32,9 @@ class CheckToken extends Controller
         //     return $this->respondWithErrorMessage('You account has been lock ! Please contact with an Admin', 2013);
         // }
         else {
-            $user = User::where('idUser',(DB::table('token')->where('token', $api_token)->first()->user_token_id))->first();
+            $user = User::where('idUser',(DB::table('tokens')->where('token', $api_token)->first()->user_token_id))->first();
             $request->request->add(array('user' => $user));
-            $authen_id = User::where('idUser',(DB::table('token')->where('token', $api_token)->first()->user_token_id))->first()->idUser;
+            $authen_id = User::where('idUser',(DB::table('tokens')->where('token', $api_token)->first()->user_token_id))->first()->id;
             $request->request->add(
                 array(
                     'authen_id'=>$authen_id,

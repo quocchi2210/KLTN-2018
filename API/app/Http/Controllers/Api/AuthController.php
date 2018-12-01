@@ -8,8 +8,9 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
-
+use Log;
 /**
  * @SWG\Swagger(
  *   basePath="/",
@@ -21,11 +22,12 @@ use Validator;
  *   securityDefinition="api_key",
  *   type="apiKey",
  *   in="header",
- *   name="token"
+ *   name="Authorization"
  * )
  * )
  */
 class AuthController extends Controller {
+
 	/**
 	 *   @SWG\Response(
 	 *     response="default",
@@ -102,27 +104,23 @@ class AuthController extends Controller {
 		if ($validator->fails()) {
 			return $this->errorWithValidation($validator);
 		}
-		if (Auth::attempt(['email' => $email, 'password' => $password])) {
-			Token::create([
-				'token' => str_random(32),
-				'user_token_id' => auth()->user()->idUser,
-				'expired_at' => Carbon::now()->addDays(30),
-			]);
-			// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
-			$user = DB::table('users')
-				->join('token', 'users.idUser', '=', 'token.user_token_id')
-				->select('users.idUser', 'users.fullName', 'users.email', 'token.token', 'token.expired_at')
-				->get()
-				->last();
-			return response()->json([
-				'error' => false,
-				'data' => $user,
-				'errors' => null,
-			], 200);
-		}
-		return $this->respondWithErrorMessage(
-			$errorCode['authentication'],
-			$errorCode['ApiErrorCodes']['authentication'], 400);
+        $input = $request->only('email', 'password');
+        $jwt_token = null;
+
+        if (!$jwt_token = JWTAuth::attempt($input)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Email or Password',
+            ], 401);
+        }
+        return response()->json([
+            'success' => true,
+            'token' => $jwt_token,
+        ]);
+
+//		return $this->respondWithErrorMessage(
+//			$errorCode['authentication'],
+//			$errorCode['ApiErrorCodes']['authentication'], 400);
 	}
 	public function loginPhone(Request $request) {
 		$errorCode = $this->apiErrorCodes;
@@ -143,14 +141,14 @@ class AuthController extends Controller {
 		if ($CountryCode != null) {
 			if (auth::attempt(['country_code' => $CountryCode, 'phone_number' => $phone, 'password' => $password])) {
 				Token::create([
-					'token' => str_random(32),
+					'tokens' => str_random(32),
 					'user_token_id' => auth()->user()->idUser,
 					'expired_at' => Carbon::now()->addDays(30),
 				]);
 				// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
 				$user = DB::table('users')
-					->join('token', 'users.idUser', '=', 'token.user_token_id')
-					->select('users.idUser', 'users.fullName', 'users.email', 'users.phone_number', 'token.token', 'token.expired_at')
+					->join('tokens', 'users.idUser', '=', 'tokens.user_token_id')
+					->select('users.idUser', 'users.fullName', 'users.email', 'users.phone_number', 'tokens.token', 'tokens.expired_at')
 					->get()
 					->last();
 				return response()->json([
@@ -171,10 +169,10 @@ class AuthController extends Controller {
 					'user_token_id' => auth()->user()->idUser,
 					'expired_at' => Carbon::now()->addDays(30),
 				]);
-				// User::where('idUser', auth()->user()->idUser)->update(['disabled' => false]);
+				// User::where('id', auth()->user()->id)->update(['disabled' => false]);
 				$user = DB::table('users')
-					->join('token', 'users.idUser', '=', 'token.user_token_id')
-					->select('users.idUser', 'users.name', 'users.email', 'users.phone_number', 'token.token', 'token.expired_at')
+					->join('tokens', 'users.idUser', '=', 'tokens.user_token_id')
+					->select('users.idUser', 'users.name', 'users.email', 'users.phone_number', 'tokens.token', 'tokens.expired_at')
 					->get()
 					->last();
 				return response()->json([
@@ -210,7 +208,7 @@ class AuthController extends Controller {
 		$token = $request->header('token');
 		//return array("err" => false,...)
 		//  return $this->respondWithSuccess($token);
-		$idUser = User::where('idUser', (DB::table('token')->where('token', $token)->first()->user_token_id))->first()->idUser;
+		$idUser = User::where('id', (DB::table('tokens')->where('token', $token)->first()->user_token_id))->first()->id;
 		DB::table('token')->where('user_token_id', '=', $idUser)->delete();
 		return response()->json([
 			'error' => false,

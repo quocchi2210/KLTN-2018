@@ -59,7 +59,9 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'api.auth' => \App\Http\Middleware\ApiAuthenticate::class,
-        'checktoken'=> \App\Http\Middleware\CheckToken::class,
-        'checkadmin'=> \App\Http\Middleware\CheckAdmin::class,
+        'checktoken' => \App\Http\Middleware\CheckToken::class,
+        'CheckStore' => \App\Http\Middleware\CheckStore::class,
+        'CheckAdmin' => \App\Http\Middleware\CheckAdmin::class,
+        'jwt' => \App\Http\Middleware\jwt::class
     ];
 }

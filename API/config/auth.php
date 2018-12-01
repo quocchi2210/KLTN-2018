@@ -18,6 +18,7 @@ return [
         'passwords' => 'users',
     ],
 
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -42,7 +43,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'api_key',
+            'driver' => 'jwt',
             'provider' => 'users',
         ],
     ],

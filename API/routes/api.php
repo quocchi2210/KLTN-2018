@@ -11,31 +11,47 @@
 |
  */
 
-Route::group(['middleware' => 'checktoken'], function () {
-	Route::post('logout', "AuthController@logout");
-	Route::get('profile', "ProfileController@getProfile");
-	Route::put('update', "ProfileController@updateProfile");
-	Route::post('change', "Api\ChangePasswordController@change");
-	Route::group(['prefix' => 'store'], function(){
-		Route::post('insertProfileStore', "Api\StoreController@insertProfileStore");
-		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
-		Route::post('showProfileStore', "Api\StoreController@showProfileStore");
-	});
 
+// Route::group(['middleware' => 'checktoken'], function () {
+// 	Route::post('logout', "AuthController@logout");
+// 	Route::get('profile', "ProfileController@getProfile");
+// 	Route::put('update', "ProfileController@updateProfile");
+// 	Route::post('change', "Api\ChangePasswordController@change");
+// 	Route::group(['prefix' => 'store'], function(){
+// 		Route::post('insertProfileStore', "Api\StoreController@insertProfileStore");
+// 		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
+// 		Route::post('showProfileStore', "Api\StoreController@showProfileStore");
+// 	});
+
+
+Route::group(['middleware' => 'jwt'], function () {
+    Route::post('logout', "AuthController@logout");
+    Route::put('update', "ProfileController@updateProfile");
+    Route::get('profile', "ProfileController@getProfile");
+    Route::post('change', "Api\ChangePasswordController@change");
+    Route::group(['prefix' => 'store'], function(){
+        Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
+    });
 
 });
 
-Route::group(['middleware' => 'checkadmin'], function () {
-	Route::get('user', "Api\Admin\DashboardController@getUser");
-	Route::get('user/search', "Api\Admin\DashboardController@searchUser");
-	Route::get('user/sort', "Api\Admin\DashboardController@sortUser");
-	Route::post('user/lock', "Api\Admin\DashboardController@actionUser");
-	Route::post('user/role', "Api\Admin\DashboardController@actionAssignUser");
-	Route::post('user/create', "Api\Admin\DashboardController@createUser");
-	Route::get('user/profile/{id}', "Api\Admin\DashboardController@readProfile");
-	Route::put('user/update/{id}', "Api\Admin\DashboardController@updateUserProfile");
-	Route::delete('user/delete/{id}', "Api\Admin\DashboardController@deleteUser");
-});
+  Route::group(['prefix' => 'shipper'], function(){
+        Route::post('showOrder', "Api\ShipperController@showOrder");
+        Route::post('showHistory', "Api\ShipperController@showHistory");
+        Route::post('updateStatus', "Api\ShipperController@updateStatus");
+    });
+
+//Route::group(['middleware' => 'checkadmin'], function () {
+//	Route::get('user', "Api\Admin\DashboardController@getUser");
+//	Route::get('user/search', "Api\Admin\DashboardController@searchUser");
+//	Route::get('user/sort', "Api\Admin\DashboardController@sortUser");
+//	Route::post('user/lock', "Api\Admin\DashboardController@actionUser");
+//	Route::post('user/role', "Api\Admin\DashboardController@actionAssignUser");
+//	Route::post('user/create', "Api\Admin\DashboardController@createUser");
+//	Route::get('user/profile/{id}', "Api\Admin\DashboardController@readProfile");
+//	Route::put('user/update/{id}', "Api\Admin\DashboardController@updateUserProfile");
+//	Route::delete('user/delete/{id}', "Api\Admin\DashboardController@deleteUser");
+//});
 Route::post('login', "AuthController@login");
 Route::post('register', "Api\RegisterController@register");
 Route::post('user/reset', "Api\PasswordResetController@resetUser");
