@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -95,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //order_show();
-                    //send_post();
-//                  Dialog  dialog = new Dialog(MainActivity.this);
-//                  dialog.setTitle("TEST");
-//                  dialog.setCancelable(false);
-//                  dialog.setContentView(R.layout.order_detail_layout);
-//
-//                  dialog.show();
+          //          send_post();
+                  Dialog  dialog = new Dialog(MainActivity.this,R.style.Theme_Dialog);
+                  dialog.setTitle("TEST");
+                  dialog.setContentView(R.layout.info_order_dialog);
+
+                  dialog.show();
+
                 }
             });
 
