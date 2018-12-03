@@ -27,9 +27,15 @@ class OrderController extends Controller
     public function tracking(Request $request)
     {
         $bill = $request->get('bill_of_lading');
-        $idOrderStatus = DB::table('orders')->where('billOfLading',$bill)->first()->idOrderStatus;
-        $status = DB::table('order_status')->where('idStatus',$idOrderStatus)->first()->statusName;
-        return view('tracking.trackingStatus', ['status' => $status]);
+        if ($bill){
+            $idOrderStatus = DB::table('orders')->where('billOfLading',$bill)->first()->idOrderStatus;
+            if ($idOrderStatus){
+                $status = DB::table('order_status')->where('idStatus',$idOrderStatus)->first()->statusName;
+                if ($status)
+                    return view('tracking.trackingStatus', ['status' => $status]);
+            }
+        }
+
     }
 
     /**
