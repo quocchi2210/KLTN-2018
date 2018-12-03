@@ -21,7 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Order_Activity" />
-        <activity android:name=".Main2Activity"></activity>
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".History_Activity" />
+        <activity android:name=".Orderdetail_Activity" />
+        <activity android:name=".Order_Received_Activity"></activity>
     </application>
 
 </manifest>

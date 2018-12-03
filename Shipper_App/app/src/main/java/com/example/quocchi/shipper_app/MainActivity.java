@@ -1,5 +1,6 @@
 package com.example.quocchi.shipper_app;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     EditText edt_user, edt_password;
     Button btn_register, btn_login, btn_logout;
     String username, password;
-    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //order_show();
-                    send_post();
+                    //send_post();
+//                  Dialog  dialog = new Dialog(MainActivity.this);
+//                  dialog.setTitle("TEST");
+//                  dialog.setCancelable(false);
+//                  dialog.setContentView(R.layout.order_detail_layout);
+//
+//                  dialog.show();
                 }
             });
 
@@ -106,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
         private void order_show(){
-            Intent intent = new Intent(MainActivity.this, Order_Activity.class);
+            //Intent intent = new Intent(MainActivity.this, History_Activity.class);
+            //Intent intent = new Intent(MainActivity.this, Order_Activity.class);
+            Intent intent = new Intent(MainActivity.this, Order_Received_Activity.class);
             startActivity(intent);
         }
 

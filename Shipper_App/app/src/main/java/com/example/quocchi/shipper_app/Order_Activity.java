@@ -7,18 +7,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Order_Activity extends AppCompatActivity {
 
-    private ArrayList<String> data = new ArrayList<String>();
+    private ArrayList<Order> data = new ArrayList<Order>();
     //public int position_index = -1;
 
     @Override
@@ -28,64 +32,104 @@ public class Order_Activity extends AppCompatActivity {
 
         ListView lv = findViewById(R.id.list_view);
 
-        data.add("fuck you");
-        data.add("hello you");
+        data.add(new Order("math","123"));
+        data.add(new Order("history","456"));
+        data.add(new Order("van hoc","789"));
 
-        lv.setAdapter(new MyListAdapter(this, R.layout.list_item, data));
+        lv.setAdapter(new OrderAdapter(this, R.layout.list_item, data));
+
+
     }
 
-    private class MyListAdapter extends ArrayAdapter<String> {
-        private int layout;
-        private MyListAdapter(Context context, int resource, List<String> objects){
-            super(context, resource, objects);
-            layout = resource;
+    private class OrderAdapter extends BaseAdapter {
+
+        Context myContext;
+        int myLayout;
+        List<Order> arrayOrder;
+
+        public OrderAdapter(Context context, int layout, List<Order> orderList){
+            myContext = context;
+            myLayout = layout;
+            arrayOrder = orderList;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
-            try {
+        public int getCount() {
+            return arrayOrder.size();
+        }
 
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
 
-                ViewHolder mainViewholder = null;
-                //final ViewHolder viewHolder = null;
-                final int position_index = position;
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
 
-                if (convertView == null) {
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
-                    convertView = inflater.inflate(layout, parent, false);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-                    final ViewHolder viewHolder = new ViewHolder();
-                    viewHolder.thumbnail = (ImageView) convertView.findViewById(R.id.list_item_thumbnail);
-                    viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_text);
-                    viewHolder.button = (Button) convertView.findViewById(R.id.list_item_btn);
-                    viewHolder.button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //viewHolder.button.setText("fuck you");
+            LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                            //Toast.makeText(getContext(), "Button was clicked for list item " + position_index, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            convertView = inflater.inflate(myLayout, null);
 
-                    convertView.setTag(viewHolder);
-                } else {
-                    mainViewholder = (ViewHolder) convertView.getTag();
-                    mainViewholder.title.setText(getItem(position));
+            TextView bill_of_lading = (TextView) convertView.findViewById(R.id.bill_of_lading);
+            TextView address = (TextView) convertView.findViewById(R.id.address);
+
+            bill_of_lading.setText(data.get(position).getBill_of_lading());
+            address.setText(data.get(position).getAddress());
+
+            LinearLayout lnlo_order = (LinearLayout) convertView.findViewById (R.id.lnlo_order);
+
+            final int vitri = position;
+
+            lnlo_order.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(Order_Activity.this, data.get(vitri).getBill_of_lading(), Toast.LENGTH_LONG).show();
                 }
-                return convertView;
-            }catch(Exception e) {
-                e.printStackTrace();
-                Log.e("Memory exceptions","exceptions"+e);
-                return null;
-            }
+            });
 
+//            list_item_text.setText(data.get(position).getA());
+//            Button list_item_btn = (Button) convertView.findViewById(R.id.list_item_btn);
+//
+//            list_item_btn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(Order_Activity.this,data.get(vitri).getA(),Toast.LENGTH_SHORT).show();
+//                }
+//            });
 
+            return convertView;
         }
     }
 
-    public class ViewHolder{
-        ImageView thumbnail;
-        TextView title;
-        Button button;
+
+    private class Order{
+        private String bill_of_lading;
+        private String address;
+
+        Order(String bill_of_lading, String address){
+            this.bill_of_lading = bill_of_lading;
+            this.address = address;
+        }
+
+        public String getBill_of_lading() {
+            return bill_of_lading;
+        }
+
+        public void setBill_of_lading(String bill_of_lading) {
+            this.bill_of_lading = bill_of_lading;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
     }
 }
