@@ -70,14 +70,16 @@ class RegisterController extends Controller
     {
         $storeRequest = $request->get('Store');
         $userRequest = $request->get('User');
+        $fullNameRequest = $request->get('fullName');
         $user = User::create([
             'email' => $userRequest['email'],
-            'password' => bcrypt($userRequest['password']),
+            'fullName' => $fullNameRequest['name'],
+            'password' => bcrypt($userRequest['password'])
         ]);
         if ($user->idUser) {
             Store::create([
                 'idUser' => $user->idUser,
-                'nameStore' => $storeRequest['name']
+                'nameStore' => $storeRequest['name'],
             ]);
             $this->guard()->login($user);
             return redirect(route('home'));

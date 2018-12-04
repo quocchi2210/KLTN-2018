@@ -27,9 +27,17 @@ class OrderController extends Controller
     public function tracking(Request $request)
     {
         $bill = $request->get('bill_of_lading');
-        $idOrderStatus = DB::table('orders')->where('billOfLading',$bill)->first()->idOrderStatus;
-        $status = DB::table('order_status')->where('idStatus',$idOrderStatus)->first()->statusName;
-        return view('tracking.trackingStatus', ['status' => $status]);
+        if ($bill){
+            $idOrderStatus = DB::table('orders')->where('billOfLading',$bill)->first();
+            if ($idOrderStatus){
+                $status = DB::table('order_status')->where('idStatus',$idOrderStatus->idOrderStatus)->first();
+                if ($status)
+                    return view('tracking.trackingStatus', ['status' => $status->statusName,'bill'=>$bill,'nameReceiver'=>$idOrderStatus->nameReceiver]);
+            }
+            else
+                return view('handleError.notfoundbill',['bill'=>$bill]);
+        }
+
     }
 
     /**
@@ -61,7 +69,8 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::find($id);
+        return response()->json(view('order.detail', ['order' => $order])->render());
     }
 
     /**
@@ -72,7 +81,8 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::find($id);
+        return response()->json(view('order.detail', ['order' => $order])->render());
     }
 
     /**
@@ -95,6 +105,7 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Order::destroy($id);
+        return back();
     }
 }

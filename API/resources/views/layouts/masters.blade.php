@@ -47,7 +47,7 @@
 </div>
 <!-- ./wrapper -->
 
-<script src="{{ mix('app/js/app.js') }}"></script>
+<script src="{{ mix('js/app.js') }}"></script>
 
 <script>
     $(document).on('load',function () {

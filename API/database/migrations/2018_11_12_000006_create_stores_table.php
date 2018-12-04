@@ -35,8 +35,8 @@ class CreateStoresTable extends Migration
             $table->string('typeStore', 50)->nullable()->default(null);
             $table->string('addressStore', 100)->nullable()->default(null);
             $table->string('descriptionStore', 100)->nullable()->default(null);
-            $table->decimal('latitudeStore', 8, 2)->nullable()->default(null);
-            $table->decimal('longitudeStore', 8, 2)->nullable()->default(null);
+            $table->decimal('latitudeStore', 11, 8)->nullable()->default(null);
+            $table->decimal('longitudeStore', 11, 8)->nullable()->default(null);
             $table->time('startWorkingTime')->nullable()->default(null);
             $table->time('endWorkingTime')->nullable()->default(null);
 

@@ -23,6 +23,7 @@
                                                     <label for="fullname">Your Bill Of Lading</label>
                                                     <input type="text" id="fullname"
                                                            name="bill_of_lading"
+                                                           required autofocus
                                                            placeholder="Enter the bill of lading" class="form-control">
                                                 </div>
                                             </div>

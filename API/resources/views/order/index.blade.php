@@ -49,6 +49,7 @@
                                             <th scope="col">Receiver Phone Number</th>
                                             <th scope="col">Bill Of Lading</th>
                                             <th scope="col">Order Address</th>
+                                            <th scope="col">Total Money</th>
                                             <th scope="col">Date Order</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -61,26 +62,27 @@
                                                 <td>{{$statusOrder->phoneReceiver}}</td>
                                                 <td>{{$statusOrder->billOfLading}}</td>
                                                 <td>{{$statusOrder->addressReceiver}}</td>
+                                                <td>{{number_format($statusOrder->totalMoney)}} VND</td>
                                                 <td>{{$statusOrder->created_at}}</td>
                                                 <td nowrap="">
-                                                    {{--@if($statusItem->id == 1)--}}
-                                                        {{--<button type="button"--}}
-                                                                {{--data-id="{{$statusOrder->id}}"--}}
-                                                                {{--class="btn btn-outline-primary btn-sm btn-edit-order"--}}
-                                                                {{--data-url="{{domain_route('bussiness.admin.orders.edit',['order' => $statusOrder->id])}}">--}}
-                                                            {{--<i class="fa fa-pencil"></i>--}}
-                                                        {{--</button>--}}
-                                                        {{--<button type="button"--}}
-                                                                {{--data-id="{{$statusOrder->id}}"--}}
-                                                                {{--class="btn btn-outline-danger btn-sm btn-delete-order"--}}
-                                                                {{--data-url="{{domain_route('bussiness.admin.orders.edit',['order' => $statusOrder->id])}}">--}}
-                                                            {{--<i class="fa fa-trash"></i>--}}
-                                                        {{--</button>--}}
-                                                    {{--@endif--}}
+                                                    @if($statusItem->idStatus == 1)
+                                                        <button type="button"
+                                                                data-id="{{$statusOrder->idOrder}}"
+                                                                class="btn btn-outline-primary btn-sm btn-edit-order"
+                                                                data-url="{{route('orders.edit',['order' => $statusOrder->idOrder])}}">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </button>
+                                                        <button type="button"
+                                                                data-id="{{$statusOrder->idOrder}}"
+                                                                class="btn btn-outline-danger btn-sm btn-delete-order"
+                                                                data-url="{{route('orders.edit',['order' => $statusOrder->idOrder])}}">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    @endif
                                                     <button type="button"
-                                                            data-id="{{$statusOrder->id}}"
+                                                            data-id="{{$statusOrder->idOrder}}"
                                                             class="btn btn-outline-info btn-sm btn-info-order"
-                                                            data-url="{{route('orders.show',['order' => $statusOrder->id])}}">
+                                                            data-url="{{route('orders.show',['order' => $statusOrder->idOrder])}}">
                                                         <i class="fa fa-info-circle"></i>
                                                     </button>
                                                 </td>
