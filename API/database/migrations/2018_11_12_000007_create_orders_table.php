@@ -32,17 +32,21 @@ class CreateOrdersTable extends Migration
                 ->onUpdate('cascade');
 
             $table->string('billOfLading', 45)->nullable();
+            $table->string('nameSender', 50)->nullable()->default(null);
+            $table->text('addressSender')->nullable()->default(null);
+            $table->decimal('latitudeSender', 11, 8)->nullable()->default(null);
+            $table->decimal('longitudeSender', 11, 8)->nullable()->default(null);
+            $table->string('phoneSender', 11)->nullable()->default(null);
             $table->string('nameReceiver', 50)->nullable()->default(null);
             $table->text('addressReceiver')->nullable()->default(null);
             $table->decimal('latitudeReceiver', 11, 8)->nullable()->default(null);
             $table->decimal('longitudeReceiver', 11, 8)->nullable()->default(null);
             $table->string('phoneReceiver', 11)->nullable()->default(null);
-            $table->string('emailReceiver', 50);
+            $table->string('emailReceiver', 50)->nullable()->default(null);
             $table->string('descriptionOrder', 50);
-            $table->dateTime('dateCreated');
             $table->tinyInteger('COD')->default('0');
-            $table->dateTime('timeDelivery');
-            $table->integer('distanceShipping');
+            $table->dateTime('timeDelivery')->nullable()->default(null);
+            $table->float('distanceShipping',4,1);
 
             $table->unsignedInteger('idServiceType');
             $table->foreign('idServiceType')

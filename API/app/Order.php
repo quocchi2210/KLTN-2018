@@ -12,8 +12,13 @@ class Order extends Model
     protected  $primaryKey = 'idOrder';
 
     protected $fillable = [
-        'name',
+        'idStore',
         'billOfLading',
+        'nameSender',
+        'addressSender',
+        'latitudeSender',
+        'longitudeSender',
+        'phoneSender',
         'nameReceiver',
         'addressReceiver',
         'latitudeReceiver',
@@ -25,6 +30,8 @@ class Order extends Model
         'COD',
         'timeDelivery',
         'distanceShipping',
+        'idOrderStatus',
+        'idServiceType',
         'totalWeight',
         'priceService',
         'totalMoney',
