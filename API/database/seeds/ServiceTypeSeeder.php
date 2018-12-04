@@ -12,11 +12,11 @@ class ServiceTypeSeeder extends Seeder
     public function run()
     {
         \Illuminate\Support\Facades\DB::table('service_types')->insert([
-            ['nameService' => 'Normal Delivery','price'=> 400,'created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['nameService' => 'Normal Delivery','price'=> 3000,'created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['nameService' => 'Fast Delivery','price'=> 600,'created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['nameService' => 'Fast Delivery','price'=> 4000,'created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['nameService' => 'Express Delivery','price'=> 800,'created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['nameService' => 'Express Delivery','price'=> 5000,'created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')]
         ]);
     }

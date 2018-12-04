@@ -102,4 +102,140 @@
             @endforeach
         </div>
     </div>
+
+
+    <!--Modal add new-->
+    <div class="modal fade modal-add" id="Modal"
+         tabindex="-1" role="dialog"
+         aria-labelledby="favoritesModalLabel" style="display: none;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"
+                        id="favoritesModalLabel">Order</h4>
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                </div>
+                {!! Form::open(['url' => route('orders.store'),'method' => 'POST']) !!}
+                <div class="modal-body">
+                    <div class="container col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('sender-name', 'Sender Name') !!}
+                                    {!! Form::text(
+                                        'sender[name]',
+                                        old('sender[name]'),
+                                        [
+                                            'id' => 'sender-name',
+                                            'class' => 'form-control',
+                                            'required autofocus'
+                                        ]
+                                        )
+                                    !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('sender-phone', 'Sender Phone') !!}
+                                    {!! Form::text(
+                                        'sender[phone]',
+                                        old('sender[phone]'),
+                                        [
+                                            'id' => 'sender-name',
+                                            'class' => 'form-control',
+                                            'required autofocus'
+                                        ]
+                                        )
+                                    !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('sender-address', 'Sender Address') !!}
+                                    {!! Form::text(
+                                        'sender[address]',
+                                        old('sender[address]'),
+                                        [
+                                            'id' => 'sender-name',
+                                            'class' => 'form-control',
+                                            'required autofocus'
+                                        ]
+                                        )
+                                    !!}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('receiver-name', 'Receiver Name') !!}
+                                    {!! Form::text(
+                                        'receiver[name]',
+                                        old('receiver[name]'),
+                                        [
+                                            'id' => 'receiver-name',
+                                            'class' => 'form-control',
+                                            'required autofocus'
+                                        ]
+                                        )
+                                    !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('receiver-phone', 'Receiver Phone') !!}
+                                    {!! Form::text(
+                                        'receiver[phone]',
+                                        old('receiver[phone]'),
+                                        [
+                                            'id' => 'receiver-name',
+                                            'class' => 'form-control',
+                                            'required autofocus'
+                                        ]
+                                        )
+                                    !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('receiver-address', 'Receiver Address') !!}
+                                    {!! Form::text(
+                                        'receiver[address]',
+                                        old('receiver[address]'),
+                                        [
+                                            'id' => 'receiver-name',
+                                            'class' => 'form-control',
+                                            'required autofocus'
+                                        ]
+                                        )
+                                    !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('weight', 'Total Weight') !!}
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="order[weight]">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon2">Kilogram</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('receiver-address', 'Services') !!}
+                        {!! Form::select('order[serviceTypes]',$serviceTypes, null , ['class' => 'form-control service-types']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('receiver-address', 'Note') !!}
+                        {!! Form::select('order[note]',$note, null , ['class' => 'form-control service-types']) !!}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button"
+                                    class="btn btn-default"
+                                    data-dismiss="modal">Close
+                            </button>
+                            <span class="pull-right">
+                              {!! Form::submit('Save', ['class' => 'btn btn-primary btn-block']) !!}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
