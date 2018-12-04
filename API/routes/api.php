@@ -37,6 +37,11 @@ Route::group(['prefix' => 'shipper'], function () {
 	Route::post('showHistory', "Api\ShipperController@showHistory");
 	Route::post('updateStatus', "Api\ShipperController@updateStatus");
 	Route::post('showDetailOrder', "Api\ShipperController@showDetailOrder");
+
+});
+
+Route::group(['prefix' => 'ordertrakings'], function () {
+	Route::post('insertPosition', "Api\OrderTrakingsController@insertPosition");
 });
 
 //Route::group(['middleware' => 'checkadmin'], function () {

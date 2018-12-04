@@ -213,7 +213,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idUser = $request->idUser;
-			//$idUser =2;
+			$idUser = 1;
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
 			if ($result_shipper->count() > 0) {
@@ -234,14 +234,14 @@ class ShipperController extends Controller {
 				} else {
 					return response()->json([
 						'error' => true,
-						'data' => null,
+						'data' => 'wtf',
 						'errors' => null,
 					], 400);
 				}
 			} else {
 				return response()->json([
 					'error' => true,
-					'data' => null,
+					'data' => 'count > 0',
 					'errors' => null,
 				], 400);
 			}
