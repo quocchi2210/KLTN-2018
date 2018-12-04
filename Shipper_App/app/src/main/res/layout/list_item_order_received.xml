@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="60dp"
+    android:layout_height="100dp"
     android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/lnlo_order"
         android:layout_width="0dip"
         android:layout_height="fill_parent"
-        android:layout_weight="70"
+        android:layout_weight="60"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/bill_of_lading"
+            android:id="@+id/txt_address_delivery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TEST"
+            android:text="Diem giao"
             />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/txt_address_receive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TEST"/>
+            android:text="Diem nhan"/>
+
+        <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thoi gian"/>
 
     </LinearLayout>
 
     <Button
         android:layout_width="0dip"
         android:layout_height="fill_parent"
-        android:layout_weight="30"
-        android:text="Pick up"
-        android:id="@+id/btn_pick_up"/>
+        android:layout_weight="15"
+        android:text="Xem ban do"
+        android:id="@+id/btn_see_map"/>
+
+    <Button
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="15"
+        android:text="Done"
+        android:id="@+id/btn_done"/>
 
 </LinearLayout>
