@@ -26,6 +26,8 @@ class CreateShippersTable extends Migration
             $table->increments('idShipper');
             $table->unsignedInteger('idUser');
             $table->string('licensePlates', 11)->nullable()->default(null);
+            $table->decimal('latitudeShipper', 11, 8)->nullable()->default(null);
+            $table->decimal('longitudeShipper', 11, 8)->nullable()->default(null);
 
             $table->foreign('idUser')
                 ->references('idUser')->on('users')

@@ -9,9 +9,25 @@ use Illuminate\Support\Facades\Auth;
 class Order extends Model
 {
     public $table = 'orders';
+    protected  $primaryKey = 'idOrder';
 
     protected $fillable = [
-        'name', 'description'
+        'name',
+        'billOfLading',
+        'nameReceiver',
+        'addressReceiver',
+        'latitudeReceiver',
+        'longitudeReceiver',
+        'phoneReceiver',
+        'emailReceiver',
+        'descriptionOrder',
+        'dateCreated',
+        'COD',
+        'timeDelivery',
+        'distanceShipping',
+        'totalWeight',
+        'priceService',
+        'totalMoney',
     ];
     protected static function boot()
     {
@@ -22,6 +38,8 @@ class Order extends Model
             });
         }
     }
+
+
     public function status()
     {
         return $this->belongsTo('App\OrderStatus', 'idOrderStatus', 'idStatus');
@@ -30,6 +48,11 @@ class Order extends Model
     public function store()
     {
         return $this->belongsTo('App\Store','idStore','idStore');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany('App\OrderDetail','idOrder','idOrder');
     }
 
 }

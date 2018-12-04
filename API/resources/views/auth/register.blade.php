@@ -60,6 +60,21 @@
                 !!}
                 <span class="glyphicon glyphicon-bold form-control-feedback"></span>
             </div>
+            <div class="form-group has-feedback">
+                {!! Form::label('full-name', 'Full Name') !!}
+                {!! Form::text(
+                    'fullName[name]',
+                    old('fullName[name]'),
+                    [
+                        'id' => 'full-name',
+                        'class' => 'form-control',
+                        'placeholder' => 'John Doe',
+                        'required autofocus'
+                    ]
+                    )
+                !!}
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
         </div>
             <div class="user-info">
                 <div class="form-group has-feedback">

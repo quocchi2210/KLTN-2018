@@ -51,10 +51,10 @@ class ApiRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
-        return [
-            //
-        ];
-    }
+//    public function rules()
+//    {
+//        return [
+//            //
+//        ];
+//    }
 }

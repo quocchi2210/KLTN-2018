@@ -5,8 +5,8 @@
     <div class="container">
             <div class="row top25 inboxMain">
                 <div class="row text-center alert alert-info">
-                    <div class="col-md-4"><h3>Order No: 2</h3></div>
-                    <div class="col-md-4"><h3>Total: 3</h3></div>
+                    <div class="col-md-4"><h3>Order No: {{$bill}}</h3></div>
+                    <div class="col-md-4"><h3>Customer: {{$nameReceiver}}</h3></div>
                     <div class="col-md-4"><h3> Status: {{$status}}</h3></div>
                 </div>
 

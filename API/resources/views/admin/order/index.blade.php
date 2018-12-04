@@ -40,6 +40,7 @@
                                             <th scope="col">Store</th>
                                             <th scope="col">Address Store</th>
                                             <th scope="col">Bill Of Lading</th>
+                                            <th scope="col">Total Money</th>
                                             <th scope="col">Date Create</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -51,6 +52,7 @@
                                                 <td>{{$statusOrder->store->nameStore}}</td>
                                                 <td>{{$statusOrder->store->addressStore}}</td>
                                                 <td>{{$statusOrder->billOfLading}}</td>
+                                                <td>{{$statusOrder->totalMoney}}</td>
                                                 <td>{{$statusOrder->created_at}}</td>
                                                 <td nowrap="">
                                                     {{--@if($statusItem->id == 1)--}}

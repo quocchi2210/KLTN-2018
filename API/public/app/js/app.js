@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 41);
+/******/ 	return __webpack_require__(__webpack_require__.s = 43);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -19622,7 +19622,7 @@ if (typeof jQuery === 'undefined') {
 
 /***/ }),
 
-/***/ 41:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(6);
@@ -19661,6 +19661,8 @@ if("undefined"==typeof jQuery)throw new Error("AdminLTE requires jQuery");+funct
  */
 
 __webpack_require__(7);
+__webpack_require__(8);
+__webpack_require__(9);
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -19688,6 +19690,71 @@ try {
     __webpack_require__(4);
 } catch (e) {}
 __webpack_require__(5);
+
+/***/ }),
+
+/***/ 8:
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports) {
+
+
+
+$(document).on('click', '.btn-edit-order', function () {
+    var url = $(this).data("url");
+    console.log(url);
+    $("#ModalInfoOrder").remove();
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function success(res) {
+            $('body').append(res);
+            $("#ModalInfoOrder").modal();
+        },
+        error: function error(a, b, c) {
+            console.log(a, b, c);
+        }
+    });
+});
+
+$(document).on('click', '.btn-delete-order', function () {
+    var url = $(this).data("url");
+    console.log(url);
+    $("#ModalDeleteOrder").remove();
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function success(res) {
+            $('body').append(res);
+            $("#ModalDeleteOrder").modal();
+        },
+        error: function error(a, b, c) {
+            console.log(a, b, c);
+        }
+    });
+});
+
+$(document).on('click', '.btn-info-order', function () {
+    var url = $(this).data("url");
+    console.log(url);
+    $("#ModalInfoOrder").remove();
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function success(res) {
+            $('body').append(res);
+            $("#ModalInfoOrder").modal();
+        },
+        error: function error(a, b, c) {
+            console.log(a, b, c);
+        }
+    });
+});
 
 /***/ })
 

@@ -34,8 +34,8 @@ class CreateOrdersTable extends Migration
             $table->string('billOfLading', 45)->nullable();
             $table->string('nameReceiver', 50)->nullable()->default(null);
             $table->text('addressReceiver')->nullable()->default(null);
-            $table->decimal('latitudeReceiver', 8, 2)->nullable()->default(null);
-            $table->decimal('longitudeReceiver', 8, 2)->nullable()->default(null);
+            $table->decimal('latitudeReceiver', 11, 8)->nullable()->default(null);
+            $table->decimal('longitudeReceiver', 11, 8)->nullable()->default(null);
             $table->string('phoneReceiver', 11)->nullable()->default(null);
             $table->string('emailReceiver', 50);
             $table->string('descriptionOrder', 50);
@@ -50,7 +50,7 @@ class CreateOrdersTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->tinyInteger('totalWeight');
+            $table->float('totalWeight',4,2);
             $table->double('priceService');
             $table->double('totalMoney');
 
