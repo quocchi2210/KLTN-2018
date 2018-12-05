@@ -20,6 +20,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     EditText edt_user, edt_password;
     Button btn_register, btn_login, btn_logout;
     String username, password;
+    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(15); // no
+    ScheduledFuture<?> t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,20 +95,17 @@ public class MainActivity extends AppCompatActivity {
             btn_register.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    t.cancel(false);
                 }
             });
 
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //order_show();
-          //          send_post();
-                  Dialog  dialog = new Dialog(MainActivity.this,R.style.Theme_Dialog);
-                  dialog.setTitle("TEST");
-                  dialog.setContentView(R.layout.info_order_dialog);
+                    order_show();
+                    //send_post();
 
-                  dialog.show();
+                    //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
 
                 }
             });
@@ -114,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
     }
         private void order_show(){
             //Intent intent = new Intent(MainActivity.this, History_Activity.class);
-            //Intent intent = new Intent(MainActivity.this, Order_Activity.class);
-            Intent intent = new Intent(MainActivity.this, Order_Received_Activity.class);
+            Intent intent = new Intent(MainActivity.this, Order_Activity.class);
+            //Intent intent = new Intent(MainActivity.this, Order_Received_Activity.class);
+
             startActivity(intent);
         }
 
@@ -129,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             Request request = new Request.Builder()
-                    .url("http://192.168.1.16:8000/api/shipper/showOrder")
+                    //.url("http://192.168.1.16:8000/api/shipper/showOrder")
+                    .url(" http://192.168.0.132:8000/api/shipper/showOrder")
                     .post(requestBody)
                     //.addHeader("name_your_token", "your_token")
                     .build();
@@ -154,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                                     Jobject = new JSONObject(yourResponse);
 
                                     JSONArray Jarray = Jobject.getJSONArray("data");
+
 
                                     for (int i = 0; i < Jarray.length(); i++) {
                                         JSONObject object = Jarray.getJSONObject(i);
@@ -184,4 +191,49 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+    class MyTask implements Runnable {
+
+
+        public void run() {
+            send_lat_long();
+        }
+    }
+
+    private void send_lat_long(){
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("order_id", "2")
+                .build();
+
+        Request request = new Request.Builder()
+                //.url("http://192.168.1.16:8000/api/shipper/showOrder")
+                .url(" http://192.168.0.132:8000/api/ordertrakings/insertPosition")
+                .post(requestBody)
+                //.addHeader("name_your_token", "your_token")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String yourResponse = response.body().string();
+
+                if(response.isSuccessful()){
+
+                }else{
+
+                }
+
+
+            }
+        });
+    }
 }
