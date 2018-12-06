@@ -3,6 +3,7 @@ package com.example.quocchi.shipper_app;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +17,34 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class History_Activity extends AppCompatActivity {
 
 //    ListView lvHistory;
     //ArrayList<History> arrayHistory;
 
+    private ArrayList<History> data = new ArrayList<History>();
+
     ExpandableListView expandableListView;
+    List<NameStore> listContact;
     List<String> listdataHeader;
     HashMap<String,ArrayList<History>> listdataChild;
 
@@ -37,35 +55,120 @@ public class History_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-        listdataHeader = new ArrayList<>();
-        listdataChild = new HashMap<String,ArrayList<History>>();
+//        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+//        listdataHeader = new ArrayList<String>();
+//        listContact = new ArrayList<NameStore>();
+//        listdataChild = new HashMap<String,ArrayList<History>>();
+//
+//        listdataHeader.add("A store");
+//        listdataHeader.add("B store");
+//        listdataHeader.add("C store");
+//
+//        listContact.add(new NameStore(1,"A store"));
+//        listContact.add(new NameStore(2,"B store"));
+//        listContact.add(new NameStore(3,"C store"));
+//
+//        ArrayList<History> store_a = new ArrayList<History>();
+//        store_a.add(new History("math",1));
+//        store_a.add(new History("math1",1));
+//        store_a.add(new History("math2",1));
+//
+//        ArrayList<History> store_b = new ArrayList<History>();
+//        store_b.add(new History("english",2));
+//        store_b.add(new History("english1",2));
+//        store_b.add(new History("english2",2));
+//
+//        ArrayList<History> store_c = new ArrayList<History>();
+//        store_c.add(new History("gaphic",3));
+//        store_c.add(new History("gaphic1",3));
+//        store_c.add(new History("gaphic2",3));
+//
+//        listdataChild.put(listdataHeader.get(0),store_a);
+//        listdataChild.put(listdataHeader.get(1),store_b);
+//        listdataChild.put(listdataHeader.get(2),store_c);
+//
+//        customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
+//        expandableListView.setAdapter(customExpandableListView);
 
-        listdataHeader.add("A store");
-        listdataHeader.add("B store");
-        listdataHeader.add("C store");
+        ArrayList<NameStore> values=new ArrayList<NameStore>();
+        values.add(new NameStore(1,"A store"));
+        values.add(new NameStore(1,"A store"));
+        values.add(new NameStore(2,"A store"));
+        HashSet<NameStore> hashSet = new HashSet<NameStore>();
+        hashSet.addAll(values);
+        values.clear();
+        values.addAll(hashSet);
 
-        ArrayList<History> store_a = new ArrayList<History>();
-        store_a.add(new History("math",1));
-        store_a.add(new History("math1",1));
-        store_a.add(new History("math2",1));
+        Log.w("myApp", values.toString());
 
-        ArrayList<History> store_b = new ArrayList<History>();
-        store_b.add(new History("english",1));
-        store_b.add(new History("english1",1));
-        store_b.add(new History("english2",1));
-
-        ArrayList<History> store_c = new ArrayList<History>();
-        store_c.add(new History("gaphic",1));
-        store_c.add(new History("gaphic1",1));
-        store_c.add(new History("gaphic2",1));
-
-        listdataChild.put(listdataHeader.get(0),store_a);
-        listdataChild.put(listdataHeader.get(1),store_b);
-        listdataChild.put(listdataHeader.get(2),store_c);
-
-        customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
-        expandableListView.setAdapter(customExpandableListView);
+//        OkHttpClient client = new OkHttpClient();
+//
+//        RequestBody requestBody = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("your_name_input", "your_value")
+//                .build();
+//
+//        Request request = new Request.Builder()
+//                //.url("http://192.168.1.16:8000/api/shipper/showOrder")
+//                .url(" http://192.168.0.132:8000/api/shipper/showOrder")
+//                .post(requestBody)
+//                //.addHeader("name_your_token", "your_token")
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                final String yourResponse = response.body().string();
+//
+//                if(response.isSuccessful()){
+//
+//                    History_Activity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            JSONObject Jobject = null;
+//                            try {
+//                                expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+//                                listdataHeader = new ArrayList<>();
+//                                listdataChild = new HashMap<String,ArrayList<History>>();
+//
+//                                Jobject = new JSONObject(yourResponse);
+//
+//                                JSONArray Jarray = Jobject.getJSONArray("data");
+//
+//
+//                                for (int i = 0; i < Jarray.length(); i++) {
+//                                    JSONObject object = Jarray.getJSONObject(i);
+//
+//                                    listContact.add(new NameStore(Integer.parseInt(object.getString("idStore")),object.getString("nameStore")))
+//                                    //listdataHeader.add();
+////                                    Log.w("myApp", object.toString());
+////                                    String billOfLading = object.getString("billOfLading");
+////                                    String address = object.getString("addressReceiver");
+////                                    data.add(new Order_Activity.Order(billOfLading,address));
+//                                }
+//
+//                                customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
+//                                expandableListView.setAdapter(customExpandableListView);
+//
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    });
+//                }else{
+//
+//                }
+//
+//
+//            }
+//        });
 //        lvHistory = (ListView) findViewById(R.id.list_history);
 //        arrayHistory = new ArrayList<History>();
 //
@@ -226,8 +329,8 @@ public class History_Activity extends AppCompatActivity {
 
 
     private class History{
-        public String a;
-        public int b;
+        private String a;
+        private int b;
 
         History(String a, int b){
             this.a = a;
@@ -242,5 +345,31 @@ public class History_Activity extends AppCompatActivity {
         public void setA(String a) {
             this.a = a;
         }
+    }
+
+    private class NameStore{
+        private int id_store;
+        private String name_store;
+        public NameStore(int id_store, String name_store) {
+            this.id_store = id_store;
+            this.name_store = name_store;
+        }
+
+        public int getId_store() {
+            return id_store;
+        }
+
+        public void setId_store(int id_store) {
+            this.id_store = id_store;
+        }
+
+        public String getName_store() {
+            return name_store;
+        }
+
+        public void setName_store(String name_store) {
+            this.name_store = name_store;
+        }
+
     }
 }

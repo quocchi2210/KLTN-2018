@@ -21,8 +21,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -35,13 +38,71 @@ public class Store_Manage_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_manage);
 
-        ListView lv_store_mange = findViewById(R.id.list_view_store_manage);
+        OkHttpClient client = new OkHttpClient();
 
-        data.add(new Store_Manage("MATH","123"));
-        data.add(new Store_Manage("MATH1","456"));
-        data.add(new Store_Manage("MATH2","789"));
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("your_input", "your_value")
+                .build();
 
-        lv_store_mange.setAdapter(new Store_Manage_Adapter(Store_Manage_Activity.this, R.layout.list_store_manage_item, data));
+        Request request = new Request.Builder()
+                //.url("http://192.168.1.16:8000/api/shipper/showOrder")
+                .url(" http://192.168.0.132:8000/api/store/showOrder")
+                .post(requestBody)
+                //.addHeader("name_your_token", "your_token")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String yourResponse = response.body().string();
+
+                if(response.isSuccessful()){
+                    Log.w("Add_Activity","Add success");
+                    //Toast.makeText(Add_Activity.this, "Add success", Toast.LENGTH_SHORT).show();
+
+                    Store_Manage_Activity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject Jobject = null;
+                            try {
+                                ListView lv_store_mange = findViewById(R.id.list_view_store_manage);
+                                Jobject = new JSONObject(yourResponse);
+
+                                JSONArray Jarray = Jobject.getJSONArray("data");
+
+                                for (int i = 0; i < Jarray.length(); i++) {
+                                    JSONObject object = Jarray.getJSONObject(i);
+                                    Log.w("myApp", object.toString());
+                                    String billOfLading = object.getString("billOfLading");
+                                    String address = object.getString("addressReceiver");
+                                    data.add(new Store_Manage(billOfLading,address));
+                                }
+
+                                lv_store_mange.setAdapter(new Store_Manage_Adapter(Store_Manage_Activity.this, R.layout.list_store_manage_item, data));
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+
+                }else{
+                    Log.w("Add_Activity","Add faild "+yourResponse.toString());
+                }
+
+            }
+        });
+
+
 
     }
 

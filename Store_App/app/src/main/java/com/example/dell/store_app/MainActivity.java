@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show(){
-        //Intent intent = new Intent(MainActivity.this, Store_Manage_Activity.class);
-        Intent intent = new Intent(MainActivity.this, Add_Activity.class);
+        Intent intent = new Intent(MainActivity.this, Store_Manage_Activity.class);
+        //Intent intent = new Intent(MainActivity.this, Add_Activity.class);
         startActivity(intent);
     }
 }
