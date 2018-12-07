@@ -54,7 +54,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url(" http://192.168.0.132:8000/api/shipper/showOrderReceived")
+                .url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
                 .post(requestBody)
                 //.addHeader("name_your_token", "your_token")
                 .build();

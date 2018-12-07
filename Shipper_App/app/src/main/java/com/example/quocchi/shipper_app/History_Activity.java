@@ -17,16 +17,34 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.Request.*;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,9 +62,10 @@ public class History_Activity extends AppCompatActivity {
     private ArrayList<History> data = new ArrayList<History>();
 
     ExpandableListView expandableListView;
-    List<NameStore> listContact;
-    List<String> listdataHeader;
-    HashMap<String,ArrayList<History>> listdataChild;
+    List<NameStore> listContact = new ArrayList<NameStore>();
+    List<String> listdataHeader = new ArrayList<String>();
+    List<String> list = new ArrayList<String>();
+    HashMap<String,ArrayList<History>> listdataChild = new HashMap<String,ArrayList<History>>();
 
     CustomExpandableListView customExpandableListView;
 
@@ -55,120 +74,28 @@ public class History_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-//        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-//        listdataHeader = new ArrayList<String>();
-//        listContact = new ArrayList<NameStore>();
-//        listdataChild = new HashMap<String,ArrayList<History>>();
-//
-//        listdataHeader.add("A store");
-//        listdataHeader.add("B store");
-//        listdataHeader.add("C store");
-//
-//        listContact.add(new NameStore(1,"A store"));
-//        listContact.add(new NameStore(2,"B store"));
-//        listContact.add(new NameStore(3,"C store"));
-//
-//        ArrayList<History> store_a = new ArrayList<History>();
-//        store_a.add(new History("math",1));
-//        store_a.add(new History("math1",1));
-//        store_a.add(new History("math2",1));
-//
-//        ArrayList<History> store_b = new ArrayList<History>();
-//        store_b.add(new History("english",2));
-//        store_b.add(new History("english1",2));
-//        store_b.add(new History("english2",2));
-//
-//        ArrayList<History> store_c = new ArrayList<History>();
-//        store_c.add(new History("gaphic",3));
-//        store_c.add(new History("gaphic1",3));
-//        store_c.add(new History("gaphic2",3));
-//
-//        listdataChild.put(listdataHeader.get(0),store_a);
-//        listdataChild.put(listdataHeader.get(1),store_b);
-//        listdataChild.put(listdataHeader.get(2),store_c);
-//
-//        customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
-//        expandableListView.setAdapter(customExpandableListView);
+        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
-        ArrayList<NameStore> values=new ArrayList<NameStore>();
-        values.add(new NameStore(1,"A store"));
-        values.add(new NameStore(1,"A store"));
-        values.add(new NameStore(2,"A store"));
-        HashSet<NameStore> hashSet = new HashSet<NameStore>();
-        hashSet.addAll(values);
-        values.clear();
-        values.addAll(hashSet);
+        ArrayList<History> store_a = new ArrayList<History>();
+        store_a.add(new History("math",1));
+        store_a.add(new History("math1",1));
+        store_a.add(new History("math2",1));
 
-        Log.w("myApp", values.toString());
+        ArrayList<History> store_b = new ArrayList<History>();
+        store_b.add(new History("english",2));
+        store_b.add(new History("english1",2));
+        store_b.add(new History("english2",2));
 
-//        OkHttpClient client = new OkHttpClient();
-//
-//        RequestBody requestBody = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("your_name_input", "your_value")
-//                .build();
-//
-//        Request request = new Request.Builder()
-//                //.url("http://192.168.1.16:8000/api/shipper/showOrder")
-//                .url(" http://192.168.0.132:8000/api/shipper/showOrder")
-//                .post(requestBody)
-//                //.addHeader("name_your_token", "your_token")
-//                .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                final String yourResponse = response.body().string();
-//
-//                if(response.isSuccessful()){
-//
-//                    History_Activity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            JSONObject Jobject = null;
-//                            try {
-//                                expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-//                                listdataHeader = new ArrayList<>();
-//                                listdataChild = new HashMap<String,ArrayList<History>>();
-//
-//                                Jobject = new JSONObject(yourResponse);
-//
-//                                JSONArray Jarray = Jobject.getJSONArray("data");
-//
-//
-//                                for (int i = 0; i < Jarray.length(); i++) {
-//                                    JSONObject object = Jarray.getJSONObject(i);
-//
-//                                    listContact.add(new NameStore(Integer.parseInt(object.getString("idStore")),object.getString("nameStore")))
-//                                    //listdataHeader.add();
-////                                    Log.w("myApp", object.toString());
-////                                    String billOfLading = object.getString("billOfLading");
-////                                    String address = object.getString("addressReceiver");
-////                                    data.add(new Order_Activity.Order(billOfLading,address));
-//                                }
-//
-//                                customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
-//                                expandableListView.setAdapter(customExpandableListView);
-//
-//
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//                    });
-//                }else{
-//
-//                }
-//
-//
-//            }
-//        });
+        ArrayList<History> store_c = new ArrayList<History>();
+        store_c.add(new History("gaphic",3));
+        store_c.add(new History("gaphic1",3));
+        store_c.add(new History("gaphic2",3));
+
+        Log.w("List child ", listContact.toString());
+
+        getNameStore("http://192.168.0.132:8000/api/shipper/showAllStoreOrder");
+
+        Log.w("List Header ", listdataHeader.toString());
 //        lvHistory = (ListView) findViewById(R.id.list_history);
 //        arrayHistory = new ArrayList<History>();
 //
@@ -188,6 +115,61 @@ public class History_Activity extends AppCompatActivity {
 //
 //            }
 //        });
+
+
+    }
+
+    private void getNameStore(String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                    final String response1 = response;
+                    Log.w("List Header Out", listdataHeader.toString());
+                    History_Activity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                JSONObject Jobject = new JSONObject(response1);
+                                JSONArray Jarray = Jobject.getJSONArray("data");
+                                for (int i = 0; i < Jarray.length(); i++) {
+                                    JSONObject object = Jarray.getJSONObject(i);
+
+                                    listdataHeader.add(object.getString("nameStore"));
+                                }
+
+                                list = listdataHeader;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+
+                    //Toast.makeText(History_Activity.this,"OK CON TETE",Toast.LENGTH_SHORT).show();
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("your_input","your_value");
+                return super.getParams();
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
     }
 
     public class CustomExpandableListView extends BaseExpandableListAdapter {
@@ -372,4 +354,66 @@ public class History_Activity extends AppCompatActivity {
         }
 
     }
+}
+
+class HttpsTrustManager implements X509TrustManager {
+
+    private static TrustManager[] trustManagers;
+    private static final X509Certificate[] _AcceptedIssuers = new X509Certificate[]{};
+
+    @Override
+    public void checkClientTrusted(
+            java.security.cert.X509Certificate[] x509Certificates, String s)
+            throws java.security.cert.CertificateException {
+
+    }
+
+    @Override
+    public void checkServerTrusted(
+            java.security.cert.X509Certificate[] x509Certificates, String s)
+            throws java.security.cert.CertificateException {
+
+    }
+
+    public boolean isClientTrusted(X509Certificate[] chain) {
+        return true;
+    }
+
+    public boolean isServerTrusted(X509Certificate[] chain) {
+        return true;
+    }
+
+    @Override
+    public X509Certificate[] getAcceptedIssuers() {
+        return _AcceptedIssuers;
+    }
+
+    public static void allowAllSSL() {
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+
+            @Override
+            public boolean verify(String arg0, SSLSession arg1) {
+                return true;
+            }
+
+        });
+
+        SSLContext context = null;
+        if (trustManagers == null) {
+            trustManagers = new TrustManager[]{new HttpsTrustManager()};
+        }
+
+        try {
+            context = SSLContext.getInstance("TLS");
+            context.init(null, trustManagers, new SecureRandom());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        HttpsURLConnection.setDefaultSSLSocketFactory(context
+                .getSocketFactory());
+    }
+
 }
