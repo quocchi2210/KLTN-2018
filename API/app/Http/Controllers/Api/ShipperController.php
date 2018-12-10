@@ -371,4 +371,45 @@ class ShipperController extends Controller {
 			}
 		}
 	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/shipper/getDirection",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="origin",
+	 *     in="query",
+	 *     description="origin",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="destination",
+	 *     in="query",
+	 *     description="destination",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+	public function getDirection(Request $request) {
+
+		$origin = $request->get('origin');
+
+		$destination = $request->get('destination');
+
+		$request_url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . urlencode($origin) . "&destination=" . urlencode($destination) . "&key=AIzaSyBVLZZFaDU6nn96cbs59PfMBNXu9ZNdxYE";
+
+		$string = file_get_contents($request_url);
+
+		return json_decode($string, true);
+	}
 }

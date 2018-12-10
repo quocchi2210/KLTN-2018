@@ -28,11 +28,13 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 
 public class Order_Activity extends AppCompatActivity {
 
@@ -43,8 +45,17 @@ public class Order_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+        String hostname = "luxexpress.cf";
 
-        OkHttpClient client = new OkHttpClient();
+        CertificatePinner certificatePinner = new CertificatePinner.Builder()
+                .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+                .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+                .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+                .build();
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .certificatePinner(certificatePinner)
+                .build();
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -52,11 +63,13 @@ public class Order_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                //.url("http://192.168.1.16:8000/api/shipper/showOrder")
-                .url(" http://192.168.0.132:8000/api/shipper/showOrder")
+                .url("https://luxexpress.cf/api/shipper/showOrder")
+                //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
                 .post(requestBody)
-                //.addHeader("name_your_token", "your_token")
+                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MCwianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE")
                 .build();
+
+        //Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MCwianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -80,7 +93,6 @@ public class Order_Activity extends AppCompatActivity {
 
                                 JSONArray Jarray = Jobject.getJSONArray("data");
 
-
                                 for (int i = 0; i < Jarray.length(); i++) {
                                     JSONObject object = Jarray.getJSONObject(i);
                                     Log.w("myApp", object.toString());
@@ -98,7 +110,7 @@ public class Order_Activity extends AppCompatActivity {
                         }
                     });
                 }else{
-
+                    Log.w("myApp",yourResponse.toString());
                 }
 
 
