@@ -73,6 +73,70 @@ class ShipperController extends Controller {
 
 	/**
 	 * @SWG\POST(
+	 *   path="/api/shipper/showAllStoreOrder",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+	public function showAllStoreOrder(Request $request) {
+
+		if ($request->isMethod('post')) {
+
+			$idUser = $request->idUser;
+			$idUser = 1;
+			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
+			if ($result_shipper->count() > 0) {
+
+				// Log::debug('idUser'. print_r($idUser,1));
+				// Log::debug('idShipper'. print_r($result_shipper[0]['idShipper'],1));
+
+				$idShipper = $result_shipper[0]->idShipper;
+				// $users = DB::statement("SELECT * FROM orders WHERE idShipper=?",[$idShipper]);
+
+				// $users = DB::select("SELECT * FROM orders WHERE idShipper = ?",[$idShipper]);
+
+				$users = DB::table('orders')
+					->distinct('idStore')
+					->select('stores.idStore', 'stores.nameStore')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('idShipper', $idShipper)
+					->where('idOrderStatus', Config::get('constants.status_type.done'))
+					->get();
+
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	/**
+	 * @SWG\POST(
 	 *   path="/api/shipper/showOrderReceived",
 	 *     tags={"Shipper"},
 	 *   summary="Show Profile",
@@ -213,7 +277,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idUser = $request->idUser;
-			//$idUser =2;
+			$idUser = 1;
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
 			if ($result_shipper->count() > 0) {
@@ -221,6 +285,7 @@ class ShipperController extends Controller {
 				$idShipper = $result_shipper[0]->idShipper;
 
 				$result_order = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('idShipper', $idShipper)
 					->where('idOrderStatus', Config::get('constants.status_type.done'))
 					->get();
@@ -234,14 +299,14 @@ class ShipperController extends Controller {
 				} else {
 					return response()->json([
 						'error' => true,
-						'data' => null,
+						'data' => 'wtf',
 						'errors' => null,
 					], 400);
 				}
 			} else {
 				return response()->json([
 					'error' => true,
-					'data' => null,
+					'data' => 'count > 0',
 					'errors' => null,
 				], 400);
 			}
