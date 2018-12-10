@@ -17,6 +17,15 @@ Route::group(['middleware' => 'jwt'], function () {
 	Route::get('profile', "ProfileController@getProfile");
 	Route::post('change', "Api\ChangePasswordController@change");
 
+	Route::group(['prefix' => 'shipper'], function () {
+		Route::post('showOrder', "Api\ShipperController@showOrder");
+		Route::post('showOrderReceived', "Api\ShipperController@showOrderReceived");
+		Route::post('showHistory', "Api\ShipperController@showHistory");
+		Route::post('updateStatus', "Api\ShipperController@updateStatus");
+		Route::post('showDetailOrder', "Api\ShipperController@showDetailOrder");
+		Route::post('showAllStoreOrder', "Api\ShipperController@showAllStoreOrder");
+	});
+
 });
 
 Route::group(['prefix' => 'store'], function () {
@@ -29,15 +38,6 @@ Route::group(['prefix' => 'store'], function () {
 	Route::post('insertOrderStore', "Api\StoreController@insertOrderStore");
 	Route::post('updateOrderStore', "Api\StoreController@updateOrderStore");
 	Route::post('deleteOrderStore', "Api\StoreController@deleteOrderStore");
-});
-
-Route::group(['prefix' => 'shipper'], function () {
-	Route::post('showOrder', "Api\ShipperController@showOrder");
-	Route::post('showOrderReceived', "Api\ShipperController@showOrderReceived");
-	Route::post('showHistory', "Api\ShipperController@showHistory");
-	Route::post('updateStatus', "Api\ShipperController@updateStatus");
-	Route::post('showDetailOrder', "Api\ShipperController@showDetailOrder");
-	Route::post('showAllStoreOrder', "Api\ShipperController@showAllStoreOrder");
 });
 
 Route::group(['prefix' => 'ordertrakings'], function () {
