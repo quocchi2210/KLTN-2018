@@ -116,9 +116,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.0.132:8000/api/shipper/getDirection")
+                //.url("http://192.168.0.132:8000/api/shipper/getDirection")
+                .url("http://luxexpress.cf/api/shipper/getDirection")
                 .post(requestBody)
-                //.addHeader("name_your_token", "your_token")
+                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGc" +
+                        "iOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2lu" +
+                        "IiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MC" +
+                        "wianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MT" +
+                        "JmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

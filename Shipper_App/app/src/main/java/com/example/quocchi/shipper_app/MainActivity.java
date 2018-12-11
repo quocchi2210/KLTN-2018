@@ -117,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
         private void order_show(){
-            //Intent intent = new Intent(MainActivity.this, History_Activity.class);
+            Intent intent = new Intent(MainActivity.this, History_Activity.class);
             //Intent intent = new Intent(MainActivity.this, Order_Activity.class);
             //Intent intent = new Intent(MainActivity.this, Order_Received_Activity.class);
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            //Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 
             startActivity(intent);
         }

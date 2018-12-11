@@ -290,10 +290,19 @@ class ShipperController extends Controller {
 					->where('idOrderStatus', Config::get('constants.status_type.done'))
 					->get();
 
+				$store_name = DB::table('orders')
+					->distinct('idStore')
+					->select('stores.idStore', 'stores.nameStore')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('idShipper', $idShipper)
+					->where('idOrderStatus', Config::get('constants.status_type.done'))
+					->get();
+
 				if ($result_order->count() > 0) {
 					return response()->json([
 						'error' => false,
 						'data' => $result_order,
+						'store_name' => $store_name,
 						'errors' => null,
 					], 200);
 				} else {

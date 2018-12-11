@@ -1,10 +1,14 @@
 package com.example.quocchi.shipper_app;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +43,15 @@ import okhttp3.Response;
 public class Order_Activity extends AppCompatActivity {
 
     private ArrayList<Order> data = new ArrayList<Order>();
+    private String hostname = "luxexpress.cf";
     //public int position_index = -1;
+    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NTE0NDU1LCJleHAiOjE1NDQ1MzI0NTUsIm5iZiI6MTU0NDUxNDQ1NSwianRpIjoiZlNuTWtLVHNPYmJmR3B0MCIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wR38Vvm1PBob7zBWMwpfj-BtMOJLaG4KaYJQUI9_H_I";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-        String hostname = "luxexpress.cf";
+
 
         CertificatePinner certificatePinner = new CertificatePinner.Builder()
                 .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
@@ -66,7 +72,7 @@ public class Order_Activity extends AppCompatActivity {
                 .url("https://luxexpress.cf/api/shipper/showOrder")
                 //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
                 .post(requestBody)
-                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MCwianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE")
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         //Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MCwianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE
@@ -81,7 +87,7 @@ public class Order_Activity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 final String yourResponse = response.body().string();
 
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     Order_Activity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -98,7 +104,8 @@ public class Order_Activity extends AppCompatActivity {
                                     Log.w("myApp", object.toString());
                                     String billOfLading = object.getString("billOfLading");
                                     String address = object.getString("addressReceiver");
-                                    data.add(new Order(billOfLading,address));
+                                    String idOrder = object.getString("idOrder");
+                                    data.add(new Order(billOfLading, address, idOrder));
                                 }
 
                                 lv.setAdapter(new OrderAdapter(Order_Activity.this, R.layout.list_item, data));
@@ -109,8 +116,8 @@ public class Order_Activity extends AppCompatActivity {
 
                         }
                     });
-                }else{
-                    Log.w("myApp",yourResponse.toString());
+                } else {
+                    Log.w("myApp", yourResponse.toString());
                 }
 
 
@@ -125,7 +132,7 @@ public class Order_Activity extends AppCompatActivity {
         int myLayout;
         List<Order> arrayOrder;
 
-        public OrderAdapter(Context context, int layout, List<Order> orderList){
+        public OrderAdapter(Context context, int layout, List<Order> orderList) {
             myContext = context;
             myLayout = layout;
             arrayOrder = orderList;
@@ -148,7 +155,7 @@ public class Order_Activity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            Log.w("myApp", "Detail: " + data.toString());
             LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = inflater.inflate(myLayout, null);
@@ -159,7 +166,11 @@ public class Order_Activity extends AppCompatActivity {
             bill_of_lading.setText(data.get(position).getBill_of_lading());
             address.setText(data.get(position).getAddress());
 
-            LinearLayout lnlo_order = (LinearLayout) convertView.findViewById (R.id.lnlo_order);
+            final String id_order = data.get(position).getId_order();
+
+            LinearLayout lnlo_order = (LinearLayout) convertView.findViewById(R.id.lnlo_order);
+
+            final View Testview = convertView;
 
             final int vitri = position;
 
@@ -171,14 +182,14 @@ public class Order_Activity extends AppCompatActivity {
 
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
-                            .addFormDataPart("id_order", "1")
+                            .addFormDataPart("id_order", id_order)
                             .build();
 
                     Request request = new Request.Builder()
-                            //.url("http://192.168.1.16:8000/api/shipper/showOrder")
-                            .url(" http://192.168.0.132:8000/api/shipper/showDetailOrder")
+                            //.url(" http://192.168.0.132:8000/api/shipper/showDetailOrder")
+                            .url("https://luxexpress.cf/api/shipper/showDetailOrder")
                             .post(requestBody)
-                            //.addHeader("name_your_token", "your_token")
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
 
                     client.newCall(request).enqueue(new Callback() {
@@ -191,47 +202,71 @@ public class Order_Activity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             final String yourResponse = response.body().string();
 
-                            if(response.isSuccessful()){
+                            if (response.isSuccessful()) {
 
                                 Order_Activity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         JSONObject Jobject = null;
                                         try {
-                                            ListView lv = findViewById(R.id.list_view);
+                                            ListView lv_order_detail = new ListView( Order_Activity.this);
+                                            ColorDrawable blue = new ColorDrawable(ContextCompat.getColor( Order_Activity.this, R.color.colorBlue));
+                                            lv_order_detail.setDivider(blue);
+                                            lv_order_detail.setDividerHeight(5);
+
+                                            Log.w("myApp", "BLue : " + blue.toString());
+
+                                            ArrayList<OrderDetail> data_detail = new ArrayList<OrderDetail>();
                                             Jobject = new JSONObject(yourResponse);
+
+                                            String phoneStore = null;
+                                            String addressStore = null;
+                                            String billOfLading = null;
+                                            String nameProduct = null;
+                                            String number_of_store = null;
+                                            String nameReceiver = null;
+                                            String phoneReceiver = null;
 
                                             JSONArray Jarray = Jobject.getJSONArray("data");
 
+                                            if (Jarray.length() > 0) {
 
-                                            for (int i = 0; i < Jarray.length(); i++) {
-                                                JSONObject object = Jarray.getJSONObject(i);
-                                                Log.w("myApp", "Detail: "+object.toString());
-                                                //Toast.makeText(Order_Activity.this, object.toString(), Toast.LENGTH_LONG).show();
+                                                for (int i = 0; i < Jarray.length(); i++) {
+                                                    JSONObject object = Jarray.getJSONObject(i);
+                                                    Log.w("myApp", "Detail: " + object.toString());
 
-                                                //Toast.makeText(Order_Activity.this, data.get(vitri).getBill_of_lading(), Toast.LENGTH_LONG).show();
-                                                Dialog dialog = new Dialog(Order_Activity.this,R.style.Theme_Dialog);
-                                                dialog.setTitle("TEST");
-                                                dialog.setContentView(R.layout.info_order_dialog);
+                                                    //String phoneStore = object.getString("phoneStore");
+                                                    phoneStore = "123789";
+                                                    addressStore = object.getString("addressStore");
+                                                    billOfLading = object.getString("billOfLading");
+                                                    nameProduct = object.getString("nameProduct");
+                                                    //String number_of_store = object.getString("number_of_store");
+                                                    number_of_store = "2";
+                                                    nameReceiver = object.getString("nameReceiver");
+                                                    phoneReceiver = object.getString("phoneReceiver");
 
-                                                //TextView phone_store = (TextView) dialog.findViewById(R.id.phone_store);
-                                                TextView address_store = (TextView) dialog.findViewById(R.id.address_store);
-                                                TextView bill_of_lading_order_detail = (TextView) dialog.findViewById(R.id.bill_of_lading_order_detail);
-                                                TextView name_product = (TextView) dialog.findViewById(R.id.name_product);
-                                                //TextView number_of_product = (TextView) dialog.findViewById(R.id.number_of_product);
-                                                TextView receiver = (TextView) dialog.findViewById(R.id.receiver);
-                                                TextView phone_receiver = (TextView) dialog.findViewById(R.id.phone_receiver);
+                                                    data_detail.add(new OrderDetail(phoneStore, addressStore, billOfLading, nameProduct, number_of_store, nameReceiver,phoneReceiver));
+                                                }
+                                                lv_order_detail.setAdapter(new OrderDetailAdapter(Order_Activity.this, R.layout.info_order_dialog, data_detail));
 
+//                                                Dialog dialog = new Dialog(Order_Activity.this, R.style.Theme_Dialog);
+//                                                dialog.setTitle("Chi tiết đơn hàng");
+//                                                dialog.;
+                                                //AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(Order_Activity.this, R.style.Theme_Dialog));
 
-                                                //phone_store.setText("Điện thoại: " + object.getString("phoneStore"));
-                                                address_store.setText("Địa chỉ: " + object.getString("addressStore"));
-                                                bill_of_lading_order_detail.setText("Mã đơn hàng: " + object.getString("billOfLading"));
-                                                name_product.setText("Tên sản phẩm: " + object.getString("nameProduct"));
-                                                //number_of_product.setText("Số lượng: " + object.getString("number_of_store"));
-                                                receiver.setText("Người nhận: " + object.getString("nameReceiver"));
-                                                phone_receiver.setText("Số điện thoại: " + object.getString("phoneReceiver"));
-
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(Order_Activity.this,AlertDialog.THEME_HOLO_LIGHT);
+                                                builder.setPositiveButton("OK" ,null);
+                                                builder.setView(lv_order_detail);
+                                                AlertDialog dialog = builder.create();
+                                                dialog.setTitle("Chi tiết đơn hàng");
                                                 dialog.show();
+
+                                            } else {
+                                                Dialog dialog = new Dialog(Order_Activity.this, R.style.Theme_Dialog);
+                                                dialog.setTitle("Chi tiết đơn hàng");
+                                                dialog.setContentView(R.layout.info_order_dialog);
+                                                dialog.show();
+
                                             }
 
 
@@ -241,7 +276,7 @@ public class Order_Activity extends AppCompatActivity {
 
                                     }
                                 });
-                            }else{
+                            } else {
 
                             }
 
@@ -256,14 +291,68 @@ public class Order_Activity extends AppCompatActivity {
         }
     }
 
+    private class OrderDetailAdapter extends BaseAdapter {
 
-    private class Order{
+        Context myContext;
+        int myLayout;
+        List<OrderDetail> arrayOrderDetail;
+
+        public OrderDetailAdapter(Context context, int layout, List<OrderDetail> orderdetailList) {
+            myContext = context;
+            myLayout = layout;
+            arrayOrderDetail = orderdetailList;
+        }
+
+        @Override
+        public int getCount() {
+            return arrayOrderDetail.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = inflater.inflate(myLayout, null);
+
+            TextView phone_store = (TextView) convertView.findViewById(R.id.phone_store);
+            TextView address_store = (TextView) convertView.findViewById(R.id.address_store);
+            TextView bill_of_lading_order_detail = (TextView) convertView.findViewById(R.id.bill_of_lading_order_detail);
+            TextView name_product = (TextView) convertView.findViewById(R.id.name_product);
+            //TextView number_of_product = (TextView) convertView.findViewById(R.id.number_of_product);
+
+            TextView receiver = (TextView) convertView.findViewById(R.id.receiver);
+            TextView phone_receiver = (TextView) convertView.findViewById(R.id.phone_receiver);
+
+            phone_store.setText(arrayOrderDetail.get(position).getPhoneStore());
+            address_store.setText(arrayOrderDetail.get(position).getAddressStore());
+            bill_of_lading_order_detail.setText(arrayOrderDetail.get(position).getBillOfLading());
+            name_product.setText(arrayOrderDetail.get(position).getNameProduct());
+            receiver.setText(arrayOrderDetail.get(position).getNameReceiver());
+            phone_receiver.setText(arrayOrderDetail.get(position).getPhoneReceiver());
+//            dialog.show();
+            return convertView;
+        }
+    }
+
+    private class Order {
         private String bill_of_lading;
         private String address;
+        private String id_order;
 
-        Order(String bill_of_lading, String address){
+        Order(String bill_of_lading, String address, String id_order) {
             this.bill_of_lading = bill_of_lading;
             this.address = address;
+            this.id_order = id_order;
         }
 
         public String getBill_of_lading() {
@@ -281,5 +370,91 @@ public class Order_Activity extends AppCompatActivity {
         public void setAddress(String address) {
             this.address = address;
         }
+
+        public String getId_order() {
+            return id_order;
+        }
+
+        public void setId_order(String id_order) {
+            this.id_order = id_order;
+        }
+    }
+
+    private class OrderDetail {
+
+        private String phoneStore;
+        private String addressStore;
+        private String billOfLading;
+        private String nameProduct;
+        private String number_of_store;
+        private String nameReceiver;
+        private String phoneReceiver;
+
+        public OrderDetail(String phoneStore, String addressStore, String billOfLading, String nameProduct, String number_of_store, String nameReceiver, String phoneReceiver) {
+            this.phoneStore = phoneStore;
+            this.addressStore = addressStore;
+            this.billOfLading = billOfLading;
+            this.nameProduct = nameProduct;
+            this.number_of_store = number_of_store;
+            this.nameReceiver = nameReceiver;
+            this.phoneReceiver = phoneReceiver;
+        }
+
+        public String getPhoneStore() {
+            return phoneStore;
+        }
+
+        public void setPhoneStore(String phoneStore) {
+            this.phoneStore = phoneStore;
+        }
+
+        public String getAddressStore() {
+            return addressStore;
+        }
+
+        public void setAddressStore(String addressStore) {
+            this.addressStore = addressStore;
+        }
+
+        public String getBillOfLading() {
+            return billOfLading;
+        }
+
+        public void setBillOfLading(String billOfLading) {
+            this.billOfLading = billOfLading;
+        }
+
+        public String getNameProduct() {
+            return nameProduct;
+        }
+
+        public void setNameProduct(String nameProduct) {
+            this.nameProduct = nameProduct;
+        }
+
+        public String getNumber_of_store() {
+            return number_of_store;
+        }
+
+        public void setNumber_of_store(String number_of_store) {
+            this.number_of_store = number_of_store;
+        }
+
+        public String getNameReceiver() {
+            return nameReceiver;
+        }
+
+        public void setNameReceiver(String nameReceiver) {
+            this.nameReceiver = nameReceiver;
+        }
+
+        public String getPhoneReceiver() {
+            return phoneReceiver;
+        }
+
+        public void setPhoneReceiver(String phoneReceiver) {
+            this.phoneReceiver = phoneReceiver;
+        }
+
     }
 }
