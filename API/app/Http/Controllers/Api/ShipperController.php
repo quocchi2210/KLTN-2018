@@ -290,10 +290,19 @@ class ShipperController extends Controller {
 					->where('idOrderStatus', Config::get('constants.status_type.done'))
 					->get();
 
+				$store_name = DB::table('orders')
+					->distinct('idStore')
+					->select('stores.idStore', 'stores.nameStore')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('idShipper', $idShipper)
+					->where('idOrderStatus', Config::get('constants.status_type.done'))
+					->get();
+
 				if ($result_order->count() > 0) {
 					return response()->json([
 						'error' => false,
 						'data' => $result_order,
+						'store_name' => $store_name,
 						'errors' => null,
 					], 200);
 				} else {
@@ -370,5 +379,46 @@ class ShipperController extends Controller {
 				], 400);
 			}
 		}
+	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/shipper/getDirection",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="origin",
+	 *     in="query",
+	 *     description="origin",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="destination",
+	 *     in="query",
+	 *     description="destination",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+	public function getDirection(Request $request) {
+
+		$origin = $request->get('origin');
+
+		$destination = $request->get('destination');
+
+		$request_url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . urlencode($origin) . "&destination=" . urlencode($destination) . "&key=AIzaSyBVLZZFaDU6nn96cbs59PfMBNXu9ZNdxYE";
+
+		$string = file_get_contents($request_url);
+
+		return json_decode($string, true);
 	}
 }

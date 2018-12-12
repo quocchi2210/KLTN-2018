@@ -23,6 +23,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,12 +33,14 @@ import okhttp3.Response;
 public class Order_Received_Activity extends AppCompatActivity {
 
     private ArrayList<Order_Received> data = new ArrayList<Order_Received>();
+    private String hostname = "luxexpress.cf";
+    private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDk2MzA5LCJleHAiOjE1NDQ1MTQzMDksIm5iZiI6MTU0NDQ5NjMwOSwianRpIjoiVTRwUXJuR24yU3VLRndmTyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.eSY6OvJle766Zzj2zxpRllFb-g4g4ytCxhglipatAjE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_received);
-//
+
 //        ListView list_view_order_received = findViewById(R.id.list_view_order_received);
 //
 //        data.add(new Order_Received("math","123","09:00:00"));
@@ -46,7 +49,17 @@ public class Order_Received_Activity extends AppCompatActivity {
 //
 //        list_view_order_received.setAdapter(new Order_Received_Adapter(this, R.layout.list_item_order_received, data));
 
-        OkHttpClient client = new OkHttpClient();
+        //OkHttpClient client = new OkHttpClient();
+
+        CertificatePinner certificatePinner = new CertificatePinner.Builder()
+                .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+                .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+                .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+                .build();
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .certificatePinner(certificatePinner)
+                .build();
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -54,9 +67,11 @@ public class Order_Received_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
+                //.url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
+                .url("https://luxexpress.cf/api/shipper/showOrderReceived")
                 .post(requestBody)
                 //.addHeader("name_your_token", "your_token")
+                .addHeader("Authorization", "Bearer "+token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -77,12 +92,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                             JSONObject Jobject = null;
                             try {
 
-
                                 ListView list_view_order_received = findViewById(R.id.list_view_order_received);
-
-
-//                                data.add(new Order_Received("history","456","09:00:00"));
-//                                data.add(new Order_Received("van hoc","789","09:00:00"));
 
                                 Jobject = new JSONObject(yourResponse);
 
@@ -106,7 +116,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                         }
                     });
                 }else{
-
+                    Log.w("myApp","Order received: " + yourResponse.toString());
                 }
 
 

@@ -34,6 +34,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,48 +75,124 @@ public class History_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+//        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+//        listdataHeader = new ArrayList<>();
+//        listdataChild = new HashMap<String,ArrayList<History>>();
+//        listdataHeader.add("A store");
+//        listdataHeader.add("B store");
+//        listdataHeader.add("C store");
+//        ArrayList<History> store_a = new ArrayList<History>();
+//        store_a.add(new History("math",1));
+//        store_a.add(new History("math1",1));
+//        store_a.add(new History("math2",1));
+//        ArrayList<History> store_b = new ArrayList<History>();
+//        store_b.add(new History("english",1));
+//        store_b.add(new History("english1",1));
+//        store_b.add(new History("english2",1));
+//        ArrayList<History> store_c = new ArrayList<History>();
+//        store_c.add(new History("gaphic",1));
+//        store_c.add(new History("gaphic1",1));
+//        store_c.add(new History("gaphic2",1));
+//        listdataChild.put(listdataHeader.get(0),store_a);
+//        listdataChild.put(listdataHeader.get(1),store_b);
+//        listdataChild.put(listdataHeader.get(2),store_c);
+//        customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
+//        expandableListView.setAdapter(customExpandableListView);
 
-        ArrayList<History> store_a = new ArrayList<History>();
-        store_a.add(new History("math",1));
-        store_a.add(new History("math1",1));
-        store_a.add(new History("math2",1));
+        OkHttpClient client = new OkHttpClient();
 
-        ArrayList<History> store_b = new ArrayList<History>();
-        store_b.add(new History("english",2));
-        store_b.add(new History("english1",2));
-        store_b.add(new History("english2",2));
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("your_name_input", "your_value")
+                .build();
 
-        ArrayList<History> store_c = new ArrayList<History>();
-        store_c.add(new History("gaphic",3));
-        store_c.add(new History("gaphic1",3));
-        store_c.add(new History("gaphic2",3));
+        Request request = new Request.Builder()
+                //.url("https://luxexpress.cf/api/shipper/showHistory")
+                .url("http://192.168.0.132:8000/api/shipper/showHistory")
+                .post(requestBody)
+                //.addHeader("Authorization", "Bearer " + token)
+                .build();
 
-        Log.w("List child ", listContact.toString());
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
 
-        getNameStore("http://192.168.0.132:8000/api/shipper/showAllStoreOrder");
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String yourResponse = response.body().string();
 
-        Log.w("List Header ", listdataHeader.toString());
-//        lvHistory = (ListView) findViewById(R.id.list_history);
-//        arrayHistory = new ArrayList<History>();
-//
-//
-//        arrayHistory.add(new History("math",1));
-//        arrayHistory.add(new History("history",1));
-//        arrayHistory.add(new History("van hoc",1));
-//
-//        ArrayAdapter adapter = new ArrayAdapter(History_Activity.this, android.R.layout.simple_list_item_1, arrayHistory);
-//
-//        lvHistory.setAdapter(adapter);
-//
-//        lvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(History_Activity.this,arrayHistory.get(position).getA(),Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
+                if (response.isSuccessful()) {
 
+                    History_Activity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject Jobject = null;
+                            try {
+                                Jobject = new JSONObject(yourResponse);
+                               // ArrayList<History> b = new ArrayList<History>();
+                                expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+                                listdataHeader = new ArrayList<>();
+                                listdataChild = new HashMap<String,ArrayList<History>>();
+
+                               // HistoryList ListHisroty = new HistoryList();
+                                List<ArrayList<History>> Listhistory = new ArrayList<ArrayList<History>>();
+
+                                //List<ArrayList<History>> list_detail_store = new ArrayList<ArrayList<History>>();
+
+                                JSONArray store_name_array = Jobject.getJSONArray("store_name");
+                                JSONArray data = Jobject.getJSONArray("data");
+                                ArrayList<History> wtf = new ArrayList<History>();
+                                ArrayList<History> array_tmp = new ArrayList<History>();
+
+                                for (int i = 0; i < store_name_array.length(); i++) {
+                                    JSONObject object = store_name_array.getJSONObject(i);
+                                    listdataHeader.add(object.getString("nameStore"));
+
+                                    for(int j = 0; j<data.length(); j++){
+                                        JSONObject object_data = data.getJSONObject(j);
+                                        if(object.getString("idStore") == object_data.getString("idStore")){
+
+                                            Log.w("History ",object_data.toString());
+                                            String billOfLading = object_data.getString("billOfLading");
+                                            String address = object_data.getString("addressReceiver");
+
+                                            array_tmp.add(new History(billOfLading,address));
+                                        }
+
+
+                                    }
+                                    wtf = (ArrayList<History>)array_tmp.clone();
+                                    Listhistory.add(wtf);
+                                    array_tmp.clear();
+                                }
+
+// listdataChild.put(listdataHeader.get(i),b);
+                                for(int i = 0; i < store_name_array.length(); i++){
+
+                                    listdataChild.put(listdataHeader.get(i), Listhistory.get(i));
+
+                                }
+
+                                Log.w("History detial",Listhistory.toString());
+
+                                customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
+                                expandableListView.setAdapter(customExpandableListView);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+                } else {
+                    Log.w("myApp", yourResponse.toString());
+                }
+
+
+            }
+        });
 
     }
 
@@ -309,16 +386,40 @@ public class History_Activity extends AppCompatActivity {
         }
     }
 
+//    private class HistoryList{
+//        private List<ArrayList<History>> Listhistory;
+//
+//
+//        public HistoryList() {
+//
+//        }
+//
+//        public HistoryList(List<ArrayList<History>> listhistory) {
+//            Listhistory = listhistory;
+//        }
+//
+//        public HistoryList getListihistory() {
+//            return HistoryList;
+//        }
+//
+//        public void setListhistory(ArrayList<History> listhistory_e,) {
+//            Listhistory.add(listhistory_e);
+//        }
+//
+//        public int size(){
+//            return Listhistory.size();
+//        }
+//    }
+
 
     private class History{
         private String a;
-        private int b;
+        private String b;
 
-        History(String a, int b){
+        History(String a, String b){
             this.a = a;
             this.b = b;
         }
-
 
         public String getA() {
             return a;
@@ -326,6 +427,14 @@ public class History_Activity extends AppCompatActivity {
 
         public void setA(String a) {
             this.a = a;
+        }
+
+        public String getB() {
+            return b;
+        }
+
+        public void setB(String b) {
+            this.b = b;
         }
     }
 
@@ -356,64 +465,3 @@ public class History_Activity extends AppCompatActivity {
     }
 }
 
-class HttpsTrustManager implements X509TrustManager {
-
-    private static TrustManager[] trustManagers;
-    private static final X509Certificate[] _AcceptedIssuers = new X509Certificate[]{};
-
-    @Override
-    public void checkClientTrusted(
-            java.security.cert.X509Certificate[] x509Certificates, String s)
-            throws java.security.cert.CertificateException {
-
-    }
-
-    @Override
-    public void checkServerTrusted(
-            java.security.cert.X509Certificate[] x509Certificates, String s)
-            throws java.security.cert.CertificateException {
-
-    }
-
-    public boolean isClientTrusted(X509Certificate[] chain) {
-        return true;
-    }
-
-    public boolean isServerTrusted(X509Certificate[] chain) {
-        return true;
-    }
-
-    @Override
-    public X509Certificate[] getAcceptedIssuers() {
-        return _AcceptedIssuers;
-    }
-
-    public static void allowAllSSL() {
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-
-            @Override
-            public boolean verify(String arg0, SSLSession arg1) {
-                return true;
-            }
-
-        });
-
-        SSLContext context = null;
-        if (trustManagers == null) {
-            trustManagers = new TrustManager[]{new HttpsTrustManager()};
-        }
-
-        try {
-            context = SSLContext.getInstance("TLS");
-            context.init(null, trustManagers, new SecureRandom());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-
-        HttpsURLConnection.setDefaultSSLSocketFactory(context
-                .getSocketFactory());
-    }
-
-}
