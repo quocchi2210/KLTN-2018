@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/colorWhite">
 
 
     <TextView
@@ -18,10 +19,16 @@
         android:text="ĐĂNG NHẬP"/>
 
     <EditText
+        android:layout_marginTop="50dp"
         android:id="@+id/edit_text_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nhập tên người dùng"
+
+        android:background="@color/colorXam"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"
         />
 
     <EditText
@@ -30,10 +37,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:hint="Nhập mật khẩu"
+
+        android:background="@color/colorXam"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"
         />
 
     <LinearLayout
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -41,25 +53,31 @@
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="80dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ĐĂNG KÝ"/>
+            android:text="ĐĂNG KÝ"
+            android:background="@drawable/button"/>
 
         <Button
             android:id="@+id/btn_login"
+            android:layout_marginRight="80dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ĐĂNG NHẬP"/>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="ĐĂNG NHẬP"
+            android:background="@drawable/button"/>
 
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="THOÁT"
+            android:background="@drawable/button"/>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_marginTop="100dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="THOÁT"/>
+
 
 </LinearLayout>
