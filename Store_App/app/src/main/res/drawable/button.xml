@@ -11,7 +11,8 @@
                 android:topLeftRadius="10dp"
                 android:bottomRightRadius="10dp"/>
             <size
-                android:height="30dp"/>
+                android:height="30dp"
+                android:width="50dp"/>
             <solid
                 android:color="#2a756d"/>
         </shape>
@@ -26,7 +27,8 @@
                 android:topLeftRadius="10dp"
                 android:bottomRightRadius="10dp"/>
             <size
-                android:height="30dp"/>
+                android:height="30dp"
+                android:width="50dp"/>
             <solid
                 android:color="#379e93"/>
         </shape>

@@ -147,7 +147,6 @@ public class Order_Activity extends AppCompatActivity {
             case R.id.menu_item_search:
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

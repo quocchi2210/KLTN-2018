@@ -33,7 +33,7 @@ import okhttp3.Response;
 
 public class Add_Activity extends AppCompatActivity {
 
-    EditText name_sender, address_sender, phone_sender,name_receiver,address_receiver,phone_receiver,weight;
+    EditText name_sender, address_sender, phone_sender, name_receiver, address_receiver, phone_receiver, weight;
     CheckBox cb_cod;
     Spinner spinner_des, spinner_service_type;
     Button btn_done;
@@ -48,16 +48,77 @@ public class Add_Activity extends AppCompatActivity {
         control_button();
     }
 
-    private void mapped_gui(){
-        name_sender = (EditText)findViewById(R.id.name_sender);
-        address_sender = (EditText)findViewById(R.id.address_sender);
-        phone_sender = (EditText)findViewById(R.id.phone_sender);
+    private void mapped_gui() {
+        name_sender = (EditText) findViewById(R.id.name_sender);
+        address_sender = (EditText) findViewById(R.id.address_sender);
+        phone_sender = (EditText) findViewById(R.id.phone_sender);
 
-        name_receiver = (EditText)findViewById(R.id.name_receiver);
-        address_receiver = (EditText)findViewById(R.id.address_receiver);
-        phone_receiver = (EditText)findViewById(R.id.phone_receiver);
+        OkHttpClient client = new OkHttpClient();
 
-        weight = (EditText)findViewById(R.id.weight);
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("your", "your")
+                .build();
+
+        Request request = new Request.Builder()
+                .url("http://192.168.0.132:8000/api/store/showProfileStore")
+                .post(requestBody)
+                //.addHeader("name_your_token", "your_token")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String yourResponse = response.body().string();
+
+                if (response.isSuccessful()) {
+
+                    Add_Activity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            JSONObject Jobject = null;
+                            try {
+                                ListView lv_store_mange = findViewById(R.id.list_view_store_manage);
+                                Jobject = new JSONObject(yourResponse);
+
+                                JSONArray Jarray = Jobject.getJSONArray("data");
+
+                                for (int i = 0; i < Jarray.length(); i++) {
+                                    JSONObject object = Jarray.getJSONObject(i);
+                                    Log.w("myApp", object.toString());
+                                    String name_store = object.getString("nameStore");
+                                    String address_store = object.getString("addressStore");
+                                    String phone_store = object.getString("phoneNumber");
+                                    name_sender.setText(name_store);
+                                    address_sender.setText(address_store);
+                                    phone_sender.setText(phone_store);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    });
+                } else {
+
+                }
+
+            }
+        });
+
+        name_receiver = (EditText) findViewById(R.id.name_receiver);
+        address_receiver = (EditText) findViewById(R.id.address_receiver);
+        phone_receiver = (EditText) findViewById(R.id.phone_receiver);
+
+        weight = (EditText) findViewById(R.id.weight);
 
         cb_cod = (CheckBox) findViewById(R.id.cb_cod);
 
@@ -71,7 +132,7 @@ public class Add_Activity extends AppCompatActivity {
         list_des.add("Cho thử hàng");
         list_des.add("Không cho xem hàng");
 
-        ArrayAdapter<String> adapter_des = new ArrayAdapter(this, android.R.layout.simple_spinner_item,list_des);
+        ArrayAdapter<String> adapter_des = new ArrayAdapter(this, android.R.layout.simple_spinner_item, list_des);
         adapter_des.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
 
         spinner_des.setAdapter(adapter_des);
@@ -81,30 +142,30 @@ public class Add_Activity extends AppCompatActivity {
         list_service_type.add("Fast Delivery");
         list_service_type.add("Express Delivery");
 
-        ArrayAdapter<String> adapter_service_type = new ArrayAdapter(this, android.R.layout.simple_spinner_item,list_service_type);
+        ArrayAdapter<String> adapter_service_type = new ArrayAdapter(this, android.R.layout.simple_spinner_item, list_service_type);
         adapter_service_type.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
 
         spinner_service_type.setAdapter(adapter_service_type);
 
-        btn_done = (Button)findViewById(R.id.btn_done);
+        btn_done = (Button) findViewById(R.id.btn_done);
 
 
     }
 
-    private void control_button(){
-        try{
+    private void control_button() {
+        try {
 
-            btn_done.setOnClickListener(new View.OnClickListener(){
+            btn_done.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view){
+                public void onClick(View view) {
 
                     String service_id_type = null;
-                    switch(spinner_service_type.getSelectedItem().toString()) {
+                    switch (spinner_service_type.getSelectedItem().toString()) {
 
                         case "Normal Delivery":
                             service_id_type = "1";
                             break;
-                        case "Fast Delivery" :
+                        case "Fast Delivery":
                             service_id_type = "2";
                             break;
                         case "Express Delivery":
@@ -113,24 +174,26 @@ public class Add_Activity extends AppCompatActivity {
                     }
 
                     String des = null;
-                    switch(spinner_des.getSelectedItem().toString()) {
+                    switch (spinner_des.getSelectedItem().toString()) {
 
                         case "Cho xem hàng, không cho thử":
                             des = "1";
                             break;
-                        case "Cho thử hàng" :
+                        case "Cho thử hàng":
                             des = "2";
                             break;
                         case "Không cho xem hàng":
                             des = "3";
                             break;
                     }
-                    //Toast.makeText(Add_Activity.this, des, Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(Add_Activity.this, service_id_type, Toast.LENGTH_SHORT).show();
+
                     OkHttpClient client = new OkHttpClient();
 
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
+                            .addFormDataPart("name_sender", name_sender.getText().toString())
+                            .addFormDataPart("address_sender", address_sender.getText().toString())
+                            .addFormDataPart("phone_sender", phone_sender.getText().toString())
                             .addFormDataPart("name_receiver", name_receiver.getText().toString())
                             .addFormDataPart("address_receiver", address_receiver.getText().toString())
                             .addFormDataPart("phone_receiver", phone_receiver.getText().toString())
@@ -141,8 +204,7 @@ public class Add_Activity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            //.url("http://192.168.1.16:8000/api/shipper/showOrder")
-                            .url(" http://192.168.0.132:8000/api/store/insertOrderStore")
+                            .url("http://192.168.0.132:8000/api/store/insertOrderStore")
                             .post(requestBody)
                             //.addHeader("name_your_token", "your_token")
                             .build();
@@ -157,11 +219,11 @@ public class Add_Activity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             final String yourResponse = response.body().string();
 
-                            if(response.isSuccessful()){
-                                Log.w("Add_Activity","Add success");
+                            if (response.isSuccessful()) {
+                                Log.w("Add_Activity", "Add success");
                                 //Toast.makeText(Add_Activity.this, "Add success", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Log.w("Add_Activity","Add faild "+yourResponse.toString());
+                            } else {
+                                Log.w("Add_Activity", "Add faild " + yourResponse.toString());
                             }
 
                         }
@@ -169,8 +231,8 @@ public class Add_Activity extends AppCompatActivity {
                 }
             });
 
-        }catch (Exception e){
-            Log.e("Add_Activity","EXCEPTION CAUGHT WHILE EXECUTING DATABASE TRANSACTION");
+        } catch (Exception e) {
+            Log.e("Add_Activity", "EXCEPTION CAUGHT WHILE EXECUTING DATABASE TRANSACTION");
             e.printStackTrace();
         }
     }
@@ -180,11 +242,11 @@ public class Add_Activity extends AppCompatActivity {
         boolean checked = ((CheckBox) view).isChecked();
 
         // Check which checkbox was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.cb_cod:
-                if(cb_cod.isChecked()){
+                if (cb_cod.isChecked()) {
                     cod = "1";
-                }else{
+                } else {
                     cod = "0";
                 }
 
