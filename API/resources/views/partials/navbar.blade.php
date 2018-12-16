@@ -115,8 +115,7 @@
                             <img src="{{ asset('/images/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
 
                             <p>
-                                {{ Auth::user()->fullName }} - Web Developer
-                                <small>Member since {{date('M Y', strtotime(Auth::user()->created_at))}}</small>
+                                {{ Auth::user()->fullName }}
                             </p>
                         </li>
                         <!-- Menu Body -->

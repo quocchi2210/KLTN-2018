@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\VerifyMail;
 use App\Store;
 use App\User;
 
 use App\Http\Controllers\Controller;
+use App\VerifyUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -76,6 +79,12 @@ class RegisterController extends Controller
             'fullName' => $fullNameRequest['name'],
             'password' => bcrypt($userRequest['password'])
         ]);
+        $verifyUser = VerifyUser::create([
+            'user_id' => $user->idUser,
+            'token' => str_random(32)
+        ]);
+
+        Mail::to($user->email)->send(new VerifyMail($user));
         if ($user->idUser) {
             Store::create([
                 'idUser' => $user->idUser,
@@ -84,5 +93,21 @@ class RegisterController extends Controller
             $this->guard()->login($user);
             return redirect(route('home'));
         }
+    }
+    public function verifyUser($token)
+    {
+        $verifyUser = VerifyUser::where('token', $token)->first();
+        if(isset($verifyUser) ){
+            $user = $verifyUser->user;
+            if(!$user->isActivated) {
+                $verifyUser->user->isActivated = 1;
+                $verifyUser->user->save();
+                $status = "Your email is verified. You can now using our services ";
+            }else{
+                $status = "Your email is already verified. You can now using our services.";
+            }
+        }
+        $this->guard()->login($user);
+        return redirect(route('home'))->with('status', $status);
     }
 }

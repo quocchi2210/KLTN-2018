@@ -66,7 +66,7 @@
         </div>
         {!! Form::close() !!}
 
-        <a href="#">I forgot my password</a><br>
+        <a href="{{route('password.request')}}">I forgot my password</a><br>
         <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
 
     </div>

@@ -33,11 +33,9 @@ class CreateUsersTable extends Migration
             $table->date('dateOfBirth')->nullable()->default(null);
             $table->string('gender', 10)->nullable()->default(null);
             $table->text('addressUser')->nullable()->default(null);
-            $table->string('activationCode', 191)->nullable()->default(null);
             $table->tinyInteger('isActivated')->nullable()->default('0');
+            $table->tinyInteger('isBanned')->nullable()->default('0');
             $table->string('remember_token', 191)->nullable()->default(null);
-            $table->string('tokenPasswordRecovery', 191)->nullable()->default(null);
-            $table->dateTime('tokenExpirationTime')->nullable()->default(null);
             $table->string('password', 191);
             $table->integer('pinCode')->nullable()->default(null);
             $table->integer('roleId')->default('1')->unsigned();
