@@ -1,18 +1,23 @@
 @extends('layouts.masters')
 
-@section('title', 'Orders')
+@section('title', 'Tạo Đơn Hàng')
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <h1>Orders</h1>
+            <h1>Danh sách đơn hàng</h1>
         </div>
         <div class="col-md-12 text-right">
             <button type="button"
                     class="btn btn-outline-primary btn-sm btn-categories"
                     data-toggle="modal"
+                    @if(!(\Illuminate\Support\Facades\Auth::user()->isActivated))
+                    data-target="#ModalOrderError">
+                    @endif
+                    @if((\Illuminate\Support\Facades\Auth::user()->isActivated))
                     data-target="#Modal">
-                Add New Order
+                    @endif
+                Thêm đơn hàng mới
             </button>
         </div>
     </div>
@@ -45,13 +50,13 @@
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th scope="col">Name Receiver</th>
-                                            <th scope="col">Receiver Phone Number</th>
-                                            <th scope="col">Bill Of Lading</th>
-                                            <th scope="col">Order Address</th>
-                                            <th scope="col">Total Money</th>
-                                            <th scope="col">Date Order</th>
-                                            <th scope="col">Actions</th>
+                                            <th scope="col">Tên người nhận</th>
+                                            <th scope="col">Số điện thoại người nhận</th>
+                                            <th scope="col">Mã vận đơn</th>
+                                            <th scope="col">Địa chỉ giao hàng</th>
+                                            <th scope="col">Tổng số tiền</th>
+                                            <th scope="col">Ngày tạo đơn hàng</th>
+                                            <th scope="col">Thông tin chi tiết</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -89,7 +94,7 @@
                                             </tr>
                                         @empty
                                             <tr class="text-center">
-                                                <td colspan="5">No orders created</td>
+                                                <td colspan="5">Không có đơn hàng nào</td>
                                             </tr>
                                         @endforelse
                                         </tbody>
@@ -103,6 +108,28 @@
         </div>
     </div>
 
+    <!--Modal Activated!-->
+    <div class="modal fade" id="ModalOrderError"
+         tabindex="-1" role="dialog"
+         aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"
+                        id="modalLabel">Error</h4>
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Your account is not activated. Please check your email to activated !!!</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!--Modal add new-->
     <div class="modal fade modal-add" id="Modal"
@@ -112,7 +139,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"
-                        id="favoritesModalLabel">Order</h4>
+                        id="favoritesModalLabel">Đơn hàng</h4>
                     <button type="button" class="close"
                             data-dismiss="modal"
                             aria-label="Close">
@@ -120,43 +147,43 @@
                 </div>
                 {!! Form::open(['url' => route('orders.store'),'method' => 'POST']) !!}
                 <div class="modal-body">
-                    <div class="container col-md-12">
                         <div class="row">
                             <div class="col-md-6">
+                                {!! Form::label('sender-name', 'Thông tin người gửi') !!}
                                 <div class="form-group">
-                                    {!! Form::label('sender-name', 'Sender Name') !!}
                                     {!! Form::text(
                                         'sender[name]',
                                         old('sender[name]'),
                                         [
                                             'id' => 'sender-name',
                                             'class' => 'form-control',
+                                            'placeholder' => 'Tên người gửi',
                                             'required autofocus'
                                         ]
                                         )
                                     !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('sender-phone', 'Sender Phone') !!}
                                     {!! Form::text(
                                         'sender[phone]',
                                         old('sender[phone]'),
                                         [
                                             'id' => 'sender-name',
                                             'class' => 'form-control',
+                                            'placeholder' => 'Số điện thoại người gửi',
                                             'required autofocus'
                                         ]
                                         )
                                     !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('sender-address', 'Sender Address') !!}
                                     {!! Form::text(
                                         'sender[address]',
                                         old('sender[address]'),
                                         [
                                             'id' => 'sender-name',
                                             'class' => 'form-control',
+                                            'placeholder' => 'Địa chỉ người gửi',
                                             'required autofocus'
                                         ]
                                         )
@@ -164,40 +191,41 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                {!! Form::label('receiver-name', 'Thông tin người nhận') !!}
                                 <div class="form-group">
-                                    {!! Form::label('receiver-name', 'Receiver Name') !!}
                                     {!! Form::text(
                                         'receiver[name]',
                                         old('receiver[name]'),
                                         [
                                             'id' => 'receiver-name',
                                             'class' => 'form-control',
+                                            'placeholder' => 'Tên người nhận',
                                             'required autofocus'
                                         ]
                                         )
                                     !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('receiver-phone', 'Receiver Phone') !!}
                                     {!! Form::text(
                                         'receiver[phone]',
                                         old('receiver[phone]'),
                                         [
                                             'id' => 'receiver-name',
                                             'class' => 'form-control',
+                                            'placeholder' => 'Số điện thoại người nhận',
                                             'required autofocus'
                                         ]
                                         )
                                     !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('receiver-address', 'Receiver Address') !!}
                                     {!! Form::text(
                                         'receiver[address]',
                                         old('receiver[address]'),
                                         [
                                             'id' => 'receiver-name',
                                             'class' => 'form-control',
+                                            'placeholder' => 'Địa chỉ người nhận',
                                             'required autofocus'
                                         ]
                                         )
@@ -205,23 +233,31 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('weight', 'Total Weight') !!}
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="order[weight]">
-                            <div class="input-group-addon">
-                                <span class="input-group-text" id="basic-addon2">Kilogram</span>
+                    {!! Form::label('weight', 'Thông tin gói hàng') !!}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('weight', 'Khối lượng') !!}
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="order[weight]">
+                                    <div class="input-group-addon">
+                                        <span class="input-group-text" id="basic-addon2">Kilogram</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('receiver-address', 'Services') !!}
-                        {!! Form::select('order[serviceTypes]',$serviceTypes, null , ['class' => 'form-control service-types']) !!}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('receiver-address', 'Note') !!}
-                        {!! Form::select('order[note]',$note, null , ['class' => 'form-control service-types']) !!}
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('receiver-address', 'Dịch vụ') !!}
+                                {!! Form::select('order[serviceTypes]',$serviceTypes, null , ['class' => 'form-control service-types']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('receiver-address', 'Ghi chú') !!}
+                                {!! Form::select('order[note]',$note, null , ['class' => 'form-control service-types']) !!}
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
