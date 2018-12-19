@@ -13,7 +13,8 @@ Route::get('/download', function () {
 });
 
 Route::post('/tracking', ['as' => 'tracking', 'uses' => 'OrderController@tracking']);
-Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser')->name('verify.user');
+Route::get('/user/verify/{user_id}/{token}', 'Auth\RegisterController@verifyUser')->name('verify.user');
+Route::get('/user/password/reset/{user_id}/{token}','Auth\ResetPasswordController@showResetForm')->name('reset.user');
 
 
 
