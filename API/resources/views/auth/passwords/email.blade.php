@@ -33,7 +33,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">Forgot Password</p>
 
-        {!! Form::open(['route' => 'login', 'method' => 'POST']) !!}
+        {!! Form::open(['route' => 'password.email', 'method' => 'POST']) !!}
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>

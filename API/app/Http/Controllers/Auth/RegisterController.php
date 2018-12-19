@@ -7,7 +7,7 @@ use App\Store;
 use App\User;
 
 use App\Http\Controllers\Controller;
-use App\VerifyUser;
+use App\VerifyResetUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -79,12 +79,13 @@ class RegisterController extends Controller
             'fullName' => $fullNameRequest['name'],
             'password' => bcrypt($userRequest['password'])
         ]);
-        $verifyUser = VerifyUser::create([
+        $verifyUser = VerifyResetUser::create([
             'user_id' => $user->idUser,
-            'token' => str_random(32)
+            'token' => str_random(32),
+            'confirmation' => 1
         ]);
 
-        Mail::to($user->email)->send(new VerifyMail($user));
+        Mail::to($user->email)->send(new VerifyMail($user,$verifyUser));
         if ($user->idUser) {
             Store::create([
                 'idUser' => $user->idUser,
@@ -94,9 +95,10 @@ class RegisterController extends Controller
             return redirect(route('home'));
         }
     }
-    public function verifyUser($token)
+    public function verifyUser($userId,$token)
     {
-        $verifyUser = VerifyUser::where('token', $token)->first();
+        $this->guard()->logout();
+        $verifyUser = VerifyResetUser::where('token', $token)->where('user_id',$userId)->where('confirmation', 1)->first();
         if(isset($verifyUser) ){
             $user = $verifyUser->user;
             if(!$user->isActivated) {

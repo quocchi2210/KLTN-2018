@@ -1,26 +1,32 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: ToxicBoiz
+ * Date: 12/19/2018
+ * Time: 11:34 PM
+ */
 
 namespace App\Mail;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class VerifyMail extends Mailable
+
+class ResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
     public $user;
-    public $verifyUser;
+    public $resetPassword;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user,$verifyUser)
+    public function __construct($user,$resetPassword)
     {
         $this->user = $user;
-        $this->verifyUser = $verifyUser;
+        $this->resetPassword = $resetPassword;
     }
 
     /**
@@ -30,6 +36,7 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.verify');
+        return $this->view('email.reminder');
     }
+
 }
