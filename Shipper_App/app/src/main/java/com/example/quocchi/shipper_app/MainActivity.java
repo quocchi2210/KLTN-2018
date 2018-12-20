@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String hostname = "luxexpress.cf";
     //public int position_index = -1;
-    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NjAxNDk2LCJleHAiOjE1NDQ2MTk0OTYsIm5iZiI6MTU0NDYwMTQ5NiwianRpIjoiMDI4UlNZTXhMMklCRWpkNiIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.6J6IcKqVazFLpya18xCQ7i1QHK2gj85xTAqUsvcJwgQ";
 
     CertificatePinner certificatePinner = new CertificatePinner.Builder()
             .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")

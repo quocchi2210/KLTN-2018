@@ -2,6 +2,7 @@ package com.example.quocchi.shipper_app;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -11,6 +12,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +38,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,12 +55,60 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
 
+    private String hostname = "luxexpress.cf";
+
+    private String token = Login_Token.token;
+
     int TAG_CODE_PERMISSION_LOCATION = 11;
 
     String latitude;
     String longitude;
 
     LocationManager locationManager;
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_shipper, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.menu_item_history:
+                //Toast.makeText(Order_Activity.this, "Ok: History",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getBaseContext(), History_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order:
+                intent = new Intent(getBaseContext(), Order_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order_received:
+                intent = new Intent(getBaseContext(), Order_Received_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_search:
+                intent = new Intent(getBaseContext(), MapsActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +217,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i("send_post", "origin_address: " + latitude + ", Longitude: " + longitude);
         Log.i("send_post", "destination_address: " + destination_address);
     //10.766080   //106.652260
-        OkHttpClient client = new OkHttpClient();
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -180,11 +231,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //.url("http://192.168.0.132:8000/api/shipper/getDirection")
                 .url("https://luxexpress.cf/api/shipper/getDirection")
                 .post(requestBody)
-                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGc" +
-                        "iOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2lu" +
-                        "IiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MC" +
-                        "wianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MT" +
-                        "JmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE")
+                .addHeader("Authorization", "Bearer "+token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

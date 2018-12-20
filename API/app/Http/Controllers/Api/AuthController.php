@@ -8,9 +8,10 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
-use Log;
+
 /**
  * @SWG\Swagger(
  *   basePath="/",
@@ -104,23 +105,23 @@ class AuthController extends Controller {
 		if ($validator->fails()) {
 			return $this->errorWithValidation($validator);
 		}
-        $input = $request->only('email', 'password');
-        $jwt_token = null;
+		$input = $request->only('email', 'password');
+		$jwt_token = null;
 
-        if (!$jwt_token = JWTAuth::attempt($input)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid Email or Password',
-            ], 401);
-        }
-        return response()->json([
-            'success' => true,
-            'token' => $jwt_token,
-        ]);
+		if (!$jwt_token = JWTAuth::attempt($input)) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Invalid Email or Password',
+			], 401);
+		}
+		return response()->json([
+			'success' => true,
+			'token' => $jwt_token,
+		]);
 
 //		return $this->respondWithErrorMessage(
-//			$errorCode['authentication'],
-//			$errorCode['ApiErrorCodes']['authentication'], 400);
+		//			$errorCode['authentication'],
+		//			$errorCode['ApiErrorCodes']['authentication'], 400);
 	}
 	public function loginPhone(Request $request) {
 		$errorCode = $this->apiErrorCodes;
@@ -152,14 +153,20 @@ class AuthController extends Controller {
 					->get()
 					->last();
 				return response()->json([
+
 					'error' => false,
 					'data' => $user,
 					'errors' => null,
 				], 200);
 			} else {
-				return $this->respondWithErrorMessage(
-					$errorCode['authentication'],
-					$errorCode['ApiErrorCodes']['authentication'], 400);
+
+				return response()->json([
+					'error' => $errorCode['authentication'],
+				], 400);
+
+				// return $this->respondWithErrorMessage(
+				// 	$errorCode['authentication'],
+				// 	$errorCode['ApiErrorCodes']['authentication'], 400);
 			}
 		} else {
 			$phone = substr($phone, 1);
