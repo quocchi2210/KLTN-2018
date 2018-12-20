@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,13 +47,12 @@ public class Order_Activity extends AppCompatActivity {
     private ArrayList<Order> data = new ArrayList<Order>();
     private String hostname = "luxexpress.cf";
     //public int position_index = -1;
-    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NTE0NDU1LCJleHAiOjE1NDQ1MzI0NTUsIm5iZiI6MTU0NDUxNDQ1NSwianRpIjoiZlNuTWtLVHNPYmJmR3B0MCIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wR38Vvm1PBob7zBWMwpfj-BtMOJLaG4KaYJQUI9_H_I";
+    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NjAxNDk2LCJleHAiOjE1NDQ2MTk0OTYsIm5iZiI6MTU0NDYwMTQ5NiwianRpIjoiMDI4UlNZTXhMMklCRWpkNiIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.6J6IcKqVazFLpya18xCQ7i1QHK2gj85xTAqUsvcJwgQ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-
 
         CertificatePinner certificatePinner = new CertificatePinner.Builder()
                 .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
@@ -124,6 +125,29 @@ public class Order_Activity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_shipper, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch(item.getItemId()){
+            case R.id.menu_item_history:
+                Toast.makeText(Order_Activity.this, "Ok: History",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_item_order:
+                break;
+            case R.id.menu_item_order_received:
+                break;
+            case R.id.menu_item_search:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class OrderAdapter extends BaseAdapter {
@@ -262,11 +286,12 @@ public class Order_Activity extends AppCompatActivity {
                                                 dialog.show();
 
                                             } else {
-                                                Dialog dialog = new Dialog(Order_Activity.this, R.style.Theme_Dialog);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(Order_Activity.this,AlertDialog.THEME_HOLO_LIGHT);
+                                                builder.setPositiveButton("OK" ,null);
+                                                AlertDialog dialog = builder.create();
                                                 dialog.setTitle("Chi tiết đơn hàng");
-                                                dialog.setContentView(R.layout.info_order_dialog);
+                                                dialog.setMessage("Không có hóa dơn chi tiết");
                                                 dialog.show();
-
                                             }
 
 

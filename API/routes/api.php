@@ -39,6 +39,8 @@ Route::group(['prefix' => 'store'], function () {
 	Route::post('insertOrderStore', "Api\StoreController@insertOrderStore");
 	Route::post('updateOrderStore', "Api\StoreController@updateOrderStore");
 	Route::post('deleteOrderStore', "Api\StoreController@deleteOrderStore");
+	Route::post('getInfoEditFromIdorder', "Api\StoreController@getInfoEditFromIdorder");
+
 });
 
 Route::group(['prefix' => 'ordertrakings'], function () {

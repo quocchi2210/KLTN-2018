@@ -330,6 +330,18 @@ class ShipperController extends Controller {
 	 *     response=200,
 	 *     description="A list with products"
 	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="id_order",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="status_order_rq",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
 	 *   @SWG\Response(
 	 *     response="default",
 	 *     description="an ""unexpected"" error"
@@ -340,9 +352,10 @@ class ShipperController extends Controller {
 	public function updateStatus(Request $request) {
 
 		if ($request->isMethod('post')) {
-			$status_order = $request->get('status_order');
+			$status_order_rq = $request->get('status_order_rq');
+			$id_order = $request->get('id_order');
 			$idUser = $request->idUser;
-			// $idUser =2;
+			$idUser = 1;
 			// $status_order=4;
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
@@ -350,13 +363,23 @@ class ShipperController extends Controller {
 
 				$idShipper = $result_shipper[0]->idShipper;
 
-				if ($status_order < Config::get('constants.status_type.done')) {
-					$status_order++;
+				$result_order = DB::table('orders')
+					->where('idOrder', $id_order)
+					->get();
+
+				$status_order = $result_order[0]->idOrderStatus;
+
+				if ($status_order_rq < Config::get('constants.status_type.done')) {
+					$status_order_rq++;
+				}
+
+				if ($status_order == 6) {
+					$status_order_rq = 6;
 				}
 
 				$affected = DB::table('orders')
-					->where('idShipper', $idShipper)
-					->update(['idOrderStatus' => $idOrderStatus]);
+					->where('idOrder', $id_order)
+					->update(['idOrderStatus' => $status_order_rq]);
 
 				if ($affected) {
 					return response()->json([
