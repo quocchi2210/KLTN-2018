@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,6 +43,22 @@ public class MainActivity extends AppCompatActivity {
     String username, password;
     ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(15); // no
     ScheduledFuture<?> t;
+
+
+    private String hostname = "luxexpress.cf";
+    //public int position_index = -1;
+    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NjAxNDk2LCJleHAiOjE1NDQ2MTk0OTYsIm5iZiI6MTU0NDYwMTQ5NiwianRpIjoiMDI4UlNZTXhMMklCRWpkNiIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.6J6IcKqVazFLpya18xCQ7i1QHK2gj85xTAqUsvcJwgQ";
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +120,72 @@ public class MainActivity extends AppCompatActivity {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    order_show();
+                    //Login_Token.token;
+                    //order_show();
                     //send_post();
 
                     //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
+                    RequestBody requestBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("type", "Email")
+                            .addFormDataPart("email", edt_user.getText().toString())
+                            .addFormDataPart("password", edt_password.getText().toString())
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url("https://luxexpress.cf/api/login")
+                            //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
+                            .post(requestBody)
+                            .build();
+
+                    //Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MCwianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            final String yourResponse = response.body().string();
+
+                            if (response.isSuccessful()) {
+
+                                MainActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        JSONObject Jobject = null;
+                                        try {
+
+                                            Jobject = new JSONObject(yourResponse);
+
+                                            Login_Token.token = Jobject.getString("token");
+                                            Log.w("Login: ", yourResponse.toString());
+                                            Log.w("Login Token: ",  Login_Token.token);
+
+                                            if(Login_Token.token != null){
+
+                                                order_show();
+                                                //send_post();
+
+                                                //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                            } else {
+                                Log.w("Login:", yourResponse.toString());
+                            }
+
+
+                        }
+                    });
+
 
                 }
             });

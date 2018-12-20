@@ -65,6 +65,8 @@ public class Order_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
+        Log.w("Order token: ",Login_Token.token);
+
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("your_name_input", "your_value")
