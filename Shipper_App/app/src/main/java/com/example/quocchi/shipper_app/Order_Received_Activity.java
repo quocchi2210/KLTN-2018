@@ -1,6 +1,7 @@
 package com.example.quocchi.shipper_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +37,12 @@ public class Order_Received_Activity extends AppCompatActivity {
     private ArrayList<Order_Received> data = new ArrayList<Order_Received>();
     private String hostname = "luxexpress.cf";
     private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDk2MzA5LCJleHAiOjE1NDQ1MTQzMDksIm5iZiI6MTU0NDQ5NjMwOSwianRpIjoiVTRwUXJuR24yU3VLRndmTyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.eSY6OvJle766Zzj2zxpRllFb-g4g4ytCxhglipatAjE";
+
+    private CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +112,10 @@ public class Order_Received_Activity extends AppCompatActivity {
                                     String timeDelivery = object.getString("timeDelivery");
                                     String addressReceiver = object.getString("addressReceiver");
                                     String addressStore = object.getString("addressStore");
-                                    data.add(new Order_Received(addressReceiver,addressStore,timeDelivery));
+                                    String idOrder = object.getString("idOrder");
+                                    String idOrderStatus = object.getString("idOrderStatus");
+
+                                    data.add(new Order_Received(addressReceiver,addressStore,timeDelivery,idOrder,idOrderStatus));
                                 }
 
                                 list_view_order_received.setAdapter(new Order_Received_Adapter(Order_Received_Activity.this, R.layout.list_item_order_received, data));
@@ -163,11 +174,86 @@ public class Order_Received_Activity extends AppCompatActivity {
             TextView txt_address_receive = (TextView) convertView.findViewById(R.id.txt_address_receive);
             TextView txt_time = (TextView) convertView.findViewById(R.id.txt_time);
 
+            Button btn_see_map = (Button)convertView.findViewById(R.id.btn_see_map);
+            Button btn_done = (Button)convertView.findViewById(R.id.btn_done);
+
             txt_address_delivery.setText(data.get(position).getAddress_delivery());
             txt_address_receive.setText(data.get(position).getAddress_receive());
             txt_time.setText(data.get(position).getTime());
 
             final int vitri = position;
+
+            btn_see_map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Order_Received_Activity.this, MapsActivity.class);
+                    intent.putExtra("destination_address", data.get(vitri).getAddress_receive());
+                    startActivity(intent);
+
+                }
+            });
+
+            btn_done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    OkHttpClient client = new OkHttpClient.Builder()
+                            .certificatePinner(certificatePinner)
+                            .build();
+
+                    RequestBody requestBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("id_order", data.get(vitri).getId_order())
+                            .addFormDataPart("status_order_rq", data.get(vitri).getStatus_order())
+                            .build();
+
+                    Request request = new Request.Builder()
+                            //.url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
+                            .url("https://luxexpress.cf/api/shipper/updateStatus")
+                            .post(requestBody)
+                            //.addHeader("name_your_token", "your_token")
+                            .addHeader("Authorization", "Bearer "+token)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            final String yourResponse = response.body().string();
+
+                            if(response.isSuccessful()){
+
+                                Order_Received_Activity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        JSONObject Jobject = null;
+                                        try {
+
+                                            Jobject = new JSONObject(yourResponse);
+
+                                            Log.w("btn_done","Order received: " + yourResponse.toString());
+                                            finish();
+                                            startActivity(getIntent());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                            }else{
+                                Log.w("myApp","Order received: " + yourResponse.toString());
+                            }
+
+
+                        }
+                    });
+
+                }
+            });
 
             return convertView;
         }
@@ -178,11 +264,15 @@ public class Order_Received_Activity extends AppCompatActivity {
         private String address_receive;
         private String address_delivery;
         private String time;
+        private String id_order;
+        private String status_order;
 
-        Order_Received(String address_receive, String address_delivery, String time) {
+        Order_Received(String address_receive, String address_delivery, String time, String idOrder, String idOrderStatus) {
             this.address_receive = address_receive;
             this.address_delivery = address_delivery;
             this.time = time;
+            this.id_order = idOrder;
+            this.status_order = idOrderStatus;
         }
 
         public String getAddress_receive() {
@@ -207,6 +297,22 @@ public class Order_Received_Activity extends AppCompatActivity {
 
         public void setTime(String time) {
             this.time = time;
+        }
+
+        public String getId_order() {
+            return id_order;
+        }
+
+        public void setId_order(String id_order) {
+            this.id_order = id_order;
+        }
+
+        public String getStatus_order() {
+            return status_order;
+        }
+
+        public void setStatus_order(String status_order) {
+            this.status_order = status_order;
         }
     }
 }
