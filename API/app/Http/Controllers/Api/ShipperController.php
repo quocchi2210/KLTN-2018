@@ -43,7 +43,7 @@ class ShipperController extends Controller {
 
 				$users = DB::table('orders')
 					->where('idShipper', $idShipper)->whereNotIn('idOrderStatus', [Config::get('constants.status_type.pending')])
-					->where('idOrderStatus',Config::get('constants.status_type.pickup'));
+					->where('idOrderStatus', Config::get('constants.status_type.pickup'))
 				// ->orWhere('idOrderStatus', Config::get('constants.status_type.confirm'))
 				// ->orWhere('idOrderStatus', Config::get('constants.status_type.pickup'))
 				// ->orWhere('idOrderStatus', Config::get('constants.status_type.delivery'))

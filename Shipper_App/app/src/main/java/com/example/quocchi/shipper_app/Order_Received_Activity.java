@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -36,13 +38,51 @@ public class Order_Received_Activity extends AppCompatActivity {
 
     private ArrayList<Order_Received> data = new ArrayList<Order_Received>();
     private String hostname = "luxexpress.cf";
-    private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDk2MzA5LCJleHAiOjE1NDQ1MTQzMDksIm5iZiI6MTU0NDQ5NjMwOSwianRpIjoiVTRwUXJuR24yU3VLRndmTyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.eSY6OvJle766Zzj2zxpRllFb-g4g4ytCxhglipatAjE";
+    private String token = Login_Token.token;
 
     private CertificatePinner certificatePinner = new CertificatePinner.Builder()
             .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
             .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
             .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
             .build();
+
+    private OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_shipper, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.menu_item_history:
+                //Toast.makeText(Order_Activity.this, "Ok: History",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getBaseContext(), History_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order:
+                intent = new Intent(getBaseContext(), Order_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order_received:
+                intent = new Intent(getBaseContext(), Order_Received_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_search:
+                intent = new Intent(getBaseContext(), MapsActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +98,6 @@ public class Order_Received_Activity extends AppCompatActivity {
 //        list_view_order_received.setAdapter(new Order_Received_Adapter(this, R.layout.list_item_order_received, data));
 
         //OkHttpClient client = new OkHttpClient();
-
-        CertificatePinner certificatePinner = new CertificatePinner.Builder()
-                .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
-                .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
-                .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
-                .build();
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .certificatePinner(certificatePinner)
-                .build();
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
