@@ -1,9 +1,19 @@
 package com.example.quocchi.shipper_app;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +38,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -37,12 +48,67 @@ import okhttp3.Route;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
+
+    private String hostname = "luxexpress.cf";
+
+    private String token = Login_Token.token;
+
+    int TAG_CODE_PERMISSION_LOCATION = 11;
+
+    String latitude;
+    String longitude;
+
+    LocationManager locationManager;
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_shipper, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.menu_item_history:
+                //Toast.makeText(Order_Activity.this, "Ok: History",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getBaseContext(), History_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order:
+                intent = new Intent(getBaseContext(), Order_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order_received:
+                intent = new Intent(getBaseContext(), Order_Received_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_search:
+                intent = new Intent(getBaseContext(), MapsActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +118,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION},
+                TAG_CODE_PERMISSION_LOCATION);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
 
@@ -77,7 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void showDirection(List<Route> routes){
+    public void showDirection(List<Route> routes) {
 
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
@@ -106,24 +190,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void send_post(){
-        OkHttpClient client = new OkHttpClient();
+    public void send_post() {
+        mMap.clear();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        String destination_address= getIntent().getStringExtra("destination_address");
+        if(loc!=null && latitude==null && longitude==null){
+            Log.i("send_post", "Location: " + loc.toString());
+            latitude = String.valueOf(loc.getLatitude());
+            longitude = String.valueOf(loc.getLongitude());
+        }
+
+        String origin_address = latitude + ","+longitude;
+
+        Log.i("send_post", "origin_address: " + latitude + ", Longitude: " + longitude);
+        Log.i("send_post", "destination_address: " + destination_address);
+    //10.766080   //106.652260
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("origin", "114 Lê Đại Hành P7 Q11")
-                .addFormDataPart("destination", "132E Cách Mạng Tháng Tám")
+                //.addFormDataPart("origin",  "10.766090,106.642000")
+                //10.766080 106.652260
+                //.addFormDataPart("destination", "132E Cách Mạng Tháng Tám P10 Q3")
+                .addFormDataPart("origin",  origin_address)
+                .addFormDataPart("destination", destination_address)
                 .build();
 
         Request request = new Request.Builder()
                 //.url("http://192.168.0.132:8000/api/shipper/getDirection")
-                .url("http://luxexpress.cf/api/shipper/getDirection")
+                .url("https://luxexpress.cf/api/shipper/getDirection")
                 .post(requestBody)
-                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGc" +
-                        "iOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2lu" +
-                        "IiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MC" +
-                        "wianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MT" +
-                        "JmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE")
+                .addHeader("Authorization", "Bearer "+token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -235,6 +343,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         return decoded;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // TODO Auto-generated method stub
+
+        latitude = String.valueOf(location.getLatitude());
+        longitude = String.valueOf(location.getLongitude());
+
+        Log.i("Geo_Location", "Latitude: " + latitude + ", Longitude: " + longitude);
+        send_post();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     private class Route {

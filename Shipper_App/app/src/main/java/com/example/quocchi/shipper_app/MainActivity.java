@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,8 +42,23 @@ public class MainActivity extends AppCompatActivity {
     EditText edt_user, edt_password;
     Button btn_register, btn_login, btn_logout;
     String username, password;
-    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(15); // no
+    //ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(15); // no
     ScheduledFuture<?> t;
+
+
+    private String hostname = "luxexpress.cf";
+    //public int position_index = -1;
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     private void mapped_gui(){
         edt_user = (EditText)findViewById(R.id.edit_text_user);
         edt_password = (EditText)findViewById(R.id.edit_text_password);
+
+        edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         btn_login = (Button)findViewById(R.id.btn_login);
         btn_register = (Button)findViewById(R.id.btn_register);
         btn_logout = (Button)findViewById(R.id.btn_logout);
@@ -102,10 +122,73 @@ public class MainActivity extends AppCompatActivity {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    order_show();
+                    //Login_Token.token;
+                    //order_show();
                     //send_post();
 
+                    //Shipper_Position_Send a = new Shipper_Position_Send(getBaseContext());
+
+
                     //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
+                    RequestBody requestBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("type", "Email")
+                            .addFormDataPart("email", edt_user.getText().toString())
+                            .addFormDataPart("password", edt_password.getText().toString())
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url("https://luxexpress.cf/api/login")
+                            //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
+                            .post(requestBody)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            final String yourResponse = response.body().string();
+
+                            if (response.isSuccessful()) {
+
+                                MainActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        JSONObject Jobject = null;
+                                        try {
+
+                                            Jobject = new JSONObject(yourResponse);
+
+                                            Login_Token.token = Jobject.getString("token");
+                                            Log.w("Login: ", yourResponse.toString());
+                                            Log.w("Login Token: ",  Login_Token.token);
+
+                                            if(Login_Token.token != null){
+
+                                                order_show();
+                                                //send_post();
+
+                                                //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                            } else {
+                                Log.w("Login:", yourResponse.toString());
+                            }
+
+
+                        }
+                    });
+
 
                 }
             });
@@ -117,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
         private void order_show(){
-            Intent intent = new Intent(MainActivity.this, History_Activity.class);
-            //Intent intent = new Intent(MainActivity.this, Order_Activity.class);
+            //Intent intent = new Intent(MainActivity.this, History_Activity.class);
+            Intent intent = new Intent(MainActivity.this, Order_Activity.class);
             //Intent intent = new Intent(MainActivity.this, Order_Received_Activity.class);
             //Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 

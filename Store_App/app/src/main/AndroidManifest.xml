@@ -21,7 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Store_Manage_Activity" />
-        <activity android:name=".Add_Activity"></activity>
+        <activity android:name=".Add_Activity" />
+        <activity android:name=".Edit_Activity" />
+        <activity android:name=".Register_Activity" />
+        <activity android:name=".Updateprofile_Activity"></activity>
     </application>
 
 </manifest>

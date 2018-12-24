@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyMail;
+use App\Store;
 use App\User;
+use App\VerifyResetUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller {
@@ -100,25 +104,24 @@ class RegisterController extends Controller {
 			return $this->respondWithErrorMessage('This username has been exists', 2019);
 		}
 
-		$message = [
-			'name.required' => 'The name is required',
-			'name.alpha' => 'The name may only contain letters',
-			'name.max' => 'The name may not be greater than 255',
-			'email.required' => 'The email is required',
-			'email.email' => 'The email must be a valid email address.',
-			'email.regex' => 'The email is not correct format',
-			'password.required' => 'The password is required',
-			'password.min' => 'The password must be at least 6.',
-			'date_of_birth.required' => 'The date of birth is required',
-			'date_of_birth.date' => 'The date of birth is not correct format',
-			'gender.required' => 'The gender is required',
-			'gender.regex' => 'The gender must be male or female',
+		// $message = [
+		// 	'name.required' => 'The name is required',
+		// 	'name.max' => 'The name may not be greater than 255',
+		// 	'email.required' => 'The email is required',
+		// 	'email.email' => 'The email must be a valid email address.',
+		// 	'email.regex' => 'The email is not correct format',
+		// 	'password.required' => 'The password is required',
+		// 	'password.min' => 'The password must be at least 6.',
+		// 	'date_of_birth.required' => 'The date of birth is required',
+		// 	'date_of_birth.date' => 'The date of birth is not correct format',
+		// 	'gender.required' => 'The gender is required',
+		// 	'gender.regex' => 'The gender must be male or female',
 
-		];
-		$validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USERS_CREATE'], $message);
-		if ($validator->fails()) {
-			return $this->errorWithValidation($validator);
-		}
+		// ];
+		// $validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USERS_CREATE'], $message);
+		// if ($validator->fails()) {
+		// 	return $this->errorWithValidation($validator);
+		// }
 		$create = User::create([
 			'fullName' => $request['name'],
 			'email' => $request['email'],
@@ -127,6 +130,24 @@ class RegisterController extends Controller {
 			'dateOfBirth' => $request->input('date_of_birth'),
 			'gender' => $request->input('gender'),
 		]);
+
+		$verifyUser = VerifyResetUser::create([
+			'user_id' => $create->idUser,
+			'token' => str_random(32),
+			'confirmation' => 1,
+		]);
+
+		Mail::to($create->email)->send(new VerifyMail($create, $verifyUser));
+
+		if ($create->idUser) {
+			Store::create([
+				'idUser' => $create->idUser,
+				'nameStore' => $create['name'],
+			]);
+			// $this->guard()->login($user);
+			// return redirect(route('home'));
+		}
+
 		return response()->json([
 			'error' => false,
 			'data' => $create,

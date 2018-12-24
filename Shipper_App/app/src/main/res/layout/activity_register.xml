@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ email: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:id="@+id/txt_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:text="Tên người dùng: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:id="@+id/txt_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:id="@+id/txt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ngày sinh nhật: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:id="@+id/txt_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Giới tính: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <Spinner
+        android:id="@+id/spinner_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="10dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mật khẩu: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:id="@+id/txt_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xác nhận mật khẩu: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        />
+
+    <EditText
+        android:id="@+id/txt_comfirmpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+</LinearLayout>
+</ScrollView>

@@ -1,10 +1,13 @@
 package com.example.quocchi.shipper_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,6 +52,7 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -56,9 +60,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class History_Activity extends AppCompatActivity {
-
-//    ListView lvHistory;
-    //ArrayList<History> arrayHistory;
 
     private ArrayList<History> data = new ArrayList<History>();
 
@@ -69,6 +70,53 @@ public class History_Activity extends AppCompatActivity {
     HashMap<String,ArrayList<History>> listdataChild = new HashMap<String,ArrayList<History>>();
 
     CustomExpandableListView customExpandableListView;
+
+    private String token = Login_Token.token;
+    private String hostname = "luxexpress.cf";
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_shipper, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.menu_item_history:
+                //Toast.makeText(Order_Activity.this, "Ok: History",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getBaseContext(), History_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order:
+                intent = new Intent(getBaseContext(), Order_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_order_received:
+                intent = new Intent(getBaseContext(), Order_Received_Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_item_search:
+                intent = new Intent(getBaseContext(), MapsActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +147,7 @@ public class History_Activity extends AppCompatActivity {
 //        customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
 //        expandableListView.setAdapter(customExpandableListView);
 
-        OkHttpClient client = new OkHttpClient();
+        //OkHttpClient client = new OkHttpClient();
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -107,10 +155,10 @@ public class History_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                //.url("https://luxexpress.cf/api/shipper/showHistory")
-                .url("http://192.168.0.132:8000/api/shipper/showHistory")
+                .url("https://luxexpress.cf/api/shipper/showHistory")
+                //.url("http://192.168.0.132:8000/api/shipper/showHistory")
                 .post(requestBody)
-                //.addHeader("Authorization", "Bearer " + token)
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -131,19 +179,16 @@ public class History_Activity extends AppCompatActivity {
                             JSONObject Jobject = null;
                             try {
                                 Jobject = new JSONObject(yourResponse);
-                               // ArrayList<History> b = new ArrayList<History>();
+
                                 expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
                                 listdataHeader = new ArrayList<>();
                                 listdataChild = new HashMap<String,ArrayList<History>>();
 
-                               // HistoryList ListHisroty = new HistoryList();
                                 List<ArrayList<History>> Listhistory = new ArrayList<ArrayList<History>>();
-
-                                //List<ArrayList<History>> list_detail_store = new ArrayList<ArrayList<History>>();
 
                                 JSONArray store_name_array = Jobject.getJSONArray("store_name");
                                 JSONArray data = Jobject.getJSONArray("data");
-                                ArrayList<History> wtf = new ArrayList<History>();
+                                ArrayList<History> array_tmp_value = new ArrayList<History>();
                                 ArrayList<History> array_tmp = new ArrayList<History>();
 
                                 for (int i = 0; i < store_name_array.length(); i++) {
@@ -163,12 +208,11 @@ public class History_Activity extends AppCompatActivity {
 
 
                                     }
-                                    wtf = (ArrayList<History>)array_tmp.clone();
-                                    Listhistory.add(wtf);
+                                    array_tmp_value = (ArrayList<History>)array_tmp.clone();
+                                    Listhistory.add(array_tmp_value);
                                     array_tmp.clear();
                                 }
 
-// listdataChild.put(listdataHeader.get(i),b);
                                 for(int i = 0; i < store_name_array.length(); i++){
 
                                     listdataChild.put(listdataHeader.get(i), Listhistory.get(i));

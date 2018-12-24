@@ -34,13 +34,15 @@ class PasswordResetController extends Controller
     public function resetUser(Request $request){
         $errorCode = $this->apiErrorCodes;
         $email = $request->get('email');
-        $email_db = DB::table('users')->where('email',$email)->first();
-        if ($email_db){
-            $newPassword = str_random(20);
-            User::query()->update(array('password' => bcrypt($newPassword)));
-            Mail::send('password',array('content'=>$newPassword), function($message){
-                $message->to('nkhoaa96@gmail.com', 'Khoa')->subject('Password Reset!');
-            });
+        $user = User::where('email',$email['email'])->first();
+        if ($user){
+
+            $resetPassword = VerifyResetUser::create([
+            'user_id' => $user->idUser,
+            'token' => str_random(32),
+            'reset' => 1
+            ]);
+            Mail::to($user->email)->send(new ResetPassword($user,$resetPassword));
             return response() ->json([
                 'error' => false,
                 'data' => 'Your new password sending successful!!! Check your email',
@@ -51,7 +53,8 @@ class PasswordResetController extends Controller
             return $this->respondWithErrorMessage(
                 $errorCode['no_email'],
                 $errorCode['ApiErrorCodes']['no_email'], 400);
-        }
+         
+
     }
 }
 

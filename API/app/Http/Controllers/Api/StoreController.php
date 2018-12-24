@@ -50,6 +50,18 @@ class StoreController extends Controller {
 	 *     description="Your End Working Store",
 	 *     type="string",
 	 *   ),
+	 	 *   @SWG\Parameter(
+	 *     name="lat",
+	 *     in="query",
+	 *     description="Your Start Working Store",
+	 *     type="string",
+	 *   ),
+	 	 *   @SWG\Parameter(
+	 *     name="long",
+	 *     in="query",
+	 *     description="Your Start Working Store",
+	 *     type="string",
+	 *   ),
 	 *   @SWG\Response(
 	 *     response=200,
 	 *     description="A list with products"
@@ -63,10 +75,14 @@ class StoreController extends Controller {
 	 */
 	public function insertProfileStore(Request $request) {
 		if ($request->isMethod('post')) {
+		
+			//Log::debug('testtttttt 1111'. print_r($request->all(),1));
 			$name_store = $request->get('name_store');
 			$type_store = $request->get('type_store');
 			$address_store = $request->get('address_store');
 			$description_store = $request->get('description_store');
+				$latitude_store = $request->get('lat');
+			$longitude_store = $request->get('long');
 			$latitude_store = 11.3;
 			$longitude_store = 12.3;
 			$start_working_time = $request->get('start_working_time');
@@ -76,7 +92,15 @@ class StoreController extends Controller {
 			$user_id = $request->idUser;
 			$user_id = 1;
 
-			$affected = DB::insert('insert into stores (idUser, nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]);
+			// 	$request->request->add(
+			// 	array(
+			// 		'idUser' => $user_id,
+			// 	)
+
+			// );
+			//[$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]
+
+			$affected = DB::insert('insert into stores (idUser,nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]);
 			if ($affected) {
 				return response()->json([
 					'error' => false,
@@ -161,34 +185,52 @@ class StoreController extends Controller {
 
 			$user_id = $request->idUser;
 			$user_id = 1;
+
 			$store_id = 1;
 
-			$affected = DB::table('stores')->where('idStore', $store_id)->update([
-				'idUser' => $user_id,
-				'nameStore' => $name_store,
-				'typeStore' => $type_store,
-				'addressStore' => $address_store,
-				'descriptionStore' => $description_store,
-				'latitudeStore' => $latitude_store,
-				'longitudeStore' => $longitude_store,
-				'startWorkingTime' => $start_working_time,
-				'endWorkingTime' => $end_working_time,
-			]);
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $user_id)->get();
 
-			if ($affected) {
-				return response()->json([
-					'error' => false,
-					'data' => $affected,
-					'errors' => null,
-				], 200);
-			} else {
+			$test = DB::table('stores')->where('idUser', $user_id)->get();
 
-				response()->json([
-					'error' => true,
-					'data' => $affected,
-					'errors' => null,
-				], 400);
-			}
+			Log::debug('result_store'. print_r(decrypt($test[0]->nameStore),1));
+ 
+			// if ($result_store->count() > 0) {
+
+			// 	$affected = DB::table('stores')->where('idStore', $store_id)->update([
+			// 		'idUser' => $user_id,
+			// 		'nameStore' => $name_store,
+			// 		'typeStore' => $type_store,
+			// 		'addressStore' => $address_store,
+			// 		'descriptionStore' => $description_store,
+			// 		'latitudeStore' => $latitude_store,
+			// 		'longitudeStore' => $longitude_store,
+			// 		'startWorkingTime' => $start_working_time,
+			// 		'endWorkingTime' => $end_working_time,
+			// 	]);
+
+			// 	if ($affected) {
+			// 		return response()->json([
+			// 			'error' => false,
+			// 			'data' => $affected,
+			// 			'errors' => null,
+			// 		], 200);
+			// 	} else {
+
+			// 		response()->json([
+			// 			'error' => true,
+			// 			'data' => $affected,
+			// 			'errors' => null,
+			// 		], 400);
+			// 	}
+
+			// } else {
+			// 	return response()->json([
+			// 		'error' => true,
+			// 		'data' => null,
+			// 		'errors' => null,
+			// 	], 400);
+			// }
+
 		}
 
 	}
@@ -216,7 +258,10 @@ class StoreController extends Controller {
 			$user_id = $request->authen_id;
 			$store_id = 1;
 
-			$affected = DB::table('stores')->where('idStore', 1)->select('*')->get();
+			$affected = DB::table('stores')
+				->join('users', 'stores.idUser', '=', 'users.idUser')
+				->where('idStore', 1)
+				->get();
 
 			if ($affected) {
 				return response()->json([
@@ -329,13 +374,15 @@ class StoreController extends Controller {
 			$idOrder = $request->get('id_order');
 			$idUser = $request->idUser;
 
-			$idUser = 2;
+			$idUser = 1;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 			if ($result_store->count() > 0) {
 
 				$users = DB::table('order_details')
-					->where('idOrder', $idOrder)
+					->join('orders', 'order_details.idOrder', '=', 'orders.idOrder')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('order_details.idOrder', $idOrder)
 					->get();
 
 				if ($users) {
@@ -367,13 +414,19 @@ class StoreController extends Controller {
 	 *     tags={"Store"},
 	 *   summary="Show Profile",
 	 *   @SWG\Parameter(
-	 *     name="name_receiver",
+	 *     name="name_sender",
 	 *     in="query",
 	 *     description="Your Name Store",
 	 *     type="string",
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     name="address_receiver",
+	 *     name="address_sender",
+	 *     in="query",
+	 *     description="Your Type Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="phone_sender",
 	 *     in="query",
 	 *     description="Your Type Store",
 	 *     type="string",
@@ -391,25 +444,25 @@ class StoreController extends Controller {
 	 *     type="string",
 	 *   ),
 	 *   @SWG\Parameter(
+	 *     name="name_receiver",
+	 *     in="query",
+	 *     description="Your Start Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="address_receiver",
+	 *     in="query",
+	 *     description="Your Start Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
 	 *     name="phone_receiver",
 	 *     in="query",
 	 *     description="Your Start Working Store",
 	 *     type="string",
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     name="email_receiver",
-	 *     in="query",
-	 *     description="Your End Working Store",
-	 *     type="string",
-	 *   ),
-	 *   @SWG\Parameter(
 	 *     name="description_order",
-	 *     in="query",
-	 *     description="Your End Working Store",
-	 *     type="string",
-	 *   ),
-	 *   @SWG\Parameter(
-	 *     name="phone_receiver",
 	 *     in="query",
 	 *     description="Your End Working Store",
 	 *     type="string",
@@ -459,6 +512,10 @@ class StoreController extends Controller {
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
 			if ($result_store->count() > 0) {
+
+				$name_sender = $request->get('name_sender');
+				$address_sender = $request->get('address_sender');
+				$phone_sender = $request->get('phone_sender');
 
 				$name_receiver = $request->get('name_receiver');
 				$address_receiver = $request->get('address_receiver');
@@ -517,24 +574,103 @@ class StoreController extends Controller {
 
 				// insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (1, 'LUXNONONON' , 'abc', '123', 11.3, 12.3, 123, 'email', 'des',123,'2018-12-11 00:00:00',1,1,123,400,123,1,'2018-12-06 03:24:41')
 
-				$affected = DB::insert('insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_receiver, $address_receiver, $lat, $long, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending'), $data_created]);
+				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_receiver, $address_receiver, $lat, $long, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending'), $data_created]);
 
-				if ($affected) {
+				$affected_store = DB::table('stores')->where('idStore', $store_id)->update([
+
+					'nameStore' => $name_sender,
+					'addressStore' => $address_sender,
+
+				]);
+
+				$affected_user = DB::table('users')->where('idUser', $idUser)->update([
+					'phoneNumber' => $phone_sender,
+				]);
+
+				if ($affected_order && $affected_store && $affected_store) {
 					return response()->json([
 						'error' => false,
-						'data' => $affected,
+						'data' => $affected_order,
+						'data1' => $affected_store,
+						'data2' => $affected_user,
 						'errors' => null,
 					], 200);
 				} else {
 
 					response()->json([
 						'error' => true,
-						'data' => $affected,
+						'data' => $affected_order,
+						'data1' => $affected_store,
+						'data2' => $affected_user,
 						'errors' => null,
 					], 400);
 				}
 			}
 
+		}
+	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/getInfoEditFromIdorder",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="id_order",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
+	public function getInfoEditFromIdorder(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = $request->idUser;
+
+			$idUser = 1;
+
+			$idOrder = $request->get('id_order');
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->join('users', 'stores.idStore', '=', 'orders.idStore')
+					->where('idOrder', $idOrder)
+					->get();
+
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => null,
+					'errors' => null,
+				], 400);
+			}
 		}
 	}
 

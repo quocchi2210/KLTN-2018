@@ -1,7 +1,5 @@
 <?php
 
-
-
 /*Home route*/
 Route::get('/', function () {
 	return view('welcome');
@@ -9,7 +7,7 @@ Route::get('/', function () {
 
 /*Download app route*/
 Route::get('/download', function () {
-    return view('download');
+	return view('download');
 });
 
 Route::post('/tracking', ['as' => 'tracking', 'uses' => 'OrderController@tracking']);
@@ -35,6 +33,9 @@ Route::group(['middleware' => 'CheckAdmin', 'prefix' => 'admin' , 'as' =>'admin.
 
 Route::get('send-message', 'RedisController@index');
 Route::post('send-message', 'RedisController@postSendMessage');
+Route::get("message", function () {
+	return view("message");
+});
 
 /*Store route*/
 Auth::routes();
@@ -46,5 +47,3 @@ Route::group(['middleware' => 'CheckStore', 'prefix' => 'store'], function(){
     Route::put('/profile/{store}','HomeController@updateProfile')->name('profile.update');
 
 });
-
-

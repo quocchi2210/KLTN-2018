@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30dp"
-        android:text="History"/>
+        android:text="Hóa đơn"
+        android:textStyle="bold"
+        />
 
     <ListView
         android:id="@+id/list_view"
