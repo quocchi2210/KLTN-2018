@@ -162,16 +162,22 @@ class ShipperController extends Controller {
 			if ($result_shipper->count() > 0) {
 
 				// Log::debug('idUser'. print_r($idUser,1));
-				// Log::debug('idShipper'. print_r($result_shipper[0]['idShipper'],1));
 
 				$idShipper = $result_shipper[0]->idShipper;
 
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('idShipper', $idShipper)
-					->where('idOrderStatus', '>2')
-					->where('idOrderStatus', '<5')
+					->whereBetween('idOrderStatus', array(2, 5))
 					->get();
+
+				// DB::enableQueryLog();
+
+				// $laQuery = DB::getQueryLog();
+
+				// DB::disableQueryLog();
+
+				// Log::debug('idShipper' . print_r($laQuery, 1));
 
 				if ($users) {
 					return response()->json([
