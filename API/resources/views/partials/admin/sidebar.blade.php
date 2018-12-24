@@ -15,10 +15,13 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li>
-                <a href="{{ route('orderAdmin') }}"><i class="fa fa-list-alt"></i> <span>Order</span></a>
+                <a href="{{ route('admin.orderAdmin') }}"><i class="fa fa-list-alt"></i> <span>Order</span></a>
             </li>
             <li>
-                <a href="{{ route('home') }}"><i class="fa fa-search"></i><span>Search Order</span></a>
+                <a href="{{ route('admin.stores.index') }}"><i class="fa fa-list-alt"></i> <span>Store</span></a>
+            </li>
+            <li>
+                <a href="{{ route('admin.delivers.index') }}"><i class="fa fa-list-alt"></i> <span>Deliver</span></a>
             </li>
             {{--<li class="header">Team</li>--}}
             {{--<li class="treeview">--}}

@@ -145,7 +145,7 @@
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                 </div>
-                {!! Form::open(['url' => route('orders.store'),'method' => 'POST']) !!}
+                {!! Form::open(['url' => route('orders.store'),'method' => 'POST','id' => 'addOrderForm']) !!}
                 <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -153,7 +153,7 @@
                                 <div class="form-group">
                                     {!! Form::text(
                                         'sender[name]',
-                                        old('sender[name]'),
+                                        \Illuminate\Support\Facades\Auth::user()->fullName,
                                         [
                                             'id' => 'sender-name',
                                             'class' => 'form-control',
@@ -168,7 +168,7 @@
                                         'sender[phone]',
                                         old('sender[phone]'),
                                         [
-                                            'id' => 'sender-name',
+                                            'id' => 'sender-phone',
                                             'class' => 'form-control',
                                             'placeholder' => 'Số điện thoại người gửi',
                                             'required autofocus'
@@ -179,9 +179,9 @@
                                 <div class="form-group">
                                     {!! Form::text(
                                         'sender[address]',
-                                        old('sender[address]'),
+                                        \Illuminate\Support\Facades\Auth::user()->store->addressStore,
                                         [
-                                            'id' => 'sender-name',
+                                            'id' => 'sender-address',
                                             'class' => 'form-control',
                                             'placeholder' => 'Địa chỉ người gửi',
                                             'required autofocus'
@@ -210,7 +210,7 @@
                                         'receiver[phone]',
                                         old('receiver[phone]'),
                                         [
-                                            'id' => 'receiver-name',
+                                            'id' => 'receiver-phone',
                                             'class' => 'form-control',
                                             'placeholder' => 'Số điện thoại người nhận',
                                             'required autofocus'
@@ -223,7 +223,7 @@
                                         'receiver[address]',
                                         old('receiver[address]'),
                                         [
-                                            'id' => 'receiver-name',
+                                            'id' => 'receiver-address',
                                             'class' => 'form-control',
                                             'placeholder' => 'Địa chỉ người nhận',
                                             'required autofocus'
@@ -239,7 +239,7 @@
                             <div class="form-group">
                                 {!! Form::label('weight', 'Khối lượng') !!}
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="order[weight]">
+                                    <input type="text" class="form-control" id="order-weight" name="order[weight]">
                                     <div class="input-group-addon">
                                         <span class="input-group-text" id="basic-addon2">Kilogram</span>
                                     </div>
@@ -255,19 +255,34 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 {!! Form::label('receiver-address', 'Ghi chú') !!}
-                                {!! Form::select('order[note]',$note, null , ['class' => 'form-control service-types']) !!}
+                                {!! Form::select('order[note]',$note, null , ['class' => 'form-control service-notes']) !!}
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label id="order-money-label" style="float: left">Tổng tiền</label>
+                                </div>
+                                <div class="col-md-6 pull-right">
+                                    <input id="order-money">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label id="order-money-label" style="float: left">Ngày dự kiến giao hàng</label>
+                                </div>
+                                <div class="col-md-6 pull-right">
+                                    <input id="order-delivery">
+                                </div>
+                            </div>
                             <button type="button"
-                                    class="btn btn-default"
+                                    class="btn btn-default pull-right"
+                                    style="margin-left: 5px"
                                     data-dismiss="modal">Close
                             </button>
-                            <span class="pull-right">
-                              {!! Form::submit('Save', ['class' => 'btn btn-primary btn-block']) !!}
-                        </span>
+                              {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
                         </div>
                     </div>
                 </div>

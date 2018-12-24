@@ -59,15 +59,15 @@ class ResetPasswordController extends Controller
         $verifyUser = VerifyResetUser::where('token', $token)->where('user_id',$userId)->where('reset', 1)->first();
         if(isset($verifyUser) ){
             $user = User::find($verifyUser->user_id);
-            $user->passowrd = bcrypt($password);
-            $result = $user->save();
-            if($result) {
-                $status = "Your password has been reset. You can now using with new password ";
-            }else{
-                $status = "Your email is already verified. You can now using our services.";
-            }
+            $user->password = bcrypt($password);
+            $user->save();
+//            if($result) {
+//                $status = "Your password has been reset. You can now using with new password ";
+//            }else{
+//                $status = "Your email is already verified. You can now using our services.";
+//            }
         }
-        return redirect(route('home'))->with('status', $status);
+        return redirect(route('home'));
     }
 
 

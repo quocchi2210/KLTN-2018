@@ -1,6 +1,11 @@
+
+
+
+
+
 @extends('layouts.admin.master')
 
-@section('title', 'Orders')
+@section('title', 'Stores')
 
 @section('content')
     <div class="row">
@@ -12,7 +17,7 @@
         <ul class="nav nav-pills">
             @foreach($status as $statusItem)
                 <li @if($statusItem->idStatus == 1) class="active" @endif><a href="#{{$statusItem->idStatus}}"
-                                                                       data-toggle="tab">{{$statusItem->statusName}}</a></li>
+                                                                             data-toggle="tab">{{$statusItem->statusName}}</a></li>
             @endforeach
         </ul>
 
@@ -54,18 +59,18 @@
                                                 <td>{{$statusOrder->created_at}}</td>
                                                 <td nowrap="">
                                                     {{--@if($statusItem->id == 1)--}}
-                                                        <button type="button"
-                                                                data-id="{{$statusOrder->id}}"
-                                                                class="btn btn-outline-primary btn-sm btn-edit-order"
-                                                                data-url="{{route('orders.edit',['order' => $statusOrder->id])}}">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </button>
-                                                        {{--<button type="button"--}}
-                                                                {{--data-id="{{$statusOrder->id}}"--}}
-                                                                {{--class="btn btn-outline-danger btn-sm btn-delete-order"--}}
-                                                                {{--data-url="{{domain_route('bussiness.admin.orders.edit',['order' => $statusOrder->id])}}">--}}
-                                                            {{--<i class="fa fa-trash"></i>--}}
-                                                        {{--</button>--}}
+                                                    <button type="button"
+                                                            data-id="{{$statusOrder->id}}"
+                                                            class="btn btn-outline-primary btn-sm btn-edit-order"
+                                                            data-url="{{route('orders.edit',['order' => $statusOrder->id])}}">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </button>
+                                                    {{--<button type="button"--}}
+                                                    {{--data-id="{{$statusOrder->id}}"--}}
+                                                    {{--class="btn btn-outline-danger btn-sm btn-delete-order"--}}
+                                                    {{--data-url="{{domain_route('bussiness.admin.orders.edit',['order' => $statusOrder->id])}}">--}}
+                                                    {{--<i class="fa fa-trash"></i>--}}
+                                                    {{--</button>--}}
                                                     {{--@endif--}}
                                                     <button type="button"
                                                             data-id="{{$statusOrder->id}}"

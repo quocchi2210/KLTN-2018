@@ -19671,9 +19671,9 @@ window._ = __webpack_require__(1);
  */
 
 try {
-    // window.$ = window.jQuery = require('jquery');
+  // window.$ = window.jQuery = require('jquery');
 
-    __webpack_require__(4);
+  __webpack_require__(4);
 } catch (e) {}
 __webpack_require__(5);
 
@@ -19733,6 +19733,33 @@ $(document).on('click', '.btn-info-order', function () {
         success: function success(res) {
             $('body').append(res);
             $("#ModalInfoOrder").modal();
+        },
+        error: function error(a, b, c) {
+            console.log(a, b, c);
+        }
+    });
+});
+
+$(document).on('blur', '#addOrderForm', function () {
+    var idServices = $(".service-types option:selected").val();
+    var SenderAddress = $("#sender-address").val();
+    var ReceiverAddress = $("#receiver-address").val();
+    var OrderWeight = $("#order-weight").val();
+    $.ajax({
+        type: 'post',
+        url: 'order/getPreMoney',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            idServices: idServices,
+            SenderAddress: SenderAddress,
+            ReceiverAddress: ReceiverAddress,
+            OrderWeight: OrderWeight
+        },
+        success: function success(res) {
+            $('#order-money').val(res.preMoney);
+            $('#order-delivery').val(res.timeDelivery);
         },
         error: function error(a, b, c) {
             console.log(a, b, c);

@@ -25,6 +25,6 @@ class Store extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Order');
+        return $this->hasMany('App\Order','idStore','idStore');
     }
 }
