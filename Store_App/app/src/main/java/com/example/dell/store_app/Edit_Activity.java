@@ -30,11 +30,11 @@ import okhttp3.Response;
 
 public class Edit_Activity extends AppCompatActivity {
 
-    EditText name_sender, address_sender, phone_sender, name_receiver, address_receiver, phone_receiver, weight;
-    CheckBox cb_cod;
-    Spinner spinner_des, spinner_service_type;
-    Button btn_done;
-    String cod = null;
+    private EditText name_sender, address_sender, phone_sender, name_receiver, address_receiver, phone_receiver, weight;
+    private CheckBox cb_cod;
+    private Spinner spinner_des, spinner_service_type;
+    private Button btn_done;
+    private String cod = null;
 
 
     @Override

@@ -6,15 +6,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText edt_user, edt_password;
-    Button btn_register, btn_login, btn_logout;
-    String username, password;
+    private TextView txt_forgot_password;
+    private EditText edt_user, edt_password;
+    private Button btn_register, btn_login, btn_logout;
+    private String username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         btn_login = (Button)findViewById(R.id.btn_login);
         btn_register = (Button)findViewById(R.id.btn_register);
         btn_logout = (Button)findViewById(R.id.btn_logout);
+
+        txt_forgot_password = (TextView)findViewById(R.id.txt_forgot_password);
     }
 
     private void control_button(){
@@ -81,6 +87,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            txt_forgot_password.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   //Toast.makeText(MainActivity.this, "Ok: forgot link ",Toast.LENGTH_SHORT).show();
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this, android.app.AlertDialog.THEME_HOLO_LIGHT);
+
+                    builder.setView(R.layout.forgot_password);
+
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch(which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    // User clicked the Yes button
+                                    Toast.makeText(MainActivity.this, "OK CON TE TE", Toast.LENGTH_SHORT).show();
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    // User clicked the No button
+                                    break;
+                            }
+                        }
+                    };
+
+                    builder.setPositiveButton("OK" ,dialogClickListener);
+
+                    android.app.AlertDialog dialog = builder.create();
+                    dialog.setTitle("Quên mật khẩu");
+
+                  dialog.show();
+                }
+            });
 
         }catch (Exception e){
             Log.e("abc","EXCEPTION CAUGHT WHILE EXECUTING DATABASE TRANSACTION");
@@ -91,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
     private void show(){
         Intent intent = new Intent(MainActivity.this, Store_Manage_Activity.class);
         //Intent intent = new Intent(MainActivity.this, Add_Activity.class);
+        //Intent intent = new Intent(MainActivity.this, Register_Activity.class);
+        //Intent intent = new Intent(MainActivity.this, Updateprofile_Activity.class);
         startActivity(intent);
     }
 }

@@ -161,34 +161,48 @@ class StoreController extends Controller {
 
 			$user_id = $request->idUser;
 			$user_id = 1;
+
 			$store_id = 1;
 
-			$affected = DB::table('stores')->where('idStore', $store_id)->update([
-				'idUser' => $user_id,
-				'nameStore' => $name_store,
-				'typeStore' => $type_store,
-				'addressStore' => $address_store,
-				'descriptionStore' => $description_store,
-				'latitudeStore' => $latitude_store,
-				'longitudeStore' => $longitude_store,
-				'startWorkingTime' => $start_working_time,
-				'endWorkingTime' => $end_working_time,
-			]);
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $user_id)->get();
 
-			if ($affected) {
-				return response()->json([
-					'error' => false,
-					'data' => $affected,
-					'errors' => null,
-				], 200);
+			if ($result_store->count() > 0) {
+
+				$affected = DB::table('stores')->where('idStore', $store_id)->update([
+					'idUser' => $user_id,
+					'nameStore' => $name_store,
+					'typeStore' => $type_store,
+					'addressStore' => $address_store,
+					'descriptionStore' => $description_store,
+					'latitudeStore' => $latitude_store,
+					'longitudeStore' => $longitude_store,
+					'startWorkingTime' => $start_working_time,
+					'endWorkingTime' => $end_working_time,
+				]);
+
+				if ($affected) {
+					return response()->json([
+						'error' => false,
+						'data' => $affected,
+						'errors' => null,
+					], 200);
+				} else {
+
+					response()->json([
+						'error' => true,
+						'data' => $affected,
+						'errors' => null,
+					], 400);
+				}
+
 			} else {
-
-				response()->json([
+				return response()->json([
 					'error' => true,
-					'data' => $affected,
+					'data' => null,
 					'errors' => null,
 				], 400);
 			}
+
 		}
 
 	}
