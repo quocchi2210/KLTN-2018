@@ -33,8 +33,8 @@ Route::group(['middleware' => 'CheckAdmin', 'prefix' => 'admin' , 'as' =>'admin.
 
 Route::get('send-message', 'RedisController@index');
 Route::post('send-message', 'RedisController@postSendMessage');
-Route::get("message", function () {
-	return view("message");
+//Route::get("message", function () {
+//	return view("message");
 });
 
 /*Store route*/
