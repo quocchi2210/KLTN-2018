@@ -50,6 +50,18 @@ class StoreController extends Controller {
 	 *     description="Your End Working Store",
 	 *     type="string",
 	 *   ),
+	 	 *   @SWG\Parameter(
+	 *     name="lat",
+	 *     in="query",
+	 *     description="Your Start Working Store",
+	 *     type="string",
+	 *   ),
+	 	 *   @SWG\Parameter(
+	 *     name="long",
+	 *     in="query",
+	 *     description="Your Start Working Store",
+	 *     type="string",
+	 *   ),
 	 *   @SWG\Response(
 	 *     response=200,
 	 *     description="A list with products"
@@ -63,10 +75,14 @@ class StoreController extends Controller {
 	 */
 	public function insertProfileStore(Request $request) {
 		if ($request->isMethod('post')) {
+		
+			//Log::debug('testtttttt 1111'. print_r($request->all(),1));
 			$name_store = $request->get('name_store');
 			$type_store = $request->get('type_store');
 			$address_store = $request->get('address_store');
 			$description_store = $request->get('description_store');
+				$latitude_store = $request->get('lat');
+			$longitude_store = $request->get('long');
 			$latitude_store = 11.3;
 			$longitude_store = 12.3;
 			$start_working_time = $request->get('start_working_time');
@@ -76,7 +92,15 @@ class StoreController extends Controller {
 			$user_id = $request->idUser;
 			$user_id = 1;
 
-			$affected = DB::insert('insert into stores (idUser, nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]);
+			// 	$request->request->add(
+			// 	array(
+			// 		'idUser' => $user_id,
+			// 	)
+
+			// );
+			//[$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]
+
+			$affected = DB::insert('insert into stores (idUser,nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]);
 			if ($affected) {
 				return response()->json([
 					'error' => false,
@@ -166,42 +190,46 @@ class StoreController extends Controller {
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $user_id)->get();
 
-			if ($result_store->count() > 0) {
+			$test = DB::table('stores')->where('idUser', $user_id)->get();
 
-				$affected = DB::table('stores')->where('idStore', $store_id)->update([
-					'idUser' => $user_id,
-					'nameStore' => $name_store,
-					'typeStore' => $type_store,
-					'addressStore' => $address_store,
-					'descriptionStore' => $description_store,
-					'latitudeStore' => $latitude_store,
-					'longitudeStore' => $longitude_store,
-					'startWorkingTime' => $start_working_time,
-					'endWorkingTime' => $end_working_time,
-				]);
+			Log::debug('result_store'. print_r(decrypt($test[0]->nameStore),1));
+ 
+			// if ($result_store->count() > 0) {
 
-				if ($affected) {
-					return response()->json([
-						'error' => false,
-						'data' => $affected,
-						'errors' => null,
-					], 200);
-				} else {
+			// 	$affected = DB::table('stores')->where('idStore', $store_id)->update([
+			// 		'idUser' => $user_id,
+			// 		'nameStore' => $name_store,
+			// 		'typeStore' => $type_store,
+			// 		'addressStore' => $address_store,
+			// 		'descriptionStore' => $description_store,
+			// 		'latitudeStore' => $latitude_store,
+			// 		'longitudeStore' => $longitude_store,
+			// 		'startWorkingTime' => $start_working_time,
+			// 		'endWorkingTime' => $end_working_time,
+			// 	]);
 
-					response()->json([
-						'error' => true,
-						'data' => $affected,
-						'errors' => null,
-					], 400);
-				}
+			// 	if ($affected) {
+			// 		return response()->json([
+			// 			'error' => false,
+			// 			'data' => $affected,
+			// 			'errors' => null,
+			// 		], 200);
+			// 	} else {
 
-			} else {
-				return response()->json([
-					'error' => true,
-					'data' => null,
-					'errors' => null,
-				], 400);
-			}
+			// 		response()->json([
+			// 			'error' => true,
+			// 			'data' => $affected,
+			// 			'errors' => null,
+			// 		], 400);
+			// 	}
+
+			// } else {
+			// 	return response()->json([
+			// 		'error' => true,
+			// 		'data' => null,
+			// 		'errors' => null,
+			// 	], 400);
+			// }
 
 		}
 
