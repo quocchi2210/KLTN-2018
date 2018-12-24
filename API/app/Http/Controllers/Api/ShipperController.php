@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Config;
 use DB;
 use Illuminate\Http\Request;
+use Log;
 
 class ShipperController extends Controller {
 	/**
@@ -453,4 +454,52 @@ class ShipperController extends Controller {
 
 		return json_decode($string, true);
 	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/shipper/checkOrderShipper",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+	public function checkOrderShipper(Request $request) {
+
+		$idUser = $request->idUser;
+		$idUser = 1;
+		//$id_shipper = $request->get('id_shipper');
+
+		$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
+
+		if ($result_shipper->count() > 0) {
+
+			$idShipper = $result_shipper[0]->idShipper;
+
+			Log::debug('idShipper' . print_r($idShipper, 1));
+
+			$result_order = DB::table('order_trackings')->where('idShipper', $idShipper)->get();
+
+			return response()->json([
+				'error' => false,
+				'data' => $result_order->count(),
+				'errors' => null,
+			], 200);
+
+		} else {
+			return response()->json([
+				'error' => true,
+				'data' => null,
+				'errors' => null,
+			], 400);
+		}
+	}
+
 }

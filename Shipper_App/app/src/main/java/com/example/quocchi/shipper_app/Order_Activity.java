@@ -66,7 +66,7 @@ public class Order_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        Log.w("Order token: ",Login_Token.token);
+        //Log.w("Order token: ",Login_Token.token);
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -130,6 +130,9 @@ public class Order_Activity extends AppCompatActivity {
 
             }
         });
+
+        Shipper_Position_Send obj = Shipper_Position_Send.getInstance();
+        obj.setMyContext(getBaseContext());
 
     }
 
