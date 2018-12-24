@@ -164,6 +164,9 @@ public class Order_Received_Activity extends AppCompatActivity {
             }
         });
 
+        Shipper_Position_Send obj = Shipper_Position_Send.getInstance();
+        obj.setMyContext(getBaseContext());
+
     }
 
     private class Order_Received_Adapter extends BaseAdapter {

@@ -27,6 +27,7 @@ Route::group(['prefix' => 'shipper'], function () {
 	Route::post('showDetailOrder', "Api\ShipperController@showDetailOrder");
 	Route::post('showAllStoreOrder', "Api\ShipperController@showAllStoreOrder");
 	Route::post('getDirection', "Api\ShipperController@getDirection");
+	Route::post('checkOrderShipper', "Api\ShipperController@checkOrderShipper");
 });
 
 Route::group(['prefix' => 'store'], function () {
@@ -45,6 +46,7 @@ Route::group(['prefix' => 'store'], function () {
 
 Route::group(['prefix' => 'ordertrakings'], function () {
 	Route::post('insertPosition', "Api\OrderTrakingsController@insertPosition");
+	Route::post('updatePosition', "Api\OrderTrakingsController@updatePosition");
 });
 
 //Route::group(['middleware' => 'checkadmin'], function () {

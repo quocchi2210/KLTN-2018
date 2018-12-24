@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     EditText edt_user, edt_password;
     Button btn_register, btn_login, btn_logout;
     String username, password;
-    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(15); // no
+    //ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(15); // no
     ScheduledFuture<?> t;
 
 
@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
                     //order_show();
                     //send_post();
 
+                    //Shipper_Position_Send a = new Shipper_Position_Send(getBaseContext());
+
+
                     //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
@@ -136,8 +139,6 @@ public class MainActivity extends AppCompatActivity {
                             //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
                             .post(requestBody)
                             .build();
-
-                    //Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2x1eGV4cHJlc3MuY2YvYXBpL2xvZ2luIiwiaWF0IjoxNTQ0NDE3OTUwLCJleHAiOjE1NDQ0MzU5NTAsIm5iZiI6MTU0NDQxNzk1MCwianRpIjoidmpmZ0JENTdDUXZLV005NyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wTYuIKNs0MDO-dhypmODxDez7Hb_eyMmaWKtO-1CcwE
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
