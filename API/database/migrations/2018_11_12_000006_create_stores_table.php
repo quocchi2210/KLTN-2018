@@ -31,10 +31,10 @@ class CreateStoresTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->string('nameStore', 50)->nullable()->default(null);
-            $table->string('typeStore', 50)->nullable()->default(null);
-            $table->string('addressStore', 100)->nullable()->default(null);
-            $table->string('descriptionStore', 100)->nullable()->default(null);
+            $table->string('nameStore', 300)->nullable()->default(null);
+            $table->string('typeStore', 300)->nullable()->default(null);
+            $table->string('addressStore', 300)->nullable()->default(null);
+            $table->string('descriptionStore', 300)->nullable()->default(null);
             $table->decimal('latitudeStore', 11, 8)->nullable()->default(null);
             $table->decimal('longitudeStore', 11, 8)->nullable()->default(null);
             $table->time('startWorkingTime')->nullable()->default(null);

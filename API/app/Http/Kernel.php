@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'checktoken' => \App\Http\Middleware\CheckToken::class,
         'CheckStore' => \App\Http\Middleware\CheckStore::class,
         'CheckAdmin' => \App\Http\Middleware\CheckAdmin::class,
-        'jwt' => \App\Http\Middleware\jwt::class
+        'jwt' => \App\Http\Middleware\jwt::class,
+        'encrypt' =>  \App\Http\Middleware\Encrypt::class,
     ];
 }
