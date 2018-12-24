@@ -149,7 +149,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                                 }
 
                                 list_view_order_received.setAdapter(new Order_Received_Adapter(Order_Received_Activity.this, R.layout.list_item_order_received, data));
-
+                                Log.w("Order eponse","Order received eponse: " + yourResponse.toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -157,7 +157,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                         }
                     });
                 }else{
-                    Log.w("myApp","Order received: " + yourResponse.toString());
+                    Log.w("myApp","ERROR Order received: " + yourResponse.toString());
                 }
 
 
@@ -222,6 +222,14 @@ public class Order_Received_Activity extends AppCompatActivity {
 
                 }
             });
+
+            Log.w("Order","Order getStatus_order: " +data.get(vitri).getStatus_order());
+
+            if(data.get(vitri).getStatus_order().equals("3")){
+                btn_done.setText("Chuyển hàng");
+            }else if(data.get(vitri).getStatus_order().equals("4")){
+                btn_done.setText("Xong");
+            }
 
             btn_done.setOnClickListener(new View.OnClickListener() {
                 @Override
