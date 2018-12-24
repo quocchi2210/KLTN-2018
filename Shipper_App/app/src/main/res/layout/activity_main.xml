@@ -47,32 +47,33 @@
     <LinearLayout
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_marginRight="80dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="30"
             android:text="ĐĂNG KÝ"
             android:background="@drawable/button"/>
 
         <Button
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:id="@+id/btn_login"
-            android:layout_marginRight="80dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="30"
             android:text="ĐĂNG NHẬP"
             android:background="@drawable/button"/>
 
         <Button
             android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="30"
             android:text="THOÁT"
             android:background="@drawable/button"/>
 
