@@ -118,26 +118,14 @@
                                 {{ Auth::user()->fullName }}
                             </p>
                         </li>
-                        <!-- Menu Body -->
-                        <li class="user-body">
-                            <div class="row">
-                                <div class="col-xs-6 text-center">
-                                    <a href="{{ route('home') }}">App Manager</a>
-                                </div>
-                                <div class="col-xs-6 text-center">
-                                    <a href="">Edit Restaurent Info</a>
-                                </div>
-                            </div>
-                            <!-- /.row -->
-                        </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a href="{{route('profile.edit',['store' => Auth::user()->store->idStore])}}" class="btn btn-default btn-flat">Thông tin</a>
                             </div>
                             <div class="pull-right">
                                 <form action="{{route('logout')}}" method="POST">
-                                    <a href="#" class="btn btn-default btn-flat" onclick="this.parentNode.submit()">Sign out</a>
+                                    <a href="#" class="btn btn-default btn-flat" onclick="this.parentNode.submit()">Đăng xuất</a>
                                     {{ csrf_field() }}
                                 </form>
                             </div>

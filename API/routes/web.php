@@ -15,6 +15,7 @@ Route::get('/download', function () {
 Route::post('/tracking', ['as' => 'tracking', 'uses' => 'OrderController@tracking']);
 Route::get('/user/verify/{user_id}/{token}', 'Auth\RegisterController@verifyUser')->name('verify.user');
 Route::get('/user/password/reset/{user_id}/{token}','Auth\ResetPasswordController@showResetForm')->name('reset.user');
+Route::post('/user/password/reset/{user_id}/{token}','Auth\ResetPasswordController@reset');
 
 
 
@@ -24,9 +25,12 @@ Route::get('admin/login', ['as' => 'getLogin', 'uses' => 'Admin\AuthController@g
 Route::post('admin/login', ['as' => 'postLogin', 'uses' => 'Admin\AuthController@postLogin']);
 Route::post('admin/logout', ['as' => 'getLogout', 'uses' => 'Admin\AuthController@getLogout']);
 
-Route::group(['middleware' => 'CheckAdmin', 'prefix' => 'admin'], function() {
+Route::group(['middleware' => 'CheckAdmin', 'prefix' => 'admin' , 'as' =>'admin.'], function() {
     Route::get('/', ['as' => 'homeAdmin', 'uses' => 'Admin\AdminController@index']);
     Route::get('/orders', ['as' => 'orderAdmin', 'uses' => 'Admin\AdminController@getOrders']);
+    Route::resource('/stores','Admin\StoreController');
+    Route::resource('/delivers','Admin\DeliverController');
+
 });
 
 Route::get('send-message', 'RedisController@index');
@@ -37,6 +41,10 @@ Auth::routes();
 Route::group(['middleware' => 'CheckStore', 'prefix' => 'store'], function(){
     Route::get('/', 'HomeController@index')->name('home');
     Route::resource('/orders', 'OrderController');
+    Route::post('/order/getPreMoney','OrderController@getPreMoney')->name('store.order.preMoney');
+    Route::get('/profile/{store}/edit','HomeController@editProfile')->name('profile.edit');
+    Route::put('/profile/{store}','HomeController@updateProfile')->name('profile.update');
+
 });
 
 
