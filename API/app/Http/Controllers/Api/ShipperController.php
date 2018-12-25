@@ -29,7 +29,6 @@ class ShipperController extends Controller {
 
 		if ($request->isMethod('post')) {
 
-			//$idUser = $request->idUser;
 			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
@@ -103,7 +102,7 @@ class ShipperController extends Controller {
 
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
+			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
@@ -167,7 +166,7 @@ class ShipperController extends Controller {
 
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
+			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
@@ -179,7 +178,7 @@ class ShipperController extends Controller {
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('idShipper', $idShipper)
-					->whereBetween('idOrderStatus', array(2, 5))
+					->whereBetween('idOrderStatus', array(3, 4))
 					->get();
 
 				// DB::enableQueryLog();
@@ -240,7 +239,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idOrder = $request->get('id_order');
-			$idUser = $request->idUser;
+			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
@@ -294,7 +293,7 @@ class ShipperController extends Controller {
 
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
+			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
@@ -372,7 +371,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 			$status_order_rq = $request->get('status_order_rq');
 			$id_order = $request->get('id_order');
-			$idUser = $request->idUser;
+			$idUser = auth()->user()->idUser;
 
 			// $status_order=4;
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
@@ -481,7 +480,7 @@ class ShipperController extends Controller {
 	 */
 	public function checkOrderShipper(Request $request) {
 
-		$idUser = $request->idUser;
+		$idUser = auth()->user()->idUser;
 
 		//$id_shipper = $request->get('id_shipper');
 
