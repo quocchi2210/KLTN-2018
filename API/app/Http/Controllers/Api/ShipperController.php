@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Config;
 use DB;
 use Illuminate\Http\Request;
-use Log;
 
 class ShipperController extends Controller {
 	/**
@@ -490,9 +489,12 @@ class ShipperController extends Controller {
 
 			$idShipper = $result_shipper[0]->idShipper;
 
-			Log::debug('idShipper' . print_r($idShipper, 1));
+			//Log::debug('idShipper' . print_r($idShipper, 1));
 
-			$result_order = DB::table('order_trackings')->where('idShipper', $idShipper)->get();
+			$result_order = DB::table('orders')
+				->where('idShipper', $idShipper)
+				->where('idOrderStatus', Config::get('constants.status_type.delivery'))
+				->get();
 
 			return response()->json([
 				'error' => false,

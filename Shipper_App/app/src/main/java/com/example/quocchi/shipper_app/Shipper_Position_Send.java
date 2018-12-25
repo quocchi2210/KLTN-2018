@@ -39,6 +39,8 @@ public class Shipper_Position_Send implements LocationListener {
     private static Shipper_Position_Send obj;
 
     private String hostname = "luxexpress.cf";
+
+    private static boolean update_check = false;
     //public int position_index = -1;
     String token = Login_Token.token;
 
@@ -80,61 +82,64 @@ public class Shipper_Position_Send implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+
         Toast.makeText(mContext, "Ok: Location" + location.getLatitude(), Toast.LENGTH_SHORT).show();
         //send_lat_long();
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                //.addFormDataPart("origin",  "10.766090,106.642000")
-                //10.766080 106.652260
-                //.addFormDataPart("destination", "132E Cách Mạng Tháng Tám P10 Q3")
-                .addFormDataPart("lat", String.valueOf(location.getLatitude()))
-                .addFormDataPart("long",  String.valueOf(location.getLongitude()))
-                .build();
 
-        Request request = new Request.Builder()
-                //.url("http://192.168.0.132:8000/api/shipper/getDirection")
-                .url("https://luxexpress.cf/api/ordertrakings/updatePosition")
-                .post(requestBody)
-                .addHeader("Authorization", "Bearer " + token)
-                .build();
+        if(update_check==true) {
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    //.addFormDataPart("origin",  "10.766090,106.642000")
+                    //10.766080 106.652260
+                    //.addFormDataPart("destination", "132E Cách Mạng Tháng Tám P10 Q3")
+                    .addFormDataPart("lat", String.valueOf(location.getLatitude()))
+                    .addFormDataPart("long", String.valueOf(location.getLongitude()))
+                    .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
+            Request request = new Request.Builder()
+                    //.url("http://192.168.0.132:8000/api/shipper/getDirection")
+                    .url("https://luxexpress.cf/api/ordertrakings/updatePosition")
+                    .post(requestBody)
+                    .addHeader("Authorization", "Bearer " + token)
+                    .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String yourResponse = response.body().string();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
 
-                if (response.isSuccessful()) {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String yourResponse = response.body().string();
+
+                    if (response.isSuccessful()) {
 
 
-                    JSONObject Jobject = null;
-                    try {
+                        JSONObject Jobject = null;
+                        try {
 
-                        Jobject = new JSONObject(yourResponse);
+                            Jobject = new JSONObject(yourResponse);
 
-                        //JSONArray Jarray = Jobject.getJSONArray("routes");
+                            //JSONArray Jarray = Jobject.getJSONArray("routes");
 //                        List<MapsActivity.Route> List_lat_long = new ArrayList<MapsActivity.Route>();
 //                        List_lat_long = parseJSon(yourResponse);
 //                        showDirection(List_lat_long);
 //                        Log.w("test map", List_lat_long.toString());
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    } else {
+                        Log.w("test map", yourResponse.toString());
                     }
 
 
-                } else {
-                    Log.w("test map", yourResponse.toString());
                 }
-
-
-            }
-        });
-
+            });
+        }
         //t = executor.scheduleAtFixedRate(new MyTask(), 0, 2, TimeUnit.SECONDS);
     }
 
@@ -158,6 +163,14 @@ public class Shipper_Position_Send implements LocationListener {
         public void run() {
             send_lat_long();
         }
+    }
+
+    public void set_check_update(boolean check_update){
+        this.update_check = check_update;
+    }
+
+    public boolean get_check_update(){
+        return this.update_check;
     }
 
 
