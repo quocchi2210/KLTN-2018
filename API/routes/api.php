@@ -28,9 +28,6 @@ Route::group(['middleware' => 'jwt'], function () {
 		Route::post('checkOrderShipper', "Api\ShipperController@checkOrderShipper");
 	});
 
-});
-
-Route::group(['middleware' => 'encrypt'], function () {
 	Route::group(['prefix' => 'store'], function () {
 		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
 		Route::post('showProfileStore', "Api\StoreController@showProfileStore");
@@ -46,7 +43,12 @@ Route::group(['middleware' => 'encrypt'], function () {
 		Route::post('getInfoEditFromIdorder', "Api\StoreController@getInfoEditFromIdorder");
 
 	});
+
 });
+
+// Route::group(['middleware' => 'encrypt'], function () {
+
+// });
 
 Route::group(['prefix' => 'ordertrakings'], function () {
 	Route::post('insertPosition', "Api\OrderTrakingsController@insertPosition");
