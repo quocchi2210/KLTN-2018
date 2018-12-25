@@ -231,7 +231,7 @@ public class Edit_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://luxexpress.cf/api/store/getInfoEditFromIdorder")
+                .url("https://luxexpress.cf/api/store/getInfoEditFromIdorder")
                 .post(requestBody)
                 .addHeader("Authorization", "Bearer " + token)
                 .build();
@@ -243,7 +243,7 @@ public class Edit_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
                 final String yourResponse = response.body().string();
 
                 if (response.isSuccessful()) {
@@ -313,9 +313,11 @@ public class Edit_Activity extends AppCompatActivity {
 
                                 spinner_service_type.setSelection(Integer.parseInt(spinner_service_type_str));
 
-
+                                Log.w("edit", yourResponse.toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                Log.w("edit error", yourResponse.toString());
+                                Log.w("edit error", e.toString());
                             }
 
 
@@ -323,7 +325,7 @@ public class Edit_Activity extends AppCompatActivity {
                     });
 
                 } else {
-
+                    Log.w("edit error", yourResponse.toString());
                 }
 
             }
