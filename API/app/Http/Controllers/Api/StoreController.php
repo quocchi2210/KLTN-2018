@@ -50,13 +50,13 @@ class StoreController extends Controller {
 	 *     description="Your End Working Store",
 	 *     type="string",
 	 *   ),
-	 	 *   @SWG\Parameter(
+	 *   @SWG\Parameter(
 	 *     name="lat",
 	 *     in="query",
 	 *     description="Your Start Working Store",
 	 *     type="string",
 	 *   ),
-	 	 *   @SWG\Parameter(
+	 *   @SWG\Parameter(
 	 *     name="long",
 	 *     in="query",
 	 *     description="Your Start Working Store",
@@ -75,13 +75,13 @@ class StoreController extends Controller {
 	 */
 	public function insertProfileStore(Request $request) {
 		if ($request->isMethod('post')) {
-		
+
 			//Log::debug('testtttttt 1111'. print_r($request->all(),1));
 			$name_store = $request->get('name_store');
 			$type_store = $request->get('type_store');
 			$address_store = $request->get('address_store');
 			$description_store = $request->get('description_store');
-				$latitude_store = $request->get('lat');
+			$latitude_store = $request->get('lat');
 			$longitude_store = $request->get('long');
 			$latitude_store = 11.3;
 			$longitude_store = 12.3;
@@ -192,8 +192,8 @@ class StoreController extends Controller {
 
 			$test = DB::table('stores')->where('idUser', $user_id)->get();
 
-			Log::debug('result_store'. print_r(decrypt($test[0]->nameStore),1));
- 
+			Log::debug('result_store' . print_r(decrypt($test[0]->nameStore), 1));
+
 			// if ($result_store->count() > 0) {
 
 			// 	$affected = DB::table('stores')->where('idStore', $store_id)->update([
@@ -338,7 +338,7 @@ class StoreController extends Controller {
 			} else {
 				return response()->json([
 					'error' => true,
-					'data' => null,
+					'data' => 'count > 0',
 					'errors' => null,
 				], 400);
 			}
