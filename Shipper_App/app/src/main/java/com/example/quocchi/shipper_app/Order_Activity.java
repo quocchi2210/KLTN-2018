@@ -60,7 +60,6 @@ public class Order_Activity extends AppCompatActivity {
             .certificatePinner(certificatePinner)
             .build();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +123,8 @@ public class Order_Activity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Log.w("myApp", yourResponse.toString());
+
+                    Log.w("error order", yourResponse.toString());
                 }
 
 
