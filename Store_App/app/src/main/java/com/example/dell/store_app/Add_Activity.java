@@ -1,10 +1,13 @@
 package com.example.dell.store_app;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +28,7 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,6 +43,19 @@ public class Add_Activity extends AppCompatActivity {
     Button btn_done;
     String cod = null;
 
+    private String token = Login_Token.token;
+    private String hostname = "luxexpress.cf";
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +64,33 @@ public class Add_Activity extends AppCompatActivity {
         mapped_gui();
         control_button();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_store, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.menu_item_add_order:
+
+                intent = new Intent(getBaseContext(), Add_Activity.class);
+                startActivity(intent);
+
+                break;
+            case R.id.menu_item_manage_order:
+
+                intent = new Intent(getBaseContext(), Store_Manage_Activity.class);
+                startActivity(intent);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void mapped_gui() {
         name_sender = (EditText) findViewById(R.id.name_sender);
@@ -61,9 +105,9 @@ public class Add_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.0.132:8000/api/store/showProfileStore")
+                .url("https://luxexpress.cf/api/store/showProfileStore")
                 .post(requestBody)
-                //.addHeader("name_your_token", "your_token")
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -204,9 +248,9 @@ public class Add_Activity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.132:8000/api/store/insertOrderStore")
+                            .url("https://luxexpress.cf/api/store/insertOrderStore")
                             .post(requestBody)
-                            //.addHeader("name_your_token", "your_token")
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
 
                     client.newCall(request).enqueue(new Callback() {

@@ -238,11 +238,14 @@ public class Order_Received_Activity extends AppCompatActivity {
             btn_done.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (data.get(vitri).getStatus_order().equals("4")) {
+                        Login_Token.update_check = false;
+                    }
 
-                    if(obj.get_check_update()==false) {
+                    if(Login_Token.update_check==false) {
                         Toast.makeText(Order_Received_Activity.this, "Ok: btn_done" , Toast.LENGTH_SHORT).show();
                         if (data.get(vitri).getStatus_order().equals("3")) {
-                            obj.set_check_update(true);
+                            Login_Token.update_check = true;
                         }
 
                         RequestBody requestBody = new MultipartBody.Builder()
@@ -295,6 +298,8 @@ public class Order_Received_Activity extends AppCompatActivity {
 
                             }
                         });
+                    }else{
+                        Toast.makeText(Order_Received_Activity.this, "Bạn cần giao hàng trước.", Toast.LENGTH_SHORT).show();
                     }
 
                 }

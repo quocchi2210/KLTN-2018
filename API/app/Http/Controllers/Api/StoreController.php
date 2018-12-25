@@ -804,6 +804,8 @@ class StoreController extends Controller {
 
 				$data_created = date('Y-m-d H:i:s');
 
+				$email = "test@test.com";
+
 				//Log::debug("wtffffffffffffff " . print_r($order_id, 1));
 
 				$affected = DB::table('orders')->where('idOrder', $order_id)->update([

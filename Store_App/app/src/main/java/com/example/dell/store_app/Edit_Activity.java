@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,9 +20,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,6 +39,18 @@ public class Edit_Activity extends AppCompatActivity {
     private Button btn_done;
     private String cod = null;
 
+    private String token = Login_Token.token;
+    private String hostname = "luxexpress.cf";
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,13 +156,14 @@ public class Edit_Activity extends AppCompatActivity {
                             .addFormDataPart("cod", cod)
                             .addFormDataPart("total_weight", weight.getText().toString())
                             .addFormDataPart("id_service_type", service_id_type)
+                            .addFormDataPart("email_receiver", "test@test.com")
                             .build();
 
                     Request request = new Request.Builder()
                             //.url("http://192.168.1.16:8000/api/shipper/showOrder")
-                            .url(" http://192.168.0.132:8000/api/store/insertOrderStore")
+                            .url("https://luxexpress.cf/api/store/updateOrderStore")
                             .post(requestBody)
-                            //.addHeader("name_your_token", "your_token")
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
 
                     client.newCall(request).enqueue(new Callback() {
@@ -162,9 +178,17 @@ public class Edit_Activity extends AppCompatActivity {
 
                             if (response.isSuccessful()) {
                                 Log.w("Add_Activity", "Add success");
-                                //Toast.makeText(Add_Activity.this, "Add success", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(Edit_Activity.this, Store_Manage_Activity.class);
+                                intent.putExtra("check_edit",true);
+                                startActivity(intent);
+
                             } else {
                                 Log.w("Add_Activity", "Add faild " + yourResponse.toString());
+
+                                Intent intent = new Intent(Edit_Activity.this, Store_Manage_Activity.class);
+                                intent.putExtra("check_edit",false);
+                                startActivity(intent);
                             }
 
                         }
@@ -207,9 +231,9 @@ public class Edit_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.0.132:8000/api/store/getInfoEditFromIdorder")
+                .url("http://luxexpress.cf/api/store/getInfoEditFromIdorder")
                 .post(requestBody)
-                //.addHeader("name_your_token", "your_token")
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

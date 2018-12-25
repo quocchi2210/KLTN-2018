@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,7 +41,7 @@ public class Shipper_Position_Send implements LocationListener {
 
     private String hostname = "luxexpress.cf";
 
-    private static boolean update_check = false;
+//    private static boolean update_check = false;
     //public int position_index = -1;
     String token = Login_Token.token;
 
@@ -58,8 +59,53 @@ public class Shipper_Position_Send implements LocationListener {
 
     private Shipper_Position_Send() {
 
-        //ToDo here
-        //Shipper_Position_Send.getInstance();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("input", "input")
+                .build();
+
+        Request request = new Request.Builder()
+                //.url("http://192.168.0.132:8000/api/shipper/getDirection")
+                .url("https://luxexpress.cf/api/ordertrakings/updatePosition")
+                .post(requestBody)
+                .addHeader("Authorization", "Bearer " + token)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String yourResponse = response.body().string();
+
+                if (response.isSuccessful()) {
+
+
+                    JSONObject Jobject = null;
+                    try {
+
+                        Jobject = new JSONObject(yourResponse);
+                        String data = Jobject.getString("data");
+
+                        if(Integer.parseInt(data)>0){
+                            Login_Token.update_check = true;
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                } else {
+                    Log.w("test map", yourResponse.toString());
+                }
+
+
+            }
+        });
     }
 
     public static Shipper_Position_Send getInstance() {
@@ -86,7 +132,8 @@ public class Shipper_Position_Send implements LocationListener {
         Toast.makeText(mContext, "Ok: Location" + location.getLatitude(), Toast.LENGTH_SHORT).show();
         //send_lat_long();
 
-        if(update_check==true) {
+        if(Login_Token.update_check==true) {
+            Toast.makeText(mContext, "Ok: Location UPDATE TRUE", Toast.LENGTH_SHORT).show();
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     //.addFormDataPart("origin",  "10.766090,106.642000")
@@ -165,13 +212,13 @@ public class Shipper_Position_Send implements LocationListener {
         }
     }
 
-    public void set_check_update(boolean check_update){
-        this.update_check = check_update;
-    }
-
-    public boolean get_check_update(){
-        return this.update_check;
-    }
+//    public void set_check_update(boolean check_update){
+//        this.update_check = check_update;
+//    }
+//
+//    public boolean get_check_update(){
+//        return this.update_check;
+//    }
 
 
     public void send_lat_long() {
