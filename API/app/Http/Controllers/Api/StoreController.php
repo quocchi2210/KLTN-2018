@@ -192,7 +192,7 @@ class StoreController extends Controller {
 
 			$test = DB::table('stores')->where('idUser', $user_id)->get();
 
-			Log::debug('result_store' . print_r(decrypt($test[0]->nameStore), 1));
+			//Log::debug('result_store' . print_r(decrypt($test[0]->nameStore), 1));
 
 			// if ($result_store->count() > 0) {
 
@@ -804,50 +804,26 @@ class StoreController extends Controller {
 
 				$data_created = date('Y-m-d H:i:s');
 
-				Log::debug("wtffffffffffffff " . print_r($order_id, 1));
-				try {
-					$affected = DB::table('orders')->where('idOrder', $order_id)->update([
-						'billOfLading' => $bill_of_lading,
-						'nameReceiver' => $name_receiver,
-						'addressReceiver' => $address_receiver,
-						'latitudeReceiver' => $lat,
-						'longitudeReceiver' => $long,
-						'phoneReceiver' => $phone,
-						'emailReceiver' => $email,
-						'descriptionOrder' => $description,
-						'COD' => $cod,
-						'timeDelivery' => $time_delivery,
-						'distanceShipping' => $distance_shipping,
-						'idServiceType' => $id_service_type,
-						'totalWeight' => $total_weight,
-						'priceService' => $price_service,
-						'totalMoney' => $total_money,
-						'idOrderStatus' => Config::get('constants.status_type.pending'),
-					]);
-				} catch (\Illuminate\Database\QueryException $ex) {
-					Log::debug("wtffffffffffffff " . print_r($ex, 1));
+				//Log::debug("wtffffffffffffff " . print_r($order_id, 1));
 
-				}
-				Log::debug("wtffffffffffffff " . print_r($affected, 1));
-				// $test = DB::table('orders')->where('idOrder', $order_id)->update([
-				// 	'idStore' => $store_id,
-				// 	'billOfLading' => $bill_of_lading,
-				// 	'nameReceiver' => $name_receiver,
-				// 	'addressReceiver' => $address_receiver,
-				// 	'latitudeReceiver' => $lat,
-				// 	'longitudeReceiver' => $long,
-				// 	'phoneReceiver' => $phone,
-				// 	'emailReceiver' => $email,
-				// 	'descriptionOrder' => $description,
-				// 	'COD' => $cod,
-				// 	'timeDelivery' => $time_delivery,
-				// 	'distanceShipping' => $distance_shipping,
-				// 	'idServiceType' => $id_service_type,
-				// 	'totalWeight' => $total_weight,
-				// 	'priceService' => $price_service,
-				// 	'totalMoney' => $total_money,
-				// 	'idOrderStatus' => Config::get('constants.status_type.pending'),
-				// ])->toSql();
+				$affected = DB::table('orders')->where('idOrder', $order_id)->update([
+					'billOfLading' => $bill_of_lading,
+					'nameReceiver' => $name_receiver,
+					'addressReceiver' => $address_receiver,
+					'latitudeReceiver' => $lat,
+					'longitudeReceiver' => $long,
+					'phoneReceiver' => $phone,
+					'emailReceiver' => $email,
+					'descriptionOrder' => $description,
+					'COD' => $cod,
+					'timeDelivery' => $time_delivery,
+					'distanceShipping' => $distance_shipping,
+					'idServiceType' => $id_service_type,
+					'totalWeight' => $total_weight,
+					'priceService' => $price_service,
+					'totalMoney' => $total_money,
+					'idOrderStatus' => Config::get('constants.status_type.pending'),
+				]);
 
 				if ($affected) {
 					return response()->json([
@@ -856,7 +832,7 @@ class StoreController extends Controller {
 						'errors' => null,
 					], 200);
 				} else {
-					Log::debug("wtffffffffffffff eseleeeeeeeee" . print_r($affected, 1));
+
 					return response()->json([
 						'error' => true,
 						'data' => $affected,
