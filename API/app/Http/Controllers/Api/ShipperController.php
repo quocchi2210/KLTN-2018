@@ -31,6 +31,8 @@ class ShipperController extends Controller {
 
 			$idUser = $request->idUser;
 
+			Log::debug("Log query showOrder iduser" . print_r($idUser, 1));
+
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
 
@@ -55,7 +57,7 @@ class ShipperController extends Controller {
 				// 	->where('idOrderStatus', Config::get('constants.status_type.confirm'))
 				// 	->toSql();
 
-				Log::debug("Log query showOrder" . print_r($test, 1));
+				//Log::debug("Log query showOrder" . print_r($test, 1));
 
 				if ($users) {
 					return response()->json([
@@ -103,7 +105,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idUser = $request->idUser;
-			$idUser = 1;
+
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
 
@@ -167,7 +169,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idUser = $request->idUser;
-			$idUser = 1;
+
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
 
@@ -241,8 +243,6 @@ class ShipperController extends Controller {
 			$idOrder = $request->get('id_order');
 			$idUser = $request->idUser;
 
-			$idUser = 1;
-
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
 
@@ -296,7 +296,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idUser = $request->idUser;
-			$idUser = 1;
+
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
 			if ($result_shipper->count() > 0) {
@@ -374,7 +374,7 @@ class ShipperController extends Controller {
 			$status_order_rq = $request->get('status_order_rq');
 			$id_order = $request->get('id_order');
 			$idUser = $request->idUser;
-			$idUser = 1;
+
 			// $status_order=4;
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
@@ -483,7 +483,7 @@ class ShipperController extends Controller {
 	public function checkOrderShipper(Request $request) {
 
 		$idUser = $request->idUser;
-		$idUser = 1;
+
 		//$id_shipper = $request->get('id_shipper');
 
 		$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
