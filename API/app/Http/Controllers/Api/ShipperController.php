@@ -30,7 +30,7 @@ class ShipperController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idUser = $request->idUser;
-			$idUser = 1;
+
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
 
@@ -50,10 +50,18 @@ class ShipperController extends Controller {
 				// ->orWhere('idOrderStatus', Config::get('constants.status_type.delivery'))
 					->get();
 
+				// $test = DB::table('orders')
+				// 	->where('idShipper', $idShipper)->whereNotIn('idOrderStatus', [Config::get('constants.status_type.pending')])
+				// 	->where('idOrderStatus', Config::get('constants.status_type.confirm'))
+				// 	->toSql();
+
+				Log::debug("Log query showOrder" . print_r($test, 1));
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
 						'data' => $users,
+						'iduser' => $idUser,
 						'errors' => null,
 					], 200);
 				} else {
@@ -67,6 +75,7 @@ class ShipperController extends Controller {
 				return response()->json([
 					'error' => true,
 					'data' => 'count > 0',
+					'iduser' => $idUser,
 					'errors' => null,
 				], 400);
 			}
