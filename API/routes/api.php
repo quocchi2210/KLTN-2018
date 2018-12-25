@@ -17,18 +17,19 @@ Route::group(['middleware' => 'jwt'], function () {
 	Route::get('profile', "ProfileController@getProfile");
 	Route::post('change', "Api\ChangePasswordController@change");
 
+	Route::group(['prefix' => 'shipper'], function () {
+		Route::post('showOrder', "Api\ShipperController@showOrder");
+		Route::post('showOrderReceived', "Api\ShipperController@showOrderReceived");
+		Route::post('showHistory', "Api\ShipperController@showHistory");
+		Route::post('updateStatus', "Api\ShipperController@updateStatus");
+		Route::post('showDetailOrder', "Api\ShipperController@showDetailOrder");
+		Route::post('showAllStoreOrder', "Api\ShipperController@showAllStoreOrder");
+		Route::post('getDirection', "Api\ShipperController@getDirection");
+		Route::post('checkOrderShipper', "Api\ShipperController@checkOrderShipper");
+	});
+
 });
 
-Route::group(['prefix' => 'shipper'], function () {
-	Route::post('showOrder', "Api\ShipperController@showOrder");
-	Route::post('showOrderReceived', "Api\ShipperController@showOrderReceived");
-	Route::post('showHistory', "Api\ShipperController@showHistory");
-	Route::post('updateStatus', "Api\ShipperController@updateStatus");
-	Route::post('showDetailOrder', "Api\ShipperController@showDetailOrder");
-	Route::post('showAllStoreOrder', "Api\ShipperController@showAllStoreOrder");
-	Route::post('getDirection', "Api\ShipperController@getDirection");
-	Route::post('checkOrderShipper', "Api\ShipperController@checkOrderShipper");
-});
 Route::group(['middleware' => 'encrypt'], function () {
 	Route::group(['prefix' => 'store'], function () {
 		Route::post('updateProfileStore', "Api\StoreController@updateProfileStore");
@@ -37,7 +38,7 @@ Route::group(['middleware' => 'encrypt'], function () {
 
 		Route::post('showOrder', "Api\StoreController@showOrder");
 		Route::post('showDetailOrder', "Api\StoreController@showDetailOrder");
-		
+
 		Route::post('insertOrderStore', "Api\StoreController@insertOrderStore");
 
 		Route::post('updateOrderStore', "Api\StoreController@updateOrderStore");
