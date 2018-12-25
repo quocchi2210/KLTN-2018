@@ -353,7 +353,90 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         longitude = String.valueOf(location.getLongitude());
 
         Log.i("Geo_Location", "Latitude: " + latitude + ", Longitude: " + longitude);
-        send_post();
+        //send_post();
+        mMap.clear();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        String destination_address= getIntent().getStringExtra("destination_address");
+        if(loc!=null && latitude==null && longitude==null){
+            Log.i("send_post", "Location: " + loc.toString());
+            latitude = String.valueOf(loc.getLatitude());
+            longitude = String.valueOf(loc.getLongitude());
+        }
+
+        String origin_address = latitude + ","+longitude;
+
+        Log.i("send_post", "origin_address: " + latitude + ", Longitude: " + longitude);
+        Log.i("send_post", "destination_address: " + destination_address);
+        //10.766080   //106.652260
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                //.addFormDataPart("origin",  "10.766090,106.642000")
+                //10.766080 106.652260
+                //.addFormDataPart("destination", "132E Cách Mạng Tháng Tám P10 Q3")
+                .addFormDataPart("origin",  origin_address)
+                .addFormDataPart("destination", destination_address)
+                .build();
+
+        Request request = new Request.Builder()
+                //.url("http://192.168.0.132:8000/api/shipper/getDirection")
+                .url("https://luxexpress.cf/api/shipper/getDirection")
+                .post(requestBody)
+                .addHeader("Authorization", "Bearer "+token)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String yourResponse = response.body().string();
+
+                if(response.isSuccessful()){
+
+                    MapsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject Jobject = null;
+                            try {
+
+                                //Jobject = new JSONObject(yourResponse);
+
+                                //JSONArray Jarray = Jobject.getJSONArray("routes");
+                                List<MapsActivity.Route> List_lat_long = new ArrayList<MapsActivity.Route>();
+                                List_lat_long = parseJSon(yourResponse);
+                                showDirection(List_lat_long);
+                                Log.w("test map",List_lat_long.toString());
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+                }else{
+                    Log.w("test map",yourResponse.toString());
+                }
+
+
+            }
+        });
+
     }
 
     @Override

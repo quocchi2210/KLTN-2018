@@ -50,17 +50,19 @@ public class Order_Received_Activity extends AppCompatActivity {
             .certificatePinner(certificatePinner)
             .build();
 
+    private Shipper_Position_Send obj;
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_shipper, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         Intent intent;
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_item_history:
                 //Toast.makeText(Order_Activity.this, "Ok: History",Toast.LENGTH_SHORT).show();
                 intent = new Intent(getBaseContext(), History_Activity.class);
@@ -109,7 +111,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                 .url("https://luxexpress.cf/api/shipper/showOrderReceived")
                 .post(requestBody)
                 //.addHeader("name_your_token", "your_token")
-                .addHeader("Authorization", "Bearer "+token)
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -122,7 +124,7 @@ public class Order_Received_Activity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 final String yourResponse = response.body().string();
 
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     Order_Received_Activity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -138,35 +140,34 @@ public class Order_Received_Activity extends AppCompatActivity {
 
                                 for (int i = 0; i < Jarray.length(); i++) {
                                     JSONObject object = Jarray.getJSONObject(i);
-                                    Log.w("myApp","Order received: " + object.toString());
+                                    Log.w("myApp", "Order received: " + object.toString());
                                     String timeDelivery = object.getString("timeDelivery");
                                     String addressReceiver = object.getString("addressReceiver");
                                     String addressStore = object.getString("addressStore");
                                     String idOrder = object.getString("idOrder");
                                     String idOrderStatus = object.getString("idOrderStatus");
 
-                                    data.add(new Order_Received(addressReceiver,addressStore,timeDelivery,idOrder,idOrderStatus));
+                                    data.add(new Order_Received(addressReceiver, addressStore, timeDelivery, idOrder, idOrderStatus));
                                 }
 
                                 list_view_order_received.setAdapter(new Order_Received_Adapter(Order_Received_Activity.this, R.layout.list_item_order_received, data));
-                                Log.w("Order eponse","Order received eponse: " + yourResponse.toString());
+                                Log.w("Order eponse", "Order received eponse: " + yourResponse.toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
                         }
                     });
-                }else{
-                    Log.w("myApp","ERROR Order received: " + yourResponse.toString());
+                } else {
+                    Log.w("myApp", "ERROR Order received: " + yourResponse.toString());
                 }
 
 
             }
         });
 
-        Shipper_Position_Send obj = Shipper_Position_Send.getInstance();
+        obj = Shipper_Position_Send.getInstance();
         obj.setMyContext(getBaseContext());
-
     }
 
     private class Order_Received_Adapter extends BaseAdapter {
@@ -175,7 +176,7 @@ public class Order_Received_Activity extends AppCompatActivity {
         int myLayout;
         List<Order_Received> arrayOrder;
 
-        public Order_Received_Adapter(Context context, int layout, List<Order_Received> orderList){
+        public Order_Received_Adapter(Context context, int layout, List<Order_Received> orderList) {
             myContext = context;
             myLayout = layout;
             arrayOrder = orderList;
@@ -207,8 +208,8 @@ public class Order_Received_Activity extends AppCompatActivity {
             TextView txt_address_receive = (TextView) convertView.findViewById(R.id.txt_address_receive);
             TextView txt_time = (TextView) convertView.findViewById(R.id.txt_time);
 
-            Button btn_see_map = (Button)convertView.findViewById(R.id.btn_see_map);
-            Button btn_done = (Button)convertView.findViewById(R.id.btn_done);
+            Button btn_see_map = (Button) convertView.findViewById(R.id.btn_see_map);
+            Button btn_done = (Button) convertView.findViewById(R.id.btn_done);
 
             txt_address_delivery.setText(data.get(position).getAddress_delivery());
             txt_address_receive.setText(data.get(position).getAddress_receive());
@@ -226,11 +227,11 @@ public class Order_Received_Activity extends AppCompatActivity {
                 }
             });
 
-            Log.w("Order","Order getStatus_order: " +data.get(vitri).getStatus_order());
+            Log.w("Order", "Order getStatus_order: " + data.get(vitri).getStatus_order());
 
-            if(data.get(vitri).getStatus_order().equals("3")){
+            if (data.get(vitri).getStatus_order().equals("3")) {
                 btn_done.setText("Chuyển hàng");
-            }else if(data.get(vitri).getStatus_order().equals("4")){
+            }else if (data.get(vitri).getStatus_order().equals("4")) {
                 btn_done.setText("Xong");
             }
 
@@ -238,60 +239,63 @@ public class Order_Received_Activity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    OkHttpClient client = new OkHttpClient.Builder()
-                            .certificatePinner(certificatePinner)
-                            .build();
-
-                    RequestBody requestBody = new MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("id_order", data.get(vitri).getId_order())
-                            .addFormDataPart("status_order_rq", data.get(vitri).getStatus_order())
-                            .build();
-
-                    Request request = new Request.Builder()
-                            //.url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
-                            .url("https://luxexpress.cf/api/shipper/updateStatus")
-                            .post(requestBody)
-                            //.addHeader("name_your_token", "your_token")
-                            .addHeader("Authorization", "Bearer "+token)
-                            .build();
-
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            e.printStackTrace();
+                    if(obj.get_check_update()==false) {
+                        Toast.makeText(Order_Received_Activity.this, "Ok: btn_done" , Toast.LENGTH_SHORT).show();
+                        if (data.get(vitri).getStatus_order().equals("3")) {
+                            obj.set_check_update(true);
                         }
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            final String yourResponse = response.body().string();
+                        RequestBody requestBody = new MultipartBody.Builder()
+                                .setType(MultipartBody.FORM)
+                                .addFormDataPart("id_order", data.get(vitri).getId_order())
+                                .addFormDataPart("status_order_rq", data.get(vitri).getStatus_order())
+                                .build();
 
-                            if(response.isSuccessful()){
+                        Request request = new Request.Builder()
+                                //.url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
+                                .url("https://luxexpress.cf/api/shipper/updateStatus")
+                                .post(requestBody)
+                                //.addHeader("name_your_token", "your_token")
+                                .addHeader("Authorization", "Bearer " + token)
+                                .build();
 
-                                Order_Received_Activity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        JSONObject Jobject = null;
-                                        try {
-
-                                            Jobject = new JSONObject(yourResponse);
-
-                                            Log.w("btn_done","Order received: " + yourResponse.toString());
-                                            finish();
-                                            startActivity(getIntent());
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                });
-                            }else{
-                                Log.w("myApp","Order received: " + yourResponse.toString());
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
                             }
 
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                final String yourResponse = response.body().string();
 
-                        }
-                    });
+                                if (response.isSuccessful()) {
+
+                                    Order_Received_Activity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            JSONObject Jobject = null;
+                                            try {
+
+                                                Jobject = new JSONObject(yourResponse);
+
+                                                Log.w("btn_done", "Order received: " + yourResponse.toString());
+                                                finish();
+                                                startActivity(getIntent());
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    });
+                                } else {
+                                    Log.w("myApp", "Order received: " + yourResponse.toString());
+                                }
+
+
+                            }
+                        });
+                    }
 
                 }
             });
@@ -300,7 +304,7 @@ public class Order_Received_Activity extends AppCompatActivity {
         }
     }
 
-    private class Order_Received{
+    private class Order_Received {
 
         private String address_receive;
         private String address_delivery;
