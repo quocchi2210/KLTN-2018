@@ -14,6 +14,8 @@ Route::post('/tracking', ['as' => 'tracking', 'uses' => 'OrderController@trackin
 Route::get('/user/verify/{user_id}/{token}', 'Auth\RegisterController@verifyUser')->name('verify.user');
 Route::get('/user/password/reset/{user_id}/{token}','Auth\ResetPasswordController@showResetForm')->name('reset.user');
 Route::post('/user/password/reset/{user_id}/{token}','Auth\ResetPasswordController@reset');
+Route::get('/deliver/confirm/{user_id}/{token}','Admin\DeliverController@getconfirmDeliver')->name('confirm.deliver');
+Route::post('/deliver/confirm/{user_id}/{token}','Admin\DeliverController@confirmDeliver');
 
 
 
@@ -25,7 +27,7 @@ Route::post('admin/logout', ['as' => 'getLogout', 'uses' => 'Admin\AuthControlle
 
 Route::group(['middleware' => 'CheckAdmin', 'prefix' => 'admin' , 'as' =>'admin.'], function() {
     Route::get('/', ['as' => 'homeAdmin', 'uses' => 'Admin\AdminController@index']);
-    Route::get('/orders', ['as' => 'orderAdmin', 'uses' => 'Admin\AdminController@getOrders']);
+    Route::resource('/orders','Admin\OrderController');
     Route::resource('/stores','Admin\StoreController');
     Route::resource('/delivers','Admin\DeliverController');
 

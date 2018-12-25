@@ -46,7 +46,7 @@ class User extends Authenticatable implements JWTSubject {
 		return $this->hasOne('App\Token','user_token_id','idUser');
 	}
 	public function role() {
-		return $this->belongsToMany('App\Role');
+		return $this->belongsTo('App\Role','roleId','id');
 	}
 
 
@@ -75,6 +75,11 @@ class User extends Authenticatable implements JWTSubject {
     public function verifyUser()
     {
         return $this->hasOne('App\VerifyResetUser','user_id','idUser');
+    }
+
+    public function deliver()
+    {
+        return $this->hasOne('App\Deliver','idUser','idUser');
     }
 
     /**
