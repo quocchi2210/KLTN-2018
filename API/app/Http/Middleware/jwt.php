@@ -2,9 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\User;
 use Closure;
-use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class jwt {
@@ -20,16 +18,16 @@ class jwt {
 		try {
 			JWTAuth::parseToken()->authenticate();
 
-			$idUser = auth()->user()->idUser;
+			// $idUser = auth()->user()->idUser;
 
-			$request->request->add(
-				array(
-					'idUser' => $idUser,
-				)
+			// $request->request->add(
+			// 	array(
+			// 		'idUser' => $idUser,
+			// 	)
 
-			);
+			// );
 
-			Log::debug('$REQUEST HANDLE JWT' . print_r($request, 1));
+			//Log::debug('$REQUEST HANDLE JWT' . print_r($request, 1));
 
 		} catch (\Exception $e) {
 			if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
