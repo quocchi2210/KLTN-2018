@@ -41,24 +41,23 @@ import okhttp3.Response;
 public class Store_Manage_Activity extends AppCompatActivity {
 
     private ArrayList<Store_Manage> data = new ArrayList<Store_Manage>();
-    private String token = "";
+    private String token = Login_Token.token;
     private String hostname = "luxexpress.cf";
+
+    CertificatePinner certificatePinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_manage);
-
-//        CertificatePinner certificatePinner = new CertificatePinner.Builder()
-//                .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
-//                .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
-//                .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
-//                .build();
-
-        OkHttpClient client = new OkHttpClient();
-//        OkHttpClient client = new OkHttpClient.Builder()
-//                .certificatePinner(certificatePinner)
-//                .build();
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -66,10 +65,10 @@ public class Store_Manage_Activity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                //.url("https://luxexpress.cf/api/store/showOrder")
-                .url(" http://192.168.0.132:8000/api/store/showOrder")
+                .url("https://luxexpress.cf/api/store/showOrder")
+                //.url(" http://192.168.0.132:8000/api/store/showOrder")
                 .post(requestBody)
-                //.addHeader("Authorization", "Bearer " + token)
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -107,10 +106,12 @@ public class Store_Manage_Activity extends AppCompatActivity {
                                 }
 
                                 lv_store_mange.setAdapter(new Store_Manage_Adapter(Store_Manage_Activity.this, R.layout.list_store_manage_item, data));
-
+                                Log.w("Add_Activitye eponse","Add eponse "+ yourResponse.toString());
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                Log.w("Add_Activitye error","Add faild "+yourResponse.toString());
+                                Log.w("Add_Activitye error","Add faild "+e.toString());
                             }
 
                         }
@@ -136,15 +137,18 @@ public class Store_Manage_Activity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-
+        Intent intent;
         switch(item.getItemId()){
             case R.id.menu_item_add_order:
 
-                Intent intent = new Intent(Store_Manage_Activity.this, Add_Activity.class);
+                intent = new Intent(getBaseContext(), Add_Activity.class);
                 startActivity(intent);
 
                 break;
             case R.id.menu_item_manage_order:
+
+                intent = new Intent(getBaseContext(), Store_Manage_Activity.class);
+                startActivity(intent);
                 break;
 
         }
@@ -210,10 +214,10 @@ public class Store_Manage_Activity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url(" http://192.168.0.132:8000/api/store/showDetailOrder")
-                            //.url("https://luxexpress.cf/api/store/showDetailOrder")
+                            //.url(" http://192.168.0.132:8000/api/store/showDetailOrder")
+                            .url("https://luxexpress.cf/api/store/showDetailOrder")
                             .post(requestBody)
-                            //.addHeader("Authorization", "Bearer " + token)
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
 
                     client.newCall(request).enqueue(new Callback() {

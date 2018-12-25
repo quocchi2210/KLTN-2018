@@ -54,8 +54,8 @@ public class Register_Activity extends AppCompatActivity {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Register_Activity.this, "Ok: Register Store work ",Toast.LENGTH_SHORT).show();
-                //send_post();
+                //Toast.makeText(Register_Activity.this, "Ok: Register Store work ",Toast.LENGTH_SHORT).show();
+                send_post();
             }
         });
     }
@@ -72,11 +72,11 @@ public class Register_Activity extends AppCompatActivity {
     private void send_post(){
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("your_name_input", txt_store_name.toString())
-                .addFormDataPart("your_name_input", txt_email.toString())
-                .addFormDataPart("your_name_input", txt_username.toString())
-                .addFormDataPart("your_name_input", txt_password.toString())
-                .addFormDataPart("your_name_input", txt_comfirmpassword.toString())
+                .addFormDataPart("your_name_input", txt_store_name.getText().toString())
+                .addFormDataPart("email", txt_email.getText().toString())
+                .addFormDataPart("username", txt_username.getText().toString())
+                .addFormDataPart("password", txt_password.getText().toString())
+                //.addFormDataPart("password", txt_comfirmpassword.toString())
                 .build();
 
         Request request = new Request.Builder()
