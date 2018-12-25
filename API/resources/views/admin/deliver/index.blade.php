@@ -3,94 +3,120 @@
 @section('title', 'Delivers')
 
 @section('content-header')
-    <h1>
-        Restaurants
-    </h1>
+
     <div style="margin-bottom: 25px;" class="form-group">
-        <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#ModalBranches">Add New
+        <button class="btn btn-success btn-sm pull-left" data-toggle="modal" data-target="#ModalAddDeliver">Add New
             Deliver
         </button>
     </div>
 @endsection
 
 @section('content')
-<div class="box box-primary">
-    <div class="box-body">
-        <div class="col-md-2">
-            <form action="{{route('admin.search.branch')}}" method="POST" role="search">
-                {{ csrf_field() }}
-                <div class="input-group">
-                    <input type="text" class="form-control" name="searchBranch"
-                           placeholder="Search restaurant"> <span class="input-group-btn">
-                <button type="submit" class="btn btn-default">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </span>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card p-3">
-                    <div class="table-responsive-dm">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Phone Number</th>
-                                <th scope="col">Comments</th>
-                                <th scope="col">Date Created</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($delivers as $deliver)
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card p-3">
+                        <div class="table-responsive-dm">
+                            <table class="table">
+                                <thead>
                                 <tr>
-                                    <td scope="row">{{$businessBranch->id}}</td>
-                                    <td>{{$businessBranch->name}}</td>
-                                    <td>{{$businessBranch->address}}, {{$businessBranch->ward}}
-                                        , {{$businessBranch->district}}, {{$businessBranch->city}}
-                                        , {{$businessBranch->country}}</td>
-                                    <td>{{$businessBranch->phone_number}}</td>
-                                    <td style="max-width: 330px;overflow: hidden; white-space: nowrap; text-overflow: ellipsis">{{$businessBranch->comments}}</td>
-                                    <td>{{$businessBranch->created_at}}</td>
-                                    <td nowrap="">
-                                        <button type="button"
-                                                data-id="{{$businessBranch->id}}"
-                                                class="btn btn-outline-primary btn-sm btn-edit-branch"
-                                                data-url="{{domain_route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">
-                                            <i class="fa fa-pencil"></i>
-                                        </button>
-                                        <button type="button"
-                                                data-id="{{$businessBranch->id}}"
-                                                class="btn btn-danger btn-sm btn-delete-branch"
-                                                data-url="{{domain_route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                        <button type="button"
-                                                data-id="{{$businessBranch->id}}"
-                                                class="btn btn-outline-info btn-sm btn-info-branch"
-                                                data-url="{{domain_route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">
-                                            <i class="fa fa-info-circle"></i>
-                                        </button>
-                                    </td>
+                                    <th>#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">Day of Birth</th>
+                                    <th scope="col">License Plates</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
-                            @empty
-                                <tr class="text-center">
-                                    <td colspan="5">No restaurants created</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @forelse($delivers as $deliver)
+                                    <tr>
+                                        <td scope="row">{{$deliver->idUser}}</td>
+                                        <td>{{$deliver->fullName}}</td>
+                                        <td>{{$deliver->email}}</td>
+                                        <td>{{$deliver->dateOfBirth}}</td>
+                                        <td>{{$deliver->gender}}</td>
+                                        <td>{{$deliver->deliver->licensePlates}}</td>
+                                        <td nowrap="">
+                                            {{--<button type="button"--}}
+                                                    {{--data-id="{{$businessBranch->id}}"--}}
+                                                    {{--class="btn btn-outline-primary btn-sm btn-edit-branch"--}}
+                                                    {{--data-url="{{domain_route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">--}}
+                                                {{--<i class="fa fa-pencil"></i>--}}
+                                            {{--</button>--}}
+                                            {{--<button type="button"--}}
+                                                    {{--data-id="{{$businessBranch->id}}"--}}
+                                                    {{--class="btn btn-danger btn-sm btn-delete-branch"--}}
+                                                    {{--data-url="{{domain_route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">--}}
+                                                {{--<i class="fa fa-trash"></i>--}}
+                                            {{--</button>--}}
+                                            <button type="button"
+                                                    data-id="{{$deliver->idUser}}"
+                                                    class="btn btn-outline-info btn-sm btn-info-branch"
+                                                    data-url="{{route('admin.delivers.edit',['branch' => $deliver->idUser])}}">
+                                                <i class="fa fa-info-circle"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr class="text-center">
+                                        <td colspan="5">No restaurants created</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="form-group pull-right">
-    {!! $businessBranches->links() !!}
-</div>
+    {{--<div class="form-group pull-right">--}}
+        {{--{!! $businessBranches->links() !!}--}}
+    {{--</div>--}}
+    <div class="modal fade modal-add" id="ModalAddDeliver"
+         tabindex="-1" role="dialog"
+         aria-labelledby="favoritesModalLabel" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"
+                        id="favoritesModalLabel">New Deliver</h4>
+                    <button type="button" class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                </div>
+                {!! Form::open(['url' => route('admin.delivers.store'),'method' => 'POST','id'=>'addCategoryForm']) !!}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {!! Form::label('', 'Full Name:') !!}
+                            {!! Form::text('Deliver[full_name]', old('Deliver[full_name]'), [
+                                'class' => 'form-control',
+                                'placeholder' => 'John'
+                            ]) !!}
+                        </div>
+                        <div class="col-xs-6">
+                            {!! Form::label('', 'Email') !!}
+                            {!! Form::email('Deliver[email]', old('Deliver[email]'), [
+                                'class' => 'form-control',
+                                'placeholder' => 'john.doe@email.com'
+                            ]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default pull-right"
+                            data-dismiss="modal"
+                            style="margin-left: 5px">Cancel
+                    </button>
+                    {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

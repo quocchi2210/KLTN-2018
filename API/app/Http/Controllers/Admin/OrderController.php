@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Store;
+use App\Order;
+use App\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
-class StoreController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,9 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::all();
-        return view('admin.store.index',['stores'=>$stores]);
+        $orders = Order::all();
+        $status = OrderStatus::all();
+        return view('admin.order.index', ['orders' => $orders,'status' => $status]);
     }
 
     /**

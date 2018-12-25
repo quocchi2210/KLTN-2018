@@ -14,10 +14,4 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-    public function getOrders()
-    {
-        $orders = Order::all();
-        $status = OrderStatus::all();
-        return view('admin.order.index', ['orders' => $orders,'status' => $status]);
-    }
 }
