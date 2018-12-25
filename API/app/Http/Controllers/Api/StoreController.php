@@ -770,11 +770,11 @@ class StoreController extends Controller {
 			$idUser = 1;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
-
+			//Log::debug("wtffffffffffffff");
 			if ($result_store->count() > 0) {
 
 				$bill_of_lading = $request->get('bill_of_lading');
-				$bill_of_lading = 'LUXABC1234';
+				$bill_of_lading = 'LUX' . str_random(12);
 				$name_receiver = $request->get('name_receiver');
 				$address_receiver = $request->get('address_receiver');
 				$lat = $request->get('latitude_receiver');
@@ -798,30 +798,56 @@ class StoreController extends Controller {
 				$time_delivery = '2018-12-11 00:00:00';
 				$distance_shipping = 12;
 				$store_id = $result_store[0]->idStore;
-				$order_id = 2;
-
+				$order_id = 1;
+				$store_id = 1;
 				$total_money = 123;
 
 				$data_created = date('Y-m-d H:i:s');
-				$affected = DB::table('orders')->where('idOrder', $order_id)->update([
-					'idStore' => $store_id,
-					'billOfLading' => $bill_of_lading,
-					'nameReceiver' => $name_receiver,
-					'addressReceiver' => $address_receiver,
-					'latitudeReceiver' => $lat,
-					'longitudeReceiver' => $long,
-					'phoneReceiver' => $phone,
-					'emailReceiver' => $email,
-					'descriptionOrder' => $description,
-					'COD' => $cod,
-					'timeDelivery' => $time_delivery,
-					'distanceShipping' => $distance_shipping,
-					'idServiceType' => $id_service_type,
-					'totalWeight' => $total_weight,
-					'priceService' => $price_service,
-					'totalMoney' => $total_money,
-					'idOrderStatus' => Config::get('constants.status_type.pending'),
-				]);
+
+				Log::debug("wtffffffffffffff " . print_r($order_id, 1));
+				try {
+					$affected = DB::table('orders')->where('idOrder', $order_id)->update([
+						'billOfLading' => $bill_of_lading,
+						'nameReceiver' => $name_receiver,
+						'addressReceiver' => $address_receiver,
+						'latitudeReceiver' => $lat,
+						'longitudeReceiver' => $long,
+						'phoneReceiver' => $phone,
+						'emailReceiver' => $email,
+						'descriptionOrder' => $description,
+						'COD' => $cod,
+						'timeDelivery' => $time_delivery,
+						'distanceShipping' => $distance_shipping,
+						'idServiceType' => $id_service_type,
+						'totalWeight' => $total_weight,
+						'priceService' => $price_service,
+						'totalMoney' => $total_money,
+						'idOrderStatus' => Config::get('constants.status_type.pending'),
+					]);
+				} catch (\Illuminate\Database\QueryException $ex) {
+					Log::debug("wtffffffffffffff " . print_r($ex, 1));
+
+				}
+				Log::debug("wtffffffffffffff " . print_r($affected, 1));
+				// $test = DB::table('orders')->where('idOrder', $order_id)->update([
+				// 	'idStore' => $store_id,
+				// 	'billOfLading' => $bill_of_lading,
+				// 	'nameReceiver' => $name_receiver,
+				// 	'addressReceiver' => $address_receiver,
+				// 	'latitudeReceiver' => $lat,
+				// 	'longitudeReceiver' => $long,
+				// 	'phoneReceiver' => $phone,
+				// 	'emailReceiver' => $email,
+				// 	'descriptionOrder' => $description,
+				// 	'COD' => $cod,
+				// 	'timeDelivery' => $time_delivery,
+				// 	'distanceShipping' => $distance_shipping,
+				// 	'idServiceType' => $id_service_type,
+				// 	'totalWeight' => $total_weight,
+				// 	'priceService' => $price_service,
+				// 	'totalMoney' => $total_money,
+				// 	'idOrderStatus' => Config::get('constants.status_type.pending'),
+				// ])->toSql();
 
 				if ($affected) {
 					return response()->json([
@@ -830,13 +856,19 @@ class StoreController extends Controller {
 						'errors' => null,
 					], 200);
 				} else {
-
-					response()->json([
+					Log::debug("wtffffffffffffff eseleeeeeeeee" . print_r($affected, 1));
+					return response()->json([
 						'error' => true,
 						'data' => $affected,
 						'errors' => null,
 					], 400);
 				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => "count > 0",
+					'errors' => null,
+				], 400);
 			}
 
 		}
@@ -900,6 +932,48 @@ class StoreController extends Controller {
 				], 400);
 			}
 		}
+	}
+
+	private function caculateTimedelivery($idServiceType, $distance) {
+		if ($idServiceType == 1) {
+			if ($distance < 50) {
+				return 1;
+			} else if (50 <= $distance && $distance < 200) {
+				return 2;
+			} else if ($distance >= 200) {
+				return 3;
+			}
+
+		} else if ($idServiceType == 2) {
+			if ($distance < 50) {
+				return 1;
+			} else if (50 <= $distance && $distance < 200) {
+				return 2;
+			} else if ($distance >= 200) {
+				return 3;
+			}
+
+		} else if ($idServiceType == 3) {
+			if ($distance < 50) {
+				return 1;
+			} else if (50 <= $distance && $distance < 200) {
+				return 1;
+			} else if ($distance >= 200) {
+				return 2;
+			}
+		}
+	}
+
+	private function getDistance($originLat, $originLong, $desLat, $desLong) {
+		$request_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" . $originLat . "," . $originLong . "&destinations=" . $desLat . "," . $desLong . "&key=AIzaSyBVLZZFaDU6nn96cbs59PfMBNXu9ZNdxYE";
+		$string = file_get_contents($request_url);
+		return json_decode($string, true);
+	}
+	private function milesToKilometers($miles) {
+		return round($miles * 1.60934, 1);
+	}
+	private function calculateMoney($distance, $totalWeight, $servicePrice) {
+		return round($distance * $servicePrice * $totalWeight);
 	}
 
 }
