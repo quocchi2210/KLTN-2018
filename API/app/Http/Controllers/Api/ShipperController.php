@@ -29,9 +29,8 @@ class ShipperController extends Controller {
 
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
-
-			Log::debug("Log query showOrder iduser" . print_r($idUser, 1));
+			//$idUser = $request->idUser;
+			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 			if ($result_shipper->count() > 0) {
