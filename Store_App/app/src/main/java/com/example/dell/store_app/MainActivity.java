@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private void mapped_gui(){
         edt_user = (EditText)findViewById(R.id.edit_text_user);
         edt_password = (EditText)findViewById(R.id.edit_text_password);
+
+        edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         btn_login = (Button)findViewById(R.id.btn_login);
         btn_register = (Button)findViewById(R.id.btn_register);
         btn_logout = (Button)findViewById(R.id.btn_logout);

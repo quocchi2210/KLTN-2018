@@ -546,6 +546,25 @@ class StoreController extends Controller {
 				$total_money = 500;
 				$email = "EMAIL";
 
+				//////////////////////////////
+				$result_service_types = DB::table('service_types')
+					->where('idService', $id_service_type)
+					->get();
+
+				$service_price = $result_service_types[0]->price;
+				$distance_shipping = $this->getDistance($senderLat, $senderLong, $receiverLat, $receiverLong);
+
+				$distance_shipping = floatval($distance['rows'][0]['elements'][0]['distance']['text']);
+
+				$distance_shipping = $this->milesToKilometers($distance);
+				$total_money = $this->calculateMoney($distance_shipping, $total_weight, $service_price);
+
+				$time_delivery = caculateTimedelivery($id_service_type, $distance_shipping);
+
+				$time_delivery = date('Y-m-d H:i:s', strtotime($time_delivery . "+ days"));
+
+				//////////////////////////////////
+
 				$id_shipper = $request->get('id_shipper');
 				$id_order_status = $request->get('id_order_status'); // comfirm done .....
 
@@ -951,7 +970,18 @@ class StoreController extends Controller {
 		return round($miles * 1.60934, 1);
 	}
 	private function calculateMoney($distance, $totalWeight, $servicePrice) {
-		return round($distance * $servicePrice * $totalWeight);
+		if ($distance < 15) {
+			return round($distance * $servicePrice * $totalWeight);
+		} elseif ($distance >= 15 && $distance < 30) {
+			return round($distance * ($servicePrice / 2) * $totalWeight);
+		} elseif ($distance >= 30 && $distance < 50) {
+			return round($distance * ($servicePrice / 4) * $totalWeight);
+		} elseif ($distance >= 50 && $distance < 100) {
+			return round($distance * ($servicePrice / 6) * $totalWeight);
+		} elseif ($distance >= 100) {
+			return round($distance * ($servicePrice / 10) * $totalWeight);
+		}
+
 	}
 
 }
