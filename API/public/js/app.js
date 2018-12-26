@@ -19671,9 +19671,9 @@ window._ = __webpack_require__(1);
  */
 
 try {
-  // window.$ = window.jQuery = require('jquery');
+    // window.$ = window.jQuery = require('jquery');
 
-  __webpack_require__(4);
+    __webpack_require__(4);
 } catch (e) {}
 __webpack_require__(5);
 
@@ -19682,6 +19682,23 @@ __webpack_require__(5);
 /***/ (function(module, exports) {
 
 
+
+$(document).on('click', '.btn-edit-order-admin', function () {
+    var url = $(this).data("url");
+    console.log(url);
+    $("#ModalEditOrderAdmin").remove();
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function success(res) {
+            $('body').append(res);
+            $("#ModalEditOrderAdmin").modal();
+        },
+        error: function error(a, b, c) {
+            console.log(a, b, c);
+        }
+    });
+});
 
 /***/ }),
 /* 9 */

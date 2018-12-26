@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Deliver;
 use App\Order;
 use App\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -61,7 +63,13 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::find($id);
+        $status = DB::table('order_status')->whereIn('statusName', ['Confirm', 'Cancel'])->pluck('statusName', 'idStatus');
+        $deliver = DB::table('shippers')->pluck('idShipper', 'idShipper');
+        return response()->json(view('admin.order.edit',
+            ['deliver' => $deliver,
+                'order' => $order,
+                'status' => $status])->render());
     }
 
     /**
@@ -73,7 +81,10 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $status = $request->get('Status');
+        $deliver = $request->get('Deliver');
+        DB::table('orders')->where('idOrder',$id)->update(array('idShipper'=>$deliver,'idOrderStatus'=>$status));
+        return back();
     }
 
     /**

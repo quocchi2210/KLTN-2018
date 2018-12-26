@@ -55,9 +55,9 @@
                                                 <td nowrap="">
                                                     {{--@if($statusItem->id == 1)--}}
                                                         <button type="button"
-                                                                data-id="{{$statusOrder->id}}"
-                                                                class="btn btn-outline-primary btn-sm btn-edit-order"
-                                                                data-url="{{route('orders.edit',['order' => $statusOrder->id])}}">
+                                                                data-id="{{$statusOrder->idOrder}}"
+                                                                class="btn btn-outline-primary btn-sm btn-edit-order-admin"
+                                                                data-url="{{route('admin.orders.edit',['order' => $statusOrder->idOrder])}}">
                                                             <i class="fa fa-pencil"></i>
                                                         </button>
                                                         {{--<button type="button"--}}
@@ -68,9 +68,9 @@
                                                         {{--</button>--}}
                                                     {{--@endif--}}
                                                     <button type="button"
-                                                            data-id="{{$statusOrder->id}}"
+                                                            data-id="{{$statusOrder->idOrder}}"
                                                             class="btn btn-outline-info btn-sm btn-info-order"
-                                                            data-url="{{route('orders.show',['order' => $statusOrder->id])}}">
+                                                            data-url="{{route('admin.orders.show',['order' => $statusOrder->idOrder])}}">
                                                         <i class="fa fa-info-circle"></i>
                                                     </button>
                                                 </td>
