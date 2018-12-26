@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Config;
 use DB;
 use Illuminate\Http\Request;
@@ -336,7 +337,6 @@ class StoreController extends Controller {
 	 */
 
 	public function showOrder(Request $request) {
-
 		if ($request->isMethod('post')) {
 
 			// $idUser = $request->idUser;
@@ -572,42 +572,47 @@ class StoreController extends Controller {
 				$total_weight = encrypt($request->get('total_weight'));
 				$id_service_type = $request->get('id_service_type'); // CPN FAST 1 2 ....
 
-				$bill_of_lading = encrypt($request->get('bill_of_lading'));
-				$bill_of_lading = encrypt('LUXABC1234');
-
-				$lat = encrypt($request->get('latitude_receiver'));
-				$long = encrypt($request->get('longitude_receiver'));
-
-				$lat = encrypt("11.3");
-				$long = encrypt("12.3");
+				$bill_of_lading = encrypt('LUX' . str_random(12));
 
 				$time_delivery = encrypt($request->get('time_delivery'));
 				$distance_shipping = encrypt($request->get('distance_shipping'));
 
-				$time_delivery = encrypt('2018-12-11 00:00:00');
-				$distance_shipping = encrypt("12");
+				$price_service = encrypt("1111"); // Don't use
 
-				$price_service = encrypt("400");
-				$total_money = encrypt("500");
-				$email = encrypt("EMAIL");
+				$email = encrypt("EMAIL"); // Don't use
 
-				Log::debug("WTF" . $long);
 				//////////////////////////////
-				// $result_service_types = DB::table('service_types')
-				// 	->where('idService', $id_service_type)
-				// 	->get();
+				$result_service_types = DB::table('service_types')
+					->where('idService', $id_service_type)
+					->get();
 
-				// $service_price = $result_service_types[0]->price;
-				// $distance_shipping = $this->getDistance($senderLat, $senderLong, $receiverLat, $receiverLong);
+				$service_price = $result_service_types[0]->price;
 
-				// $distance_shipping = floatval($distance['rows'][0]['elements'][0]['distance']['text']);
+				$sender = $this->getLatLong($request->get('address_sender'));
+				$senderLat = $sender['results'][0]['geometry']['location']['lat'];
+				$senderLong = $sender['results'][0]['geometry']['location']['lng'];
 
-				// $distance_shipping = $this->milesToKilometers($distance);
-				// $total_money = $this->calculateMoney($distance_shipping, $total_weight, $service_price);
+				$receiver = $this->getLatLong($request->get('address_receiver'));
+				$receiverLat = $receiver['results'][0]['geometry']['location']['lat'];
+				$receiverLong = $receiver['results'][0]['geometry']['location']['lng'];
 
-				// $time_delivery = caculateTimedelivery($id_service_type, $distance_shipping);
+				$distance_shipping = $this->getDistance($senderLat, $senderLong, $receiverLat, $receiverLong);
+				$distance_shipping = floatval($distance_shipping['rows'][0]['elements'][0]['distance']['text']);
+				$distance_shipping = $this->milesToKilometers($distance_shipping);
 
-				// $time_delivery = date('Y-m-d H:i:s', strtotime($time_delivery . "+ days"));
+				$total_money = $this->calculateMoney($distance_shipping, $total_weight, $service_price);
+				$time_delivery = $this->getDelivery($distance_shipping, $id_service_type);
+
+				Log::debug("call helper test " . print_r($senderLat, 1));
+				Log::debug("call helper distance_shipping " . print_r($distance_shipping, 1));
+				Log::debug("call helper time_delivery " . print_r($time_delivery, 1));
+				Log::debug("call helper total_money" . print_r($total_money, 1));
+
+				$receiverLat = encrypt($receiverLat);
+				$receiverLong = encrypt($receiverLong);
+
+				$senderLat = encrypt($senderLat);
+				$senderLong = encrypt($senderLong);
 
 				//////////////////////////////////
 
@@ -639,7 +644,7 @@ class StoreController extends Controller {
 
 				// insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (1, 'LUXNONONON' , 'abc', '123', 11.3, 12.3, 123, 'email', 'des',123,'2018-12-11 00:00:00',1,1,123,400,123,1,'2018-12-06 03:24:41')
 
-				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameSender, addressSender,phoneSender,nameReceiver,addressReceiver,latitudeSender,longitudeSender,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus) values (?,?, ?,?,?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_sender, $address_sender, $phone_sender, $name_receiver, $address_receiver, $lat, $long, $lat, $long, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending')]);
+				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameSender, addressSender,phoneSender,nameReceiver,addressReceiver,latitudeSender,longitudeSender,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus) values (?,?, ?,?,?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_sender, $address_sender, $phone_sender, $name_receiver, $address_receiver, $senderLat, $senderLong, $receiverLat, $receiverLong, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending')]);
 
 				$affected_store = DB::table('stores')->where('idStore', $store_id)->update([
 
@@ -996,6 +1001,12 @@ class StoreController extends Controller {
 		}
 	}
 
+	public function getLatLong($address) {
+		$request_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($address) . "&key=AIzaSyBVLZZFaDU6nn96cbs59PfMBNXu9ZNdxYE";
+		$string = file_get_contents($request_url);
+		return json_decode($string, true);
+	}
+
 	private function caculateTimedelivery($idServiceType, $distance) {
 		if ($idServiceType == 1) {
 			if ($distance < 50) {
@@ -1023,6 +1034,40 @@ class StoreController extends Controller {
 			} else if ($distance >= 200) {
 				return 2;
 			}
+		}
+	}
+
+	private function getDelivery($distance, $services) {
+		switch ($services) {
+		case 1:
+			if ($distance < 50) {
+				return $date = Carbon::now()->addDays(1);
+			} elseif ($distance >= 50 && $distance < 200) {
+				return $date = Carbon::now()->addDays(2);
+			} elseif ($distance >= 200) {
+				return $date = Carbon::now()->addDays(3);
+			}
+
+			break;
+		case 2:
+			if ($distance < 50) {
+				return $date = Carbon::now()->addDays(1);
+			} elseif ($distance >= 50 && $distance < 200) {
+				return $date = Carbon::now()->addDays(2);
+			} elseif ($distance >= 200) {
+				return $date = Carbon::now()->addDays(2);
+			}
+
+			break;
+		case 3:
+			if ($distance < 50) {
+				return $date = Carbon::now()->addDays(1);
+			} elseif ($distance >= 50 && $distance < 200) {
+				return $date = Carbon::now()->addDays(1);
+			} elseif ($distance >= 200) {
+				return $date = Carbon::now()->addDays(2);
+			}
+
 		}
 	}
 

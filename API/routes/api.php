@@ -42,6 +42,8 @@ Route::group(['middleware' => 'jwt'], function () {
 		Route::post('deleteOrderStore', "Api\StoreController@deleteOrderStore");
 		Route::post('getInfoEditFromIdorder', "Api\StoreController@getInfoEditFromIdorder");
 
+		Route::post('getLatLong', "Api\StoreController@getLatLong");
+
 	});
 
 });
