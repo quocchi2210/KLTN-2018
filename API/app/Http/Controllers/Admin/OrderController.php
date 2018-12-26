@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Store;
+use App\Deliver;
+use App\Order;
+use App\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class StoreController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +18,9 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::all();
-        return view('admin.store.index',['stores'=>$stores]);
+        $orders = Order::all();
+        $status = OrderStatus::all();
+        return view('admin.order.index', ['orders' => $orders,'status' => $status]);
     }
 
     /**
@@ -60,7 +63,13 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::find($id);
+        $status = DB::table('order_status')->whereIn('statusName', ['Confirm', 'Cancel'])->pluck('statusName', 'idStatus');
+        $deliver = DB::table('shippers')->pluck('idShipper', 'idShipper');
+        return response()->json(view('admin.order.edit',
+            ['deliver' => $deliver,
+                'order' => $order,
+                'status' => $status])->render());
     }
 
     /**
@@ -72,7 +81,10 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $status = $request->get('Status');
+        $deliver = $request->get('Deliver');
+        DB::table('orders')->where('idOrder',$id)->update(array('idShipper'=>$deliver,'idOrderStatus'=>$status));
+        return back();
     }
 
     /**

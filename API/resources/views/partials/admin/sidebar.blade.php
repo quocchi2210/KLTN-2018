@@ -15,7 +15,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li>
-                <a href="{{ route('admin.orderAdmin') }}"><i class="fa fa-list-alt"></i> <span>Order</span></a>
+                <a href="{{ route('admin.orders.index') }}"><i class="fa fa-list-alt"></i> <span>Order</span></a>
             </li>
             <li>
                 <a href="{{ route('admin.stores.index') }}"><i class="fa fa-list-alt"></i> <span>Store</span></a>
