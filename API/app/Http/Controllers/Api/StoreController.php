@@ -1094,4 +1094,32 @@ class StoreController extends Controller {
 
 	}
 
+	public function getPreMoney(Request $request) {
+		$idServices = $request->get('idServices');
+		$senderAddress = $request->get('SenderAddress');
+		$receiverAddress = $request->get('ReceiverAddress');
+		$orderWeight = $request->get('OrderWeight');
+
+		if (!empty($idServices) && !empty($senderAddress) && !empty($receiverAddress) && !empty($orderWeight)) {
+			$servicePrice = DB::table('service_types')->where('idService', $idServices)->first()->price;
+			$sender = $this->getLatLong($senderAddress);
+			$senderLat = $sender['results'][0]['geometry']['location']['lat'];
+			$senderLong = $sender['results'][0]['geometry']['location']['lng'];
+			$receiver = $this->getLatLong($receiverAddress);
+			$receiverLat = $receiver['results'][0]['geometry']['location']['lat'];
+			$receiverLong = $receiver['results'][0]['geometry']['location']['lng'];
+			$distance = $this->getDistance($senderLat, $senderLong, $receiverLat, $receiverLong);
+			$distance = floatval($distance['rows'][0]['elements'][0]['distance']['text']);
+			$distance = $this->milesToKilometers($distance);
+			$money = $this->calculateMoney($distance, $orderWeight, $servicePrice);
+			$timeDelivery = $this->getPreDelivery($distance, $idServices)->toFormattedDateString();
+			return response()->json([
+				'preMoney' => $money,
+				'timeDelivery' => $timeDelivery,
+			]);
+
+		}
+
+	}
+
 }
