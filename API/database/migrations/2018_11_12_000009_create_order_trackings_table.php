@@ -36,8 +36,11 @@ class CreateOrderTrackingsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->decimal('latitude', 11,8)->nullable();
-            $table->decimal('longitude', 11,8)->nullable();
+            $table->string('latitude', 300)->nullable();
+            $table->string('longitude', 300)->nullable();
+
+            // $table->decimal('latitude', 11,8)->nullable();
+            // $table->decimal('longitude', 11,8)->nullable();
 
             $table->Timestamps();
         });

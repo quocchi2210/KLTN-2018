@@ -31,32 +31,50 @@ class CreateOrdersTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->string('billOfLading', 45)->nullable();
-            $table->string('nameSender', 50)->nullable()->default(null);
-            $table->text('addressSender')->nullable()->default(null);
-            $table->decimal('latitudeSender', 11, 8)->nullable()->default(null);
-            $table->decimal('longitudeSender', 11, 8)->nullable()->default(null);
-            $table->string('phoneSender', 11)->nullable()->default(null);
-            $table->string('nameReceiver', 50)->nullable()->default(null);
-            $table->text('addressReceiver')->nullable()->default(null);
-            $table->decimal('latitudeReceiver', 11, 8)->nullable()->default(null);
-            $table->decimal('longitudeReceiver', 11, 8)->nullable()->default(null);
-            $table->string('phoneReceiver', 11)->nullable()->default(null);
-            $table->string('emailReceiver', 50)->nullable()->default(null);
-            $table->string('descriptionOrder', 50);
-            $table->tinyInteger('COD')->default('0');
-            $table->dateTime('timeDelivery')->nullable()->default(null);
-            $table->float('distanceShipping',4,1);
+            $table->string('billOfLading', 300)->nullable();
+            $table->string('nameSender', 300)->nullable()->default(null);
+            $table->string('addressSender',300)->nullable()->default(null);
+            $table->string('latitudeSender',300)->nullable()->default(null);
+            $table->string('longitudeSender',300)->nullable()->default(null);
+            $table->string('phoneSender',300)->nullable()->default(null);
+            $table->string('nameReceiver', 300)->nullable()->default(null);
+            $table->string('addressReceiver',300)->nullable()->default(null);
+            $table->string('latitudeReceiver',300)->nullable()->default(null);
+            $table->string('longitudeReceiver',300)->nullable()->default(null);
+            $table->string('phoneReceiver',300)->nullable()->default(null);
+            $table->string('emailReceiver',300)->nullable()->default(null);
+            $table->string('descriptionOrder',300);
+            $table->string('COD',300)->default('0');
+            $table->string('timeDelivery',300)->nullable()->default(null);
+            $table->string('distanceShipping',300);
+
+            $table->string('totalWeight',300);
+            $table->string('priceService',300);
+            $table->string('totalMoney',300);
+
+            // $table->text('addressSender')->nullable()->default(null);
+            // $table->decimal('latitudeSender', 11, 8)->nullable()->default(null);
+            // $table->decimal('longitudeSender', 11, 8)->nullable()->default(null);
+            // $table->string('phoneSender', 11)->nullable()->default(null);
+            // $table->string('nameReceiver', 50)->nullable()->default(null);
+            // $table->text('addressReceiver')->nullable()->default(null);
+            // $table->decimal('latitudeReceiver', 11, 8)->nullable()->default(null);
+            // $table->decimal('longitudeReceiver', 11, 8)->nullable()->default(null);
+            // $table->string('phoneReceiver', 11)->nullable()->default(null);
+            // $table->string('emailReceiver', 50)->nullable()->default(null);
+            // $table->string('descriptionOrder', 50);
+            // $table->tinyInteger('COD')->default('0');
+            // $table->dateTime('timeDelivery')->nullable()->default(null);
+            // $table->float('distanceShipping',4,1);
+            // $table->float('totalWeight',4,2);
+            // $table->double('priceService');
+            // $table->double('totalMoney');
 
             $table->unsignedInteger('idServiceType');
             $table->foreign('idServiceType')
                 ->references('idService')->on('service_types')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-
-            $table->float('totalWeight',4,2);
-            $table->double('priceService');
-            $table->double('totalMoney');
 
             $table->unsignedInteger('idShipper')->nullable();
             $table->foreign('idShipper')

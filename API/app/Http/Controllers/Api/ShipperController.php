@@ -56,6 +56,8 @@ class ShipperController extends Controller {
 
 				//Log::debug("Log query showOrder" . print_r($test, 1));
 
+				myDecrypt($users);
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -75,6 +77,7 @@ class ShipperController extends Controller {
 					'error' => true,
 					'data' => 'count > 0',
 					'iduser' => $idUser,
+					//'test' => decrypt_test($abc),
 					'errors' => null,
 				], 400);
 			}
@@ -180,6 +183,7 @@ class ShipperController extends Controller {
 					->whereBetween('idOrderStatus', array(3, 4))
 					->get();
 
+				myDecrypt($users);
 				// DB::enableQueryLog();
 
 				// $laQuery = DB::getQueryLog();
@@ -249,6 +253,8 @@ class ShipperController extends Controller {
 					->where('order_details.idOrder', $idOrder)
 					->get();
 
+				myDecrypt($users);
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -313,6 +319,10 @@ class ShipperController extends Controller {
 					->where('idShipper', $idShipper)
 					->where('idOrderStatus', Config::get('constants.status_type.done'))
 					->get();
+
+				myDecrypt($result_order);
+
+				myDecrypt($store_name);
 
 				if ($result_order->count() > 0) {
 					return response()->json([
