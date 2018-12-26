@@ -1094,6 +1094,46 @@ class StoreController extends Controller {
 
 	}
 
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/getPreMoney",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="idServices",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="SenderAddress",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="ReceiverAddress",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="OrderWeight",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
 	public function getPreMoney(Request $request) {
 		$idServices = $request->get('idServices');
 		$senderAddress = $request->get('SenderAddress');
@@ -1112,7 +1152,7 @@ class StoreController extends Controller {
 			$distance = floatval($distance['rows'][0]['elements'][0]['distance']['text']);
 			$distance = $this->milesToKilometers($distance);
 			$money = $this->calculateMoney($distance, $orderWeight, $servicePrice);
-			$timeDelivery = $this->getPreDelivery($distance, $idServices)->toFormattedDateString();
+			$timeDelivery = $this->getDelivery($distance, $idServices)->toFormattedDateString();
 			return response()->json([
 				'preMoney' => $money,
 				'timeDelivery' => $timeDelivery,
