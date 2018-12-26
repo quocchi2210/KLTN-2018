@@ -86,6 +86,98 @@ class ShipperController extends Controller {
 
 	/**
 	 * @SWG\POST(
+	 *   path="/api/shipper/updateProfileShipper",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="license_plates",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="date_of_Birth",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="gender",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="id_number",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */public function updateProfileShipper(Request $request) {
+		if ($request->isMethod('post')) {
+			$license_plates = $request->get('license_plates');
+			$date_of_Birth = $request->get('date_of_Birth');
+			$gender = $request->get('gender');
+			$id_number = $request->get('id_number');
+
+			$idUser = auth()->user()->idUser;
+
+			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
+
+			if ($result_shipper->count() > 0) {
+
+				$idShipper = $result_shipper[0]->idShipper;
+
+				$affected_shipper = DB::table('shippers')->where('idShipper', $idShipper)->update([
+					'licensePlates' => encrypt($license_plates),
+				]);
+
+				$affected_user = DB::table('users')->where('idUser', $idUser)->update([
+					'idNumberIndex' => encrypt($id_number),
+					'dateOfBirth' => encrypt($date_of_Birth),
+					'gender' => encrypt($gender),
+				]);
+
+				if ($affected_store) {
+					return response()->json([
+						'error' => false,
+						'data' => $affected_store,
+						'data1' => $affected_user,
+						'errors' => null,
+					], 400);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => $affected_store,
+						'data1' => $affected_user,
+						'errors' => null,
+					], 400);
+				}
+
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+
+		}
+
+	}
+
+	/**
+	 * @SWG\POST(
 	 *   path="/api/shipper/showAllStoreOrder",
 	 *     tags={"Shipper"},
 	 *   summary="Show Profile",
@@ -215,28 +307,6 @@ class ShipperController extends Controller {
 		}
 	}
 
-	/**
-	 * @SWG\POST(
-	 *   path="/api/shipper/showDetailOrder",
-	 *     tags={"Shipper"},
-	 *   summary="Show Profile",
-	 *   @SWG\Response(
-	 *     response=200,
-	 *     description="A list with products"
-	 *   ),
-	 *   @SWG\Parameter(
-	 *     name="id_order",
-	 *     in="query",
-	 *     description="Your End Working Store",
-	 *     type="string",
-	 *   ),
-	 *   @SWG\Response(
-	 *     response="default",
-	 *     description="an ""unexpected"" error"
-	 *   ),
-	 *	 security={{"api_key":{}}}
-	 * )
-	 */
 	public function showDetailOrder(Request $request) {
 
 		if ($request->isMethod('post')) {
