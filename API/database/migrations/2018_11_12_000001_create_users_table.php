@@ -26,9 +26,9 @@ class CreateUsersTable extends Migration {
 			$table->engine = 'InnoDB';
 			$table->increments('idUser');
 			$table->string('username', 15)->nullable()->default(null)->unique();
-			$table->string('email', 191)->nullable()->default(null)->unique();
-			$table->string('fullName', 50)->nullable()->default(null);
-			$table->string('idNumber', 300)->nullable()->default(null)->unique();
+			$table->string('email', 300)->nullable()->default(null);
+			$table->string('fullName', 300)->nullable()->default(null);
+			$table->string('idNumber', 300)->nullable()->default(null);
 			$table->string('phoneNumber', 300)->nullable()->default(null);
 			$table->string('avatar', 191)->nullable()->default(null);
 			$table->date('dateOfBirth')->nullable()->default(null);

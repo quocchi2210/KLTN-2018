@@ -8,7 +8,8 @@
                 <img src="{{ asset('/images/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>{{\Illuminate\Support\Facades\Auth::user()->store->nameStore}}</p>
+                <p>{{\Illuminate\Support\Facades\Auth::user()->store->decryptName()}}</p>
+                {{--{{(new App\Helper)->myDecrypt((\Illuminate\Support\Facades\Auth::user()->store->nameStore))}}--}}
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>

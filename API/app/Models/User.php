@@ -49,6 +49,11 @@ class User extends Authenticatable implements JWTSubject {
 		return $this->belongsTo('App\Role','roleId','id');
 	}
 
+    public function decryptName()
+    {
+        return decrypt($this->attributes['fullName']);
+	}
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
