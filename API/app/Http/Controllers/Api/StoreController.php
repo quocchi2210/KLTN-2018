@@ -89,8 +89,8 @@ class StoreController extends Controller {
 			$end_working_time = encrypt($request->get('end_working_time'));
 
 			//Get from Middleware/CheckToken
-			$user_id = $request->idUser;
-			$user_id = 1;
+			// $user_id = $request->idUser;
+			// $user_id = 1;
 
 			// 	$request->request->add(
 			// 	array(
@@ -99,6 +99,7 @@ class StoreController extends Controller {
 
 			// );
 			//[$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]
+			$idUser = auth()->user()->idUser;
 
 			$affected = DB::insert('insert into stores (idUser,nameStore,typeStore,addressStore,descriptionStore,latitudeStore,longitudeStore,startWorkingTime,endWorkingTime) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$user_id, $name_store, $type_store, $address_store, $description_store, $latitude_store, $longitude_store, $start_working_time, $end_working_time]);
 			if ($affected) {
@@ -183,14 +184,48 @@ class StoreController extends Controller {
 			$start_working_time = $request->get('start_working_time');
 			$end_working_time = $request->get('end_working_time');
 
-			$user_id = $request->idUser;
-			$user_id = 1;
+			// $user_id = $request->idUser;
+			// $user_id = 1;
+			$idUser = auth()->user()->idUser;
 
-			$store_id = 1;
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
-			$result_store = DB::table('stores')->select('idStore')->where('idUser', $user_id)->get();
+			if ($result_store->count() > 0) {
 
-			$test = DB::table('stores')->where('idUser', $user_id)->get();
+				$idStore = $result_store[0]->idStore;
+
+				$affected_store = DB::table('stores')->where('idStore', $idStore)->update([
+					'nameStore' => encrypt($name_store),
+					'typeStore' => encrypt($type_store),
+					'addressStore' => encrypt($address_store),
+					'descriptionStore' => encrypt($description_store),
+					'latitudeStore' => encrypt($latitude_store),
+					'longitudeStore' => encrypt($longitude_store),
+					'startWorkingTime' => encrypt($start_working_time),
+					'endWorkingTime' => encrypt($end_working_time),
+				]);
+
+				if ($affected_store) {
+					return response()->json([
+						'error' => false,
+						'data' => $affected_store,
+						'errors' => null,
+					], 400);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => $affected_store,
+						'errors' => null,
+					], 400);
+				}
+
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
 
 			//Log::debug('result_store' . print_r(decrypt($test[0]->nameStore), 1));
 
@@ -263,6 +298,8 @@ class StoreController extends Controller {
 				->where('idStore', 1)
 				->get();
 
+			myDecrypt($affected);
+
 			if ($affected) {
 				return response()->json([
 					'error' => false,
@@ -302,8 +339,9 @@ class StoreController extends Controller {
 
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
@@ -314,8 +352,7 @@ class StoreController extends Controller {
 
 				$idStore = $result_store[0]->idStore;
 				// $users = DB::statement("SELECT * FROM orders WHERE idShipper=?",[$idShipper]);
-				
-			
+
 				// $users = DB::select("SELECT * FROM orders WHERE idShipper = ?",[$idShipper]);
 
 				$users = DB::table('orders')
@@ -324,9 +361,8 @@ class StoreController extends Controller {
 					->get();
 
 				//Log::debug("call helper user".print_r($users[0],1));
-
-
-				Log::debug("call helper".print_r(myDecrypt($users),1));
+				myDecrypt($users);
+				//Log::debug("call helper" . print_r(myDecrypt($users), 1));
 
 				if ($users) {
 					return response()->json([
@@ -378,9 +414,9 @@ class StoreController extends Controller {
 		if ($request->isMethod('post')) {
 
 			$idOrder = $request->get('id_order');
-			$idUser = $request->idUser;
-
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 			if ($result_store->count() > 0) {
@@ -390,6 +426,8 @@ class StoreController extends Controller {
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('order_details.idOrder', $idOrder)
 					->get();
+
+				myDecrypt($users);
 
 				if ($users) {
 					return response()->json([
@@ -512,8 +550,9 @@ class StoreController extends Controller {
 	public function insertOrderStore(Request $request) {
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
@@ -552,7 +591,7 @@ class StoreController extends Controller {
 				$total_money = encrypt("500");
 				$email = encrypt("EMAIL");
 
-				Log::debug("WTF".$long);
+				Log::debug("WTF" . $long);
 				//////////////////////////////
 				// $result_service_types = DB::table('service_types')
 				// 	->where('idService', $id_service_type)
@@ -600,7 +639,7 @@ class StoreController extends Controller {
 
 				// insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (1, 'LUXNONONON' , 'abc', '123', 11.3, 12.3, 123, 'email', 'des',123,'2018-12-11 00:00:00',1,1,123,400,123,1,'2018-12-06 03:24:41')
 
-				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameSender, addressSender,phoneSender,nameReceiver,addressReceiver,latitudeSender,longitudeSender,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus) values (?,?, ?,?,?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_sender,$address_sender,$phone_sender,$name_receiver, $address_receiver,$lat, $long, $lat, $long, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending')]);
+				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameSender, addressSender,phoneSender,nameReceiver,addressReceiver,latitudeSender,longitudeSender,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus) values (?,?, ?,?,?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_sender, $address_sender, $phone_sender, $name_receiver, $address_receiver, $lat, $long, $lat, $long, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending')]);
 
 				$affected_store = DB::table('stores')->where('idStore', $store_id)->update([
 
@@ -612,8 +651,6 @@ class StoreController extends Controller {
 				$affected_user = DB::table('users')->where('idUser', $idUser)->update([
 					'phoneNumber' => $phone_sender,
 				]);
-
-
 
 				if ($affected_order && $affected_store && $affected_store) {
 					return response()->json([
@@ -633,7 +670,7 @@ class StoreController extends Controller {
 						'errors' => null,
 					], 400);
 				}
-			}else{
+			} else {
 				return response()->json([
 					'error' => true,
 					'data' => 'count > 0',
@@ -669,9 +706,9 @@ class StoreController extends Controller {
 	public function getInfoEditFromIdorder(Request $request) {
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
-
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
 
 			$idOrder = $request->get('id_order');
 
@@ -684,6 +721,8 @@ class StoreController extends Controller {
 					->join('users', 'stores.idStore', '=', 'orders.idStore')
 					->where('idOrder', $idOrder)
 					->get();
+
+				myDecrypt($users);
 
 				if ($users) {
 					return response()->json([
@@ -800,8 +839,9 @@ class StoreController extends Controller {
 	public function updateOrderStore(Request $request) {
 		if ($request->isMethod('post')) {
 
-			$idUser = $request->idUser;
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 			//Log::debug("wtffffffffffffff");
@@ -840,24 +880,32 @@ class StoreController extends Controller {
 
 				$email = "test@test.com";
 
+				if ($id_order_status > Config::get('constants.status_type.pending')) {
+					return response()->json([
+						'error' => true,
+						'data' => "data confirmed",
+						'errors' => null,
+					], 200);
+				}
+
 				//Log::debug("wtffffffffffffff " . print_r($order_id, 1));
 
 				$affected = DB::table('orders')->where('idOrder', $order_id)->update([
-					'billOfLading' => $bill_of_lading,
-					'nameReceiver' => $name_receiver,
-					'addressReceiver' => $address_receiver,
-					'latitudeReceiver' => $lat,
-					'longitudeReceiver' => $long,
-					'phoneReceiver' => $phone,
-					'emailReceiver' => $email,
-					'descriptionOrder' => $description,
-					'COD' => $cod,
-					'timeDelivery' => $time_delivery,
-					'distanceShipping' => $distance_shipping,
+					'billOfLading' => encrypt($bill_of_lading),
+					'nameReceiver' => encrypt($name_receiver),
+					'addressReceiver' => encrypt($address_receiver),
+					'latitudeReceiver' => encrypt($lat),
+					'longitudeReceiver' => encrypt($long),
+					'phoneReceiver' => encrypt($phone),
+					'emailReceiver' => encrypt($email),
+					'descriptionOrder' => encrypt($description),
+					'COD' => encrypt($cod),
+					'timeDelivery' => encrypt($time_delivery),
+					'distanceShipping' => encrypt($distance_shipping),
+					'totalWeight' => encrypt($total_weight),
+					'priceService' => encrypt($price_service),
+					'totalMoney' => encrypt($total_money),
 					'idServiceType' => $id_service_type,
-					'totalWeight' => $total_weight,
-					'priceService' => $price_service,
-					'totalMoney' => $total_money,
 					'idOrderStatus' => Config::get('constants.status_type.pending'),
 				]);
 
@@ -909,11 +957,13 @@ class StoreController extends Controller {
 	 * )
 	 */
 	public function deleteOrderStore(Request $request) {
-
+		///?????
 		if ($request->isMethod('post')) {
 			$order_id = $request->get('order_id');
-			$idUser = $request->idUser;
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
+
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 			Log::debug('idUser' . print_r($result_store, 1));
 			if ($result_store->count() > 0) {
