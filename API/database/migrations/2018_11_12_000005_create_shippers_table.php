@@ -35,9 +35,9 @@ class CreateShippersTable extends Migration {
             $table->engine = 'InnoDB';
             $table->increments('idShipper');
             $table->unsignedInteger('idUser');
-            $table->string('licensePlates', 300)->nullable()->default(null);
-            $table->string('latitudeShipper',300)->nullable()->default(null);
-            $table->string('longitudeShipper', 300)->nullable()->default(null);
+            $table->string('licensePlates', 500)->nullable()->default(null);
+            $table->string('latitudeShipper',500)->nullable()->default(null);
+            $table->string('longitudeShipper', 500)->nullable()->default(null);
             // $table->decimal('latitudeShipper', 11, 8)->nullable()->default(null);
             // $table->decimal('longitudeShipper', 11, 8)->nullable()->default(null);
 
