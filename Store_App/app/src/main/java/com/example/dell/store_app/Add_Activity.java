@@ -1,14 +1,19 @@
 package com.example.dell.store_app;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +30,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,7 +44,7 @@ import okhttp3.Response;
 
 public class Add_Activity extends AppCompatActivity {
 
-    EditText name_sender, address_sender, phone_sender, name_receiver, address_receiver, phone_receiver, weight;
+    EditText name_sender, address_sender, phone_sender, name_receiver, address_receiver, phone_receiver, weight, total_money;
     CheckBox cb_cod;
     Spinner spinner_des, spinner_service_type;
     Button btn_done;
@@ -66,15 +73,15 @@ public class Add_Activity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_store, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_item_add_order:
 
                 intent = new Intent(getBaseContext(), Add_Activity.class);
@@ -97,7 +104,7 @@ public class Add_Activity extends AppCompatActivity {
         address_sender = (EditText) findViewById(R.id.address_sender);
         phone_sender = (EditText) findViewById(R.id.phone_sender);
 
-        OkHttpClient client = new OkHttpClient();
+        total_money = (EditText) findViewById(R.id.total_money);
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -193,6 +200,396 @@ public class Add_Activity extends AppCompatActivity {
 
         btn_done = (Button) findViewById(R.id.btn_done);
 
+//        weight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                Toast.makeText(Add_Activity.this, weight.getText().toString(),Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
+        weight.addTextChangedListener(new TextWatcher() {
+            private Timer timer = new Timer();
+            private final long DELAY = 1000; // milliseconds
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                String service_id_type = null;
+                                switch (spinner_service_type.getSelectedItem().toString()) {
+
+                                    case "Normal Delivery":
+                                        service_id_type = "1";
+                                        break;
+                                    case "Fast Delivery":
+                                        service_id_type = "2";
+                                        break;
+                                    case "Express Delivery":
+                                        service_id_type = "3";
+                                        break;
+                                }
+
+                                Log.w("test", weight.getText().toString());
+                                RequestBody requestBody = new MultipartBody.Builder()
+                                        .setType(MultipartBody.FORM)
+                                        .addFormDataPart("OrderWeight", weight.getText().toString())
+                                        .addFormDataPart("SenderAddress", address_sender.getText().toString())
+                                        .addFormDataPart("ReceiverAddress", address_receiver.getText().toString())
+                                        .addFormDataPart("idServices", service_id_type)
+                                        .build();
+
+                                Request request = new Request.Builder()
+                                        .url("https://luxexpress.cf/api/store/getPreMoney")
+                                        .post(requestBody)
+                                        .addHeader("Authorization", "Bearer " + token)
+                                        .build();
+
+                                client.newCall(request).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        final String yourResponse = response.body().string();
+
+                                        if (response.isSuccessful()) {
+                                            Add_Activity.this.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    JSONObject Jobject = null;
+                                                    try {
+
+                                                        Jobject = new JSONObject(yourResponse);
+                                                        String money = Jobject.getString("preMoney");
+                                                        total_money.setText(money);
+
+                                                        Log.w("weight change : ", yourResponse.toString());
+
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Log.w("weight change error: ", yourResponse.toString());
+                                                        Log.w("weight change error", e.toString());
+                                                    }
+
+                                                }
+                                            });
+
+                                        } else {
+                                            Log.w("weight change error 1: ", yourResponse.toString());
+                                        }
+
+                                    }
+                                });
+                            }
+                        },
+                        DELAY
+                );
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+
+
+            }
+        });
+
+        address_receiver.addTextChangedListener(new TextWatcher() {
+            private Timer timer = new Timer();
+            private final long DELAY = 1000; // milliseconds
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                Log.w("test", address_receiver.getText().toString());
+                                String service_id_type = null;
+                                switch (spinner_service_type.getSelectedItem().toString()) {
+
+                                    case "Normal Delivery":
+                                        service_id_type = "1";
+                                        break;
+                                    case "Fast Delivery":
+                                        service_id_type = "2";
+                                        break;
+                                    case "Express Delivery":
+                                        service_id_type = "3";
+                                        break;
+                                }
+
+                                Log.w("test", weight.getText().toString());
+                                RequestBody requestBody = new MultipartBody.Builder()
+                                        .setType(MultipartBody.FORM)
+                                        .addFormDataPart("OrderWeight", weight.getText().toString())
+                                        .addFormDataPart("SenderAddress", address_sender.getText().toString())
+                                        .addFormDataPart("ReceiverAddress", address_receiver.getText().toString())
+                                        .addFormDataPart("idServices", service_id_type)
+                                        .build();
+
+                                Request request = new Request.Builder()
+                                        .url("https://luxexpress.cf/api/store/getPreMoney")
+                                        .post(requestBody)
+                                        .addHeader("Authorization", "Bearer " + token)
+                                        .build();
+
+                                client.newCall(request).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        final String yourResponse = response.body().string();
+
+                                        if (response.isSuccessful()) {
+                                            Add_Activity.this.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    JSONObject Jobject = null;
+                                                    try {
+
+                                                        Jobject = new JSONObject(yourResponse);
+                                                        String money = Jobject.getString("preMoney");
+                                                        total_money.setText(money);
+
+                                                        Log.w("weight change : ", yourResponse.toString());
+
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Log.w("weight change error: ", yourResponse.toString());
+                                                        Log.w("weight change error", e.toString());
+                                                    }
+
+                                                }
+                                            });
+
+                                        } else {
+                                            Log.w("weight change error 1: ", yourResponse.toString());
+                                        }
+
+                                    }
+                                });
+                            }
+                        },
+                        DELAY
+                );
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+
+
+            }
+        });
+
+        address_sender.addTextChangedListener(new TextWatcher() {
+            private Timer timer = new Timer();
+            private final long DELAY = 1000; // milliseconds
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                Log.w("test", address_sender.getText().toString());
+                                String service_id_type = null;
+                                switch (spinner_service_type.getSelectedItem().toString()) {
+
+                                    case "Normal Delivery":
+                                        service_id_type = "1";
+                                        break;
+                                    case "Fast Delivery":
+                                        service_id_type = "2";
+                                        break;
+                                    case "Express Delivery":
+                                        service_id_type = "3";
+                                        break;
+                                }
+
+                                Log.w("test", weight.getText().toString());
+                                RequestBody requestBody = new MultipartBody.Builder()
+                                        .setType(MultipartBody.FORM)
+                                        .addFormDataPart("OrderWeight", weight.getText().toString())
+                                        .addFormDataPart("SenderAddress", address_sender.getText().toString())
+                                        .addFormDataPart("ReceiverAddress", address_receiver.getText().toString())
+                                        .addFormDataPart("idServices", service_id_type)
+                                        .build();
+
+                                Request request = new Request.Builder()
+                                        .url("https://luxexpress.cf/api/store/getPreMoney")
+                                        .post(requestBody)
+                                        .addHeader("Authorization", "Bearer " + token)
+                                        .build();
+
+                                client.newCall(request).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        final String yourResponse = response.body().string();
+
+                                        if (response.isSuccessful()) {
+                                            Add_Activity.this.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    JSONObject Jobject = null;
+                                                    try {
+
+                                                        Jobject = new JSONObject(yourResponse);
+                                                        String money = Jobject.getString("preMoney");
+                                                        total_money.setText(money);
+
+                                                        Log.w("weight change : ", yourResponse.toString());
+
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Log.w("weight change error: ", yourResponse.toString());
+                                                        Log.w("weight change error", e.toString());
+                                                    }
+
+                                                }
+                                            });
+
+                                        } else {
+                                            Log.w("weight change error 1: ", yourResponse.toString());
+                                        }
+
+                                    }
+                                });
+                            }
+                        },
+                        DELAY
+                );
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+            }
+        });
+
+        spinner_service_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                //Toast.makeText(Add_Activity.this, "fff", Toast.LENGTH_SHORT).show();
+                Log.w("test", address_sender.getText().toString());
+                String service_id_type = null;
+                switch (spinner_service_type.getSelectedItem().toString()) {
+
+                    case "Normal Delivery":
+                        service_id_type = "1";
+                        break;
+                    case "Fast Delivery":
+                        service_id_type = "2";
+                        break;
+                    case "Express Delivery":
+                        service_id_type = "3";
+                        break;
+                }
+
+                Log.w("test", weight.getText().toString());
+                RequestBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("OrderWeight", weight.getText().toString())
+                        .addFormDataPart("SenderAddress", address_sender.getText().toString())
+                        .addFormDataPart("ReceiverAddress", address_receiver.getText().toString())
+                        .addFormDataPart("idServices", service_id_type)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url("https://luxexpress.cf/api/store/getPreMoney")
+                        .post(requestBody)
+                        .addHeader("Authorization", "Bearer " + token)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        final String yourResponse = response.body().string();
+
+                        if (response.isSuccessful()) {
+                            Add_Activity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    JSONObject Jobject = null;
+                                    try {
+
+                                        Jobject = new JSONObject(yourResponse);
+                                        String money = Jobject.getString("preMoney");
+                                        total_money.setText(money);
+
+                                        Log.w("weight change : ", yourResponse.toString());
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Log.w("weight change error: ", yourResponse.toString());
+                                        Log.w("weight change error", e.toString());
+                                    }
+
+                                }
+                            });
+
+                        } else {
+                            Log.w("weight change error 1: ", yourResponse.toString());
+                        }
+
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
     }
 
@@ -231,8 +628,6 @@ public class Add_Activity extends AppCompatActivity {
                             break;
                     }
 
-                    OkHttpClient client = new OkHttpClient();
-
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("name_sender", name_sender.getText().toString())
@@ -265,7 +660,9 @@ public class Add_Activity extends AppCompatActivity {
 
                             if (response.isSuccessful()) {
                                 Log.w("Add_Activity", "Add success");
-                                //Toast.makeText(Add_Activity.this, "Add success", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Add_Activity.this, "Them", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Add_Activity.this,Store_Manage_Activity.class);
+                                startActivity(intent);
                             } else {
                                 Log.w("Add_Activity", "Add faild " + yourResponse.toString());
                             }

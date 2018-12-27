@@ -151,6 +151,11 @@ public class Store_Manage_Activity extends AppCompatActivity {
                 startActivity(intent);
                 break;
 
+            case R.id.menu_item_update_profile:
+                intent = new Intent(getBaseContext(), Updateprofile_Activity.class);
+                startActivity(intent);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -319,6 +324,9 @@ public class Store_Manage_Activity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Store_Manage_Activity.this,Edit_Activity.class);
+                    Log.w("Add_Activity", "Add faild " + vitri);
+                    Log.w("Add_Activity", "Add faild " + arrayStoreManage.get(vitri).getId_order());
+
                     intent.putExtra("id_order",arrayStoreManage.get(vitri).getId_order());
                     startActivity(intent);
                 }
