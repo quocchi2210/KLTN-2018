@@ -22,15 +22,24 @@ class CreateShippersTable extends Migration {
 			return;
 		}
 
-		Schema::create($this->set_schema_table, function (Blueprint $table) {
-			$table->engine = 'InnoDB';
-			$table->increments('idShipper');
-			$table->unsignedInteger('idUser');
-			$table->string('licensePlates', 300)->nullable()->default(null);
-			$table->string('latitudeShipper', 300)->nullable()->default(null);
-			$table->string('longitudeShipper', 300)->nullable()->default(null);
-			// $table->decimal('latitudeShipper', 11, 8)->nullable()->default(null);
-			// $table->decimal('longitudeShipper', 11, 8)->nullable()->default(null);
+    /**
+     * Run the migrations.
+     * @table shippers
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (Schema::hasTable($this->set_schema_table)) return;
+        Schema::create($this->set_schema_table, function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('idShipper');
+            $table->unsignedInteger('idUser');
+            $table->string('licensePlates', 300)->nullable()->default(null);
+            $table->string('latitudeShipper',300)->nullable()->default(null);
+            $table->string('longitudeShipper', 300)->nullable()->default(null);
+            // $table->decimal('latitudeShipper', 11, 8)->nullable()->default(null);
+            // $table->decimal('longitudeShipper', 11, 8)->nullable()->default(null);
 
 			$table->foreign('idUser')
 				->references('idUser')->on('users')
