@@ -21,7 +21,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Auth::user()->store->orders;
+//        $orders = Auth::user()->store->orders;
         $orders = Order::all();
         $status = OrderStatus::all();
         $serviceTypes = DB::table('service_types')->pluck('nameService', 'idService');
@@ -165,11 +165,26 @@ class OrderController extends Controller
         $distance = $this->milesToKilometers($distance);
         $money = $this->calculateMoney($distance,$orderRequest['weight'],$servicePrice);
         $timeDelivery = $this->getPreDelivery($distance,$orderRequest['serviceTypes'])->format('Y-m-d');
-        $order = Order::create(array('idStore'=> $store->idStore, 'billOfLading'=> 'LUX001', 'nameSender'=>$senderRequest['name'],
-            'addressSender'=>$senderRequest['address'],'latitudeSender'=>$senderLat,'longitudeSender'=>$senderLong,'phoneSender'=>$senderRequest['phone'],
-            'nameReceiver'=>$receiverRequest['name'],'addressReceiver'=>$receiverRequest['address'],'latitudeReceiver'=>$receiverLat,'longitudeReceiver'=>$receiverLong,
-            'phoneReceiver'=>$receiverRequest['phone'],'descriptionOrder'=>$orderRequest['note'],'timeDelivery' => $timeDelivery,'distanceShipping'=>$distance,'idServiceType'=>$orderRequest['serviceTypes'],
-            'totalWeight'=>$orderRequest['weight'],'priceService'=>$servicePrice,'totalMoney'=>$money,'idOrderStatus'=>1));
+        $order = Order::create(array('idStore'=> $store->idStore,
+            'billOfLading'=> encrypt('LUX' . str_random(12)),
+            'nameSender'=>encrypt($senderRequest['name']),
+            'addressSender'=>encrypt($senderRequest['address']),
+            'latitudeSender'=>encrypt($senderLat),
+            'longitudeSender'=>encrypt($senderLong),
+            'phoneSender'=>encrypt($senderRequest['phone']),
+            'nameReceiver'=>encrypt($receiverRequest['name']),
+            'addressReceiver'=>encrypt($receiverRequest['address']),
+            'latitudeReceiver'=>encrypt($receiverLat),
+            'longitudeReceiver'=>encrypt($receiverLong),
+            'phoneReceiver'=>encrypt($receiverRequest['phone']),
+            'descriptionOrder'=>encrypt($orderRequest['note']),
+            'timeDelivery' => encrypt($timeDelivery),
+            'distanceShipping'=>encrypt($distance),
+            'idServiceType'=>$orderRequest['serviceTypes'],
+            'totalWeight'=>encrypt($orderRequest['weight']),
+            'priceService'=>encrypt($servicePrice),
+            'totalMoney'=>encrypt($money),
+            'idOrderStatus'=>1));
         if($order)
             return back();
 
