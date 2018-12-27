@@ -22,7 +22,10 @@ class Store extends Model
     public function user(){
         return $this->belongsTo('App\User','idUser','idUser');
     }
-
+    public function decryptName()
+    {
+        return decrypt($this->attributes['nameStore']);
+    }
     public function orders()
     {
         return $this->hasMany('App\Order','idStore','idStore');

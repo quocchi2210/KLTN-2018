@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Mail\VerifyMail;
 use App\Store;
 use App\User;
-
+use Config;
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\VerifyResetUser;
 use Illuminate\Http\Request;
@@ -30,8 +31,9 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Helper $helper)
     {
+        $this->helper = $helper;
         $this->middleware('guest');
     }
 
@@ -75,8 +77,8 @@ class RegisterController extends Controller
         $userRequest = $request->get('User');
         $fullNameRequest = $request->get('fullName');
         $user = User::create([
-            'email' => $userRequest['email'],
-            'fullName' => $fullNameRequest['name'],
+            'email' => encrypt($userRequest['email']),
+            'fullName' => encrypt($fullNameRequest['name']),
             'password' => bcrypt($userRequest['password'])
         ]);
         $verifyUser = VerifyResetUser::create([
@@ -84,16 +86,16 @@ class RegisterController extends Controller
             'token' => str_random(32),
             'confirmation' => 1
         ]);
-
-        Mail::to($user->email)->send(new VerifyMail($user,$verifyUser));
         if ($user->idUser) {
             Store::create([
                 'idUser' => $user->idUser,
-                'nameStore' => $storeRequest['name'],
+                'nameStore' => encrypt($storeRequest['name']),
             ]);
-            $this->guard()->login($user);
-            return redirect(route('home'));
         }
+        Mail::to($user->email)->send(new VerifyMail($user,$verifyUser));
+        $this->guard()->login($user);
+        return redirect(route('home'));
+
     }
     public function verifyUser($userId,$token)
     {

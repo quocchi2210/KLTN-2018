@@ -1,16 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateShippersTable extends Migration
-{
-    /**
-     * Schema table name to migrate
-     * @var string
-     */
-    public $set_schema_table = 'shippers';
+class CreateShippersTable extends Migration {
+	/**
+	 * Schema table name to migrate
+	 * @var string
+	 */
+	public $set_schema_table = 'shippers';
+
+	/**
+	 * Run the migrations.
+	 * @table shippers
+	 *
+	 * @return void
+	 */
+	public function up() {
+		if (Schema::hasTable($this->set_schema_table)) {
+			return;
+		}
 
     /**
      * Run the migrations.
@@ -31,22 +41,21 @@ class CreateShippersTable extends Migration
             // $table->decimal('latitudeShipper', 11, 8)->nullable()->default(null);
             // $table->decimal('longitudeShipper', 11, 8)->nullable()->default(null);
 
-            $table->foreign('idUser')
-                ->references('idUser')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+			$table->foreign('idUser')
+				->references('idUser')->on('users')
+				->onDelete('cascade')
+				->onUpdate('cascade');
 
-            $table->Timestamps();
-        });
-    }
+			$table->Timestamps();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-     public function down()
-     {
-       Schema::dropIfExists($this->set_schema_table);
-     }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down() {
+		Schema::dropIfExists($this->set_schema_table);
+	}
 }
