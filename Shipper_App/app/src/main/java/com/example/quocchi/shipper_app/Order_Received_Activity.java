@@ -246,6 +246,7 @@ public class Order_Received_Activity extends AppCompatActivity {
                         Toast.makeText(Order_Received_Activity.this, "Ok: btn_done" , Toast.LENGTH_SHORT).show();
                         if (data.get(vitri).getStatus_order().equals("3")) {
                             Login_Token.update_check = true;
+                            Login_Token.id_order = data.get(vitri).getId_order();
                         }
 
                         RequestBody requestBody = new MultipartBody.Builder()

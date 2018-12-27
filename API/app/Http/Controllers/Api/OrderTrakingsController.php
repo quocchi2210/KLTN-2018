@@ -92,6 +92,7 @@ class OrderTrakingsController extends Controller {
 						->update([
 							'latitude' => $lat,
 							'longitude' => $long,
+							'idOrder' => $order_id,
 						]);
 
 				} else {

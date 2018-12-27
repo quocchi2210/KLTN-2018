@@ -4,5 +4,5 @@ public class Login_Token {
 
     public static String token;
     public static boolean update_check = false;
-
+    public static String id_order;
 }
