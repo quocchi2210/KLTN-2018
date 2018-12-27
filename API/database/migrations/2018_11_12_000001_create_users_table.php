@@ -22,18 +22,17 @@ class CreateUsersTable extends Migration {
 			return;
 		}
 
-
 		Schema::create($this->set_schema_table, function (Blueprint $table) {
 			$table->engine = 'InnoDB';
 			$table->increments('idUser');
-			$table->string('username', 15)->nullable()->default(null)->unique();
-			$table->string('email', 300)->nullable()->default(null);
-			$table->string('fullName', 300)->nullable()->default(null);
-			$table->string('idNumber', 300)->nullable()->default(null);
-			$table->string('phoneNumber', 300)->nullable()->default(null);
-			$table->string('avatar', 191)->nullable()->default(null);
-			$table->date('dateOfBirth')->nullable()->default(null);
-			$table->string('gender', 10)->nullable()->default(null);
+			$table->string('username', 500)->nullable()->default(null)->unique();
+			$table->string('email', 500)->nullable()->default(null);
+			$table->string('fullName', 500)->nullable()->default(null);
+			$table->string('idNumber', 500)->nullable()->default(null);
+			$table->string('phoneNumber', 500)->nullable()->default(null);
+			$table->string('avatar', 500)->nullable()->default(null);
+			$table->string('dateOfBirth', 500)->nullable()->default(null);
+			$table->string('gender', 500)->nullable()->default(null);
 			$table->text('addressUser')->nullable()->default(null);
 			$table->tinyInteger('isActivated')->nullable()->default('0');
 			$table->tinyInteger('isBanned')->nullable()->default('0');
