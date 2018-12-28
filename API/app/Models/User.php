@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Decryption;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -17,6 +18,7 @@ class User extends Authenticatable implements JWTSubject {
 	 * @var array
 	 */
 	public $table = 'users';
+    use Decryption;
 	protected $fillable = [
 		'username',
 		'email',

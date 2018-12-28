@@ -2,15 +2,17 @@
 
 namespace App;
 
+use App\Traits\Decryption;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class Order extends Model
 {
     public $table = 'orders';
     protected  $primaryKey = 'idOrder';
-
+    use Decryption;
     protected $fillable = [
         'idStore',
         'billOfLading',

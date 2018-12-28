@@ -153,7 +153,7 @@
                                 <div class="form-group">
                                     {!! Form::text(
                                         'sender[name]',
-                                        \Illuminate\Support\Facades\Auth::user()->fullName,
+                                        \Illuminate\Support\Facades\Auth::user()->decryptName(),
                                         [
                                             'id' => 'sender-name',
                                             'class' => 'form-control',

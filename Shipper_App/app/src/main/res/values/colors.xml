@@ -7,6 +7,8 @@
     <color name="colorBlue">#3DB1E8</color>
     <color name="colorOrange">#d8571b</color>
     <color name="colorXam">#F6F6F6</color>
+    <color name="colorXamt">#F3F3F3</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#df0909</color>
 
 </resources>
