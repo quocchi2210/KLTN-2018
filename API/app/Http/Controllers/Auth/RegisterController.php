@@ -92,7 +92,8 @@ class RegisterController extends Controller
                 'nameStore' => encrypt($storeRequest['name']),
             ]);
         }
-//        Mail::to($user->email)->send(new VerifyMail($user,$verifyUser));
+        $userDecypt = User::find($user->idUser);
+        Mail::to($userDecypt->email)->send(new VerifyMail($userDecypt,$verifyUser));
         $this->guard()->login($user);
         return redirect(route('home'));
 

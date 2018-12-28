@@ -12,8 +12,8 @@ class AdminSeeder extends Seeder
     public function run()
     {
         \App\User::create([
-            'fullName' => 'admin',
-            'email' => 'admin@admin.com',
+            'fullName' => encrypt('admin'),
+            'email' => encrypt('admin@admin.com'),
             'password' => bcrypt('123456'),
             'isActivated' => 1,
             'roleId' => 3
