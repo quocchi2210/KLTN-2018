@@ -45,9 +45,9 @@ import okhttp3.Response;
 
 public class Order_Activity extends AppCompatActivity {
 
-    private ArrayList<Order> data = new ArrayList<Order>();
+    //private ArrayList<Order> data = new ArrayList<Order>();
     private String hostname = "luxexpress.cf";
-    //public int position_index = -1;
+
     String token = Login_Token.token;
 
     CertificatePinner certificatePinner = new CertificatePinner.Builder()
@@ -99,6 +99,8 @@ public class Order_Activity extends AppCompatActivity {
                                 ListView lv = findViewById(R.id.list_view);
                                 Jobject = new JSONObject(yourResponse);
 
+                                ArrayList<Order> data = new ArrayList<Order>();
+
                                 JSONArray Jarray = Jobject.getJSONArray("data");
 
                                 for (int i = 0; i < Jarray.length(); i++) {
@@ -108,11 +110,16 @@ public class Order_Activity extends AppCompatActivity {
                                     String address = object.getString("addressReceiver");
                                     String idOrder = object.getString("idOrder");
                                     String idOrderStatus = object.getString("idOrderStatus");
-                                    data.add(new Order(billOfLading, address, idOrder, idOrderStatus));
+                                    String name_received = object.getString("nameReceiver");
+                                    String phone_received = object.getString("phoneReceiver");
+                                    String total_money = object.getString("totalMoney");
+
+                                    data.add(new Order(billOfLading, address, idOrder, idOrderStatus,name_received,phone_received,total_money));
                                 }
 
                                 lv.setAdapter(new OrderAdapter(Order_Activity.this, R.layout.list_item, data));
                                 Log.w("Order: ", yourResponse.toString());
+                                Log.w("Order_data: ", data.toString());
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -161,6 +168,9 @@ public class Order_Activity extends AppCompatActivity {
             case R.id.menu_item_search:
                 intent = new Intent(getBaseContext(), MapsActivity.class);
                 startActivity(intent);
+            case R.id.menu_item_fragment:
+                intent = new Intent(getBaseContext(), Fragment_Activity.class);
+                startActivity(intent);
                 break;
 
         }
@@ -197,20 +207,28 @@ public class Order_Activity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.w("myApp", "Detail: " + data.toString());
+            Log.w("myApp", "Detail: " + arrayOrder.toString());
             LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = inflater.inflate(myLayout, null);
 
             TextView bill_of_lading = (TextView) convertView.findViewById(R.id.bill_of_lading);
             TextView address = (TextView) convertView.findViewById(R.id.address);
+            TextView mobile_receive = (TextView) convertView.findViewById(R.id.mobile_receive);
+            TextView name_receive = (TextView) convertView.findViewById(R.id.name_receive);
+            TextView total_money = (TextView) convertView.findViewById(R.id.total_money);
 
             Button btn_pick_up = (Button) convertView.findViewById(R.id.btn_pick_up);
 
-            bill_of_lading.setText(data.get(position).getBill_of_lading());
-            address.setText(data.get(position).getAddress());
+            bill_of_lading.setText("Order "+arrayOrder.get(position).getBill_of_lading());
+            address.setText(arrayOrder.get(position).getAddress());
+            mobile_receive.setText(arrayOrder.get(position).getName_received());
+            name_receive.setText(arrayOrder.get(position).getPhone_received());
+            total_money.setText(arrayOrder.get(position).getTotal_money()+" VNĐ");
 
-            final String id_order = data.get(position).getId_order();
+            //total_money.setText();
+
+            final String id_order = arrayOrder.get(position).getId_order();
 
             LinearLayout lnlo_order = (LinearLayout) convertView.findViewById(R.id.lnlo_order);
 
@@ -339,8 +357,8 @@ public class Order_Activity extends AppCompatActivity {
 
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
-                            .addFormDataPart("id_order", data.get(vitri).getId_order())
-                            .addFormDataPart("status_order_rq", data.get(vitri).getId_order_status())
+                            .addFormDataPart("id_order", arrayOrder.get(vitri).getId_order())
+                            .addFormDataPart("status_order_rq", arrayOrder.get(vitri).getId_order_status())
                             .build();
 
                     Request request = new Request.Builder()
@@ -452,12 +470,18 @@ public class Order_Activity extends AppCompatActivity {
         private String address;
         private String id_order;
         private String id_order_status;
+        private String name_received;
+        private String phone_received;
+        private String total_money;
 
-        Order(String bill_of_lading, String address, String id_order, String id_order_status) {
+        Order(String bill_of_lading, String address, String id_order, String id_order_status, String name_received, String phone_received, String total_money) {
             this.bill_of_lading = bill_of_lading;
             this.address = address;
             this.id_order = id_order;
             this.id_order_status = id_order_status;
+            this.name_received = name_received;
+            this.phone_received = phone_received;
+            this.total_money = total_money;
         }
 
         public String getBill_of_lading() {
@@ -492,6 +516,31 @@ public class Order_Activity extends AppCompatActivity {
         public void setId_order_status(String id_order_status) {
             this.id_order_status = id_order_status;
         }
+
+        public String getName_received() {
+            return name_received;
+        }
+
+        public void setName_received(String name_received) {
+            this.name_received = name_received;
+        }
+
+        public String getPhone_received() {
+            return phone_received;
+        }
+
+        public void setPhone_received(String phone_received) {
+            this.phone_received = phone_received;
+        }
+
+        public String getTotal_money() {
+            return total_money;
+        }
+
+        public void setTotal_money(String total_money) {
+            this.total_money = total_money;
+        }
+
     }
 
     private class OrderDetail {

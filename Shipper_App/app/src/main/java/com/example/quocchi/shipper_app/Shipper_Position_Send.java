@@ -140,8 +140,6 @@ public class Shipper_Position_Send implements LocationListener {
             Log.w("wtf",  "Sax");
         }
 
-
-
         if(Login_Token.update_check==true) {
             Toast.makeText(mContext, "Ok: Location UPDATE TRUE", Toast.LENGTH_SHORT).show();
             RequestBody requestBody ;
