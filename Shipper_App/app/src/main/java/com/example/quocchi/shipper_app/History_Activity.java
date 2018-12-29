@@ -2,53 +2,34 @@ package com.example.quocchi.shipper_app;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.android.volley.Request.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -179,6 +160,7 @@ public class History_Activity extends AppCompatActivity {
                             JSONObject Jobject = null;
                             try {
                                 Jobject = new JSONObject(yourResponse);
+                                Log.w("history", yourResponse.toString());
 
                                 expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
                                 listdataHeader = new ArrayList<>();
@@ -188,6 +170,9 @@ public class History_Activity extends AppCompatActivity {
 
                                 JSONArray store_name_array = Jobject.getJSONArray("store_name");
                                 JSONArray data = Jobject.getJSONArray("data");
+
+                                Log.w("history", data.toString());
+
                                 ArrayList<History> array_tmp_value = new ArrayList<History>();
                                 ArrayList<History> array_tmp = new ArrayList<History>();
 
@@ -200,10 +185,15 @@ public class History_Activity extends AppCompatActivity {
                                         if(object.getString("idStore") == object_data.getString("idStore")){
 
                                             Log.w("History ",object_data.toString());
+
+
                                             String billOfLading = object_data.getString("billOfLading");
                                             String address = object_data.getString("addressReceiver");
+                                            String name_received = object_data.getString("nameReceiver");
+                                            String phone_received = object_data.getString("phoneReceiver");
+                                            String total_money = object_data.getString("totalMoney");
 
-                                            array_tmp.add(new History(billOfLading,address));
+                                            array_tmp.add(new History(billOfLading,address,name_received,phone_received,total_money));
                                         }
 
 
@@ -224,14 +214,17 @@ public class History_Activity extends AppCompatActivity {
                                 customExpandableListView = new CustomExpandableListView(History_Activity.this,listdataHeader,listdataChild);
                                 expandableListView.setAdapter(customExpandableListView);
 
+
+
                             } catch (JSONException e) {
+                                Log.w("history", "error"+yourResponse.toString());
                                 e.printStackTrace();
                             }
 
                         }
                     });
                 } else {
-                    Log.w("myApp", yourResponse.toString());
+                    Log.w("history","error not success"+ yourResponse.toString());
                 }
 
 
@@ -355,19 +348,30 @@ public class History_Activity extends AppCompatActivity {
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            History test = (History) getChild(groupPosition,childPosition);
+            History arrayHistory = (History) getChild(groupPosition,childPosition);
 
             //History a = listChild.get(listHeader.get(groupPosition));
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = inflater.inflate(R.layout.group_history_child_view,null);
 
-            TextView txta = (TextView) convertView.findViewById(R.id.txt_a);
-            TextView txtb = (TextView) convertView.findViewById(R.id.txt_b);
+           // TextView txta = (TextView) convertView.findViewById(R.id.txt_a);
+            //TextView txtb = (TextView) convertView.findViewById(R.id.txt_b);
 
-            txta.setText( test.getA().toString());
-            txtb.setText( test.getA().toString());
+            //txta.setText( test.getA().toString());
+           // txtb.setText( test.getA().toString());
 
+            TextView bill_of_lading = (TextView) convertView.findViewById(R.id.bill_of_lading);
+            TextView address = (TextView) convertView.findViewById(R.id.address);
+            TextView mobile_receive = (TextView) convertView.findViewById(R.id.mobile_receive);
+            TextView name_receive = (TextView) convertView.findViewById(R.id.name_receive);
+            TextView total_money = (TextView) convertView.findViewById(R.id.total_money);
+
+            bill_of_lading.setText("Order " + arrayHistory.getBillOfLading());
+            address.setText(arrayHistory.getAddress());
+            mobile_receive.setText(arrayHistory.getName_received());
+            name_receive.setText(arrayHistory.getPhone_received());
+            total_money.setText(arrayHistory.getTotal_money() + " VNĐ");
 
             return convertView;
         }
@@ -457,28 +461,59 @@ public class History_Activity extends AppCompatActivity {
 
 
     private class History{
-        private String a;
-        private String b;
 
-        History(String a, String b){
-            this.a = a;
-            this.b = b;
+        private String billOfLading;
+        private String address;
+        private String name_received;
+        private String phone_received;
+        private String total_money;
+
+        public History(String billOfLading, String address, String name_received, String phone_received, String total_money) {
+            this.billOfLading = billOfLading;
+            this.address = address;
+            this.name_received = name_received;
+            this.phone_received = phone_received;
+            this.total_money = total_money;
         }
 
-        public String getA() {
-            return a;
+        public String getBillOfLading() {
+            return billOfLading;
         }
 
-        public void setA(String a) {
-            this.a = a;
+        public void setBillOfLading(String billOfLading) {
+            this.billOfLading = billOfLading;
         }
 
-        public String getB() {
-            return b;
+        public String getAddress() {
+            return address;
         }
 
-        public void setB(String b) {
-            this.b = b;
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getName_received() {
+            return name_received;
+        }
+
+        public void setName_received(String name_received) {
+            this.name_received = name_received;
+        }
+
+        public String getPhone_received() {
+            return phone_received;
+        }
+
+        public void setPhone_received(String phone_received) {
+            this.phone_received = phone_received;
+        }
+
+        public String getTotal_money() {
+            return total_money;
+        }
+
+        public void setTotal_money(String total_money) {
+            this.total_money = total_money;
         }
     }
 
