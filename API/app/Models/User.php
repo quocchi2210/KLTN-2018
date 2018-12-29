@@ -5,11 +5,13 @@ namespace App;
 use App\Traits\Decryption;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
 class User extends Authenticatable implements JWTSubject {
 	use Notifiable;
+//    use Decryption;
 	protected $primaryKey = 'idUser';
 
 	/**
@@ -18,7 +20,6 @@ class User extends Authenticatable implements JWTSubject {
 	 * @var array
 	 */
 	public $table = 'users';
-    use Decryption;
 	protected $fillable = [
 		'username',
 		'email',
@@ -56,6 +57,10 @@ class User extends Authenticatable implements JWTSubject {
         return decrypt($this->attributes['fullName']);
 	}
 
+    public function getEmailAttribute($value)
+    {
+        return Crypt::decrypt($value);
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
