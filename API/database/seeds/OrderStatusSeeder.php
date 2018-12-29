@@ -12,17 +12,17 @@ class OrderStatusSeeder extends Seeder
     public function run()
     {
         \Illuminate\Support\Facades\DB::table('order_status')->insert([
-            ['statusName' => 'Pending','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['statusName' => 'Chờ xác nhận','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['statusName' => 'Confirm','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['statusName' => 'Đã xác nhận','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['statusName' => 'Pickup','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['statusName' => 'Đã lấy hàng','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['statusName' => 'Delivery','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['statusName' => 'Đang giao hàng','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['statusName' => 'Done','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['statusName' => 'Đã giao hàng','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
-            ['statusName' => 'Cancel','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
+            ['statusName' => 'Đã hủy','created_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => \Illuminate\Support\Carbon::now()->format('Y-m-d H:i:s')],
         ]);
     }
