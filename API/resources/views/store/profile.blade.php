@@ -1,6 +1,6 @@
 @extends('layouts.masters')
 
-@section('title', 'Edit Menu')
+@section('title', 'Thông tin cá nhân')
 
 {{--@section('content-header')--}}
 {{--<h1>--}}
@@ -19,7 +19,7 @@
         <div class="box-body">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#store-data" aria-controls="store-data" role="tab"
-                                                          data-toggle="tab">Information</a></li>
+                                                          data-toggle="tab">Thông tin cá nhân</a></li>
             </ul>
 
             <div class="tab-content">
@@ -30,21 +30,21 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        {!! Form::label('store-name', 'Store Name') !!}
+                                        {!! Form::label('store-name', 'Tên cửa hàng') !!}
                                         {!! Form::text('Store[name]',$store->nameStore,['id' => 'store-name','class' => 'form-control',])!!}
                                     </div>
                                     <div class="col-md-2">
-                                        {!! Form::label('store-type', 'Store Type') !!}
+                                        {!! Form::label('store-type', 'Loại cửa hàng') !!}
                                         {!! Form::text('Store[type]',$store->typeStore,['id' => 'store-type','class' => 'form-control',])!!}
                                     </div>
                                     <div class="col-md-7">
-                                        {!! Form::label('store-address', 'Store Address') !!}
+                                        {!! Form::label('store-address', 'Địa chỉ cửa hàng') !!}
                                         {!! Form::text('Store[address]',$store->addressStore,['id' => 'store-address','class' => 'form-control',])!!}
                                     </div>
                                 </div>
                                 </br>
                                 <div class="form-group">
-                                    {!! Form::label('store-description', 'Store Description') !!}
+                                    {!! Form::label('store-description', 'Mô tả về cửa hàng') !!}
                                     {!! Form::textarea('Store[description]',$store->descriptionStore,['class'=>'form-control', 'rows' => 3, 'cols' => 40]) !!}
                                 </div>
                             </div>
@@ -52,8 +52,8 @@
                     </div>
                 </div>
                 <a href="{{ route('home') }}" class="btn btn-default pull-right"
-                   style="margin-left: 5px">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right']) !!}
+                   style="margin-left: 5px">Hủy</a>
+                {!! Form::submit('Lưu', ['class' => 'btn btn-primary pull-right']) !!}
                 {!! Form::close() !!}
             </div>
 

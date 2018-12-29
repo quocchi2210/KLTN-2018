@@ -8,20 +8,20 @@
                 <img src="{{ asset('/images/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>{{\Illuminate\Support\Facades\Auth::user()->fullName}}</p>
+                <p>{{\Illuminate\Support\Facades\Auth::user()->decryptName()}}</p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li>
-                <a href="{{ route('admin.orders.index') }}"><i class="fa fa-list-alt"></i> <span>Order</span></a>
+                <a href="{{ route('admin.orders.index') }}"><i class="fa fa-list-alt"></i> <span>Đơn hàng</span></a>
             </li>
             <li>
-                <a href="{{ route('admin.stores.index') }}"><i class="fa fa-list-alt"></i> <span>Store</span></a>
+                <a href="{{ route('admin.stores.index') }}"><i class="fa fa-list-alt"></i> <span>Cửa hàng</span></a>
             </li>
             <li>
-                <a href="{{ route('admin.delivers.index') }}"><i class="fa fa-list-alt"></i> <span>Deliver</span></a>
+                <a href="{{ route('admin.delivers.index') }}"><i class="fa fa-list-alt"></i> <span>Giao hàng</span></a>
             </li>
             {{--<li class="header">Team</li>--}}
             {{--<li class="treeview">--}}

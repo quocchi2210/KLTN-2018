@@ -11,8 +11,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject {
 	use Notifiable;
-//    use Decryption;
 	protected $primaryKey = 'idUser';
+    use Decryption;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -57,10 +57,6 @@ class User extends Authenticatable implements JWTSubject {
         return decrypt($this->attributes['fullName']);
 	}
 
-    public function getEmailAttribute($value)
-    {
-        return Crypt::decrypt($value);
-    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

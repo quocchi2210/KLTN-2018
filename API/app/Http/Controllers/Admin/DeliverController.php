@@ -52,12 +52,14 @@ class DeliverController extends Controller
             'roleId' => 2,
             'password' => bcrypt($password)
         ]);
+
         $verifyUser = VerifyResetUser::create([
             'user_id' => $user->idUser,
             'token' => str_random(32),
             'confirmation' => 1
         ]);
-        Mail::to($user->email)->send(new ConfirmPasswordMail($user,$verifyUser));
+        $deliverDecrypt = User::find($user->idUser);
+        Mail::to($deliverDecrypt->email)->send(new ConfirmPasswordMail($deliverDecrypt,$verifyUser));
         return back();
     }
 

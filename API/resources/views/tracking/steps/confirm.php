@@ -1,7 +1,7 @@
 <ol class="progtrckr" data-progtrckr-steps="5">
-                    <li class="progtrckr-done">Pending</li>
-                    <li class="progtrckr-done">Confirm </li>
-                    <li class="progtrckr-todo">Pickup</li>
-                    <li class="progtrckr-todo">Delivery</li>
-                    <li class="progtrckr-todo">Done</li>
+                    <li class="progtrckr-done">Chờ xác nhận</li>
+                    <li class="progtrckr-done">Đã xác nhận </li>
+                    <li class="progtrckr-todo">Đã lấy hàng</li>
+                    <li class="progtrckr-todo">Đang giao hàng</li>
+                    <li class="progtrckr-todo">Đã giao hàng</li>
               </ol>

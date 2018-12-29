@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a href="{{ route('home') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>L</b>UX</span>
+        <span class="logo-mini"><b>C&K</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Admin</b>LUX</span>
+        <span class="logo-lg">Quản Trị <b>C&K</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -107,7 +107,7 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{ asset('/images/user2-160x160.jpg') }}" class="user-image" alt="User Image">
-                        <span class="hidden-xs">{{ Auth::user()->fullName}}</span>
+                        <span class="hidden-xs">{{ Auth::user()->decryptName()}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -115,30 +115,17 @@
                             <img src="{{ asset('/images/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
 
                             <p>
-                                {{ Auth::user()->fullName }} - Web Developer
-                                <small>Member since {{date('M Y', strtotime(Auth::user()->created_at))}}</small>
+                                {{ Auth::user()->decryptName() }} - Quản Trị Viên
                             </p>
-                        </li>
-                        <!-- Menu Body -->
-                        <li class="user-body">
-                            <div class="row">
-                                <div class="col-xs-6 text-center">
-                                    <a href="{{ route('home') }}">App Manager</a>
-                                </div>
-                                <div class="col-xs-6 text-center">
-                                    <a href="">Edit Restaurent Info</a>
-                                </div>
-                            </div>
-                            <!-- /.row -->
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a href="#" class="btn btn-default btn-flat">Thông tin</a>
                             </div>
                             <div class="pull-right">
                                 <form action="{{route('getLogout')}}" method="POST">
-                                    <a href="#" class="btn btn-default btn-flat" onclick="this.parentNode.submit()">Sign out</a>
+                                    <a href="#" class="btn btn-default btn-flat" onclick="this.parentNode.submit()">Đăng xuất</a>
                                     {{ csrf_field() }}
                                 </form>
                             </div>

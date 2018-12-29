@@ -5,31 +5,31 @@
     <div class="container">
             <div class="row top25 inboxMain">
                 <div class="row text-center alert alert-info">
-                    <div class="col-md-4"><h3>Order No: {{$bill}}</h3></div>
-                    <div class="col-md-4"><h3>Customer: {{$nameReceiver}}</h3></div>
-                    <div class="col-md-4"><h3> Status: {{$status}}</h3></div>
+                    <div class="col-md-4"><h3>Mã vận đơn: {{$bill}}</h3></div>
+                    <div class="col-md-4"><h3>Khách hàng: {{$nameReceiver}}</h3></div>
+                    <div class="col-md-4"><h3>Tình trạng: {{$status}}</h3></div>
                 </div>
 
-                @if($status=="Pending")
+                @if($status=="Chờ xác nhận")
                 @include('tracking.steps.pending')
 
-                @elseif($status=="Confirm")
+                @elseif($status=="Đã xác nhận")
                 @include('tracking.steps.confirm')
 
 
-                @elseif($status->status=="Pickup")
+                @elseif($status->status=="Đã lấy hàng")
                 @include('tracking.steps.pickup')
 
 
-                @elseif($status->status=="Delivery")
+                @elseif($status->status=="Đang giao hàng")
                 @include('tracking.steps.delivery')
 
-                @elseif($status->status=="Done")
+                @elseif($status->status=="Đã giao hàng")
                 @include('tracking.steps.done')
 
-                @elseif($status->status=="Cancelled")
+                @elseif($status->status=="Đã hủy")
 
-                <h1 align="center">your order cancelled by admin</h1>
+                <h1 align="center">Đơn hàng của bạn đã hủy bởi Quản trị</h1>
 
                 @endif
 

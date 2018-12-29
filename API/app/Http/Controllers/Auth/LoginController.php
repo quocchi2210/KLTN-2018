@@ -90,9 +90,11 @@ class LoginController extends Controller
 //                dd($record);
 //            }
 //        });
+        $email = $request->get('email');
+        $password = $request->get('password');
         $users = User::all();
         foreach ($users as $user) {
-            if ($request->get('email') == $user['email'] && Hash::check($request->get('password'), $user['password'])) {
+            if ($email === $user['email'] && Hash::check($password, $user['password'])) {
                 auth()->login($user);
                 return Redirect(route('home'));
             }
