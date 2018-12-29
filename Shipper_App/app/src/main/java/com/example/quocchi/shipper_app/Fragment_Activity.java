@@ -33,42 +33,42 @@ public class Fragment_Activity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_control_point);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_control_point);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_control_point);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_control_point);
-        tabLayout.getTabAt(4).setIcon(R.drawable.ic_control_point);
+
     }
 
     private class Fragment_Adapter extends FragmentStatePagerAdapter {
 
-        private String listTab[] = {"Pending","Confirm","Pickup","Done","Cancel"};
+        private String listTab[] = {"Confirm","Pickup","Delivery"};
         private Confirm_Fragment mConfirmFrament;
         private Pending_Fragment mPendingFragment;
         private Pickup_Fragment mPickupFragment;
+        private Delivery_Fragment mDeliveryFragment;
         private Done_Fragment mDoneFragment;
         private Cancel_Fragment mCancelFragment;
 
         public Fragment_Adapter(FragmentManager fm){
             super(fm);
             mConfirmFrament = new Confirm_Fragment();
-            mPendingFragment = new Pending_Fragment();
             mPickupFragment = new Pickup_Fragment();
-            mDoneFragment = new Done_Fragment();
-            mCancelFragment = new Cancel_Fragment();
+            mDeliveryFragment = new Delivery_Fragment();
+            //mDoneFragment = new Done_Fragment();
         }
 
 
         @Override
         public Fragment getItem(int position) {
             if(position == 0){
-                return mPendingFragment;
-            }else if(position == 1){
                 return mConfirmFrament;
-            }else if(position == 2){
+            }else if(position == 1){
                 return mPickupFragment;
-            }else if(position == 3){
-                return mDoneFragment;
-            }else if(position == 4) {
-                return mCancelFragment;
+            }else if(position == 2){
+                return mDeliveryFragment;
             }
+//            else if(position == 3){
+//                return mDoneFragment;
+//            }else if(position == 4) {
+//                return mCancelFragment;
+//            }
             return null;
         }
 
