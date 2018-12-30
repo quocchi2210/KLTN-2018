@@ -573,6 +573,8 @@ class ShipperController extends Controller {
 			//Log::debug('idShipper' . print_r($idShipper, 1));
 
 			$result_order = DB::table('orders')
+				->join('stores', 'stores.idStore', '=', 'orders.idStore')
+				->join('users', 'stores.idUser', '=', 'users.idUser')
 				->where('idShipper', $idShipper)
 				->where('idOrderStatus', Config::get('constants.status_type.delivery'))
 				->get();
