@@ -272,7 +272,8 @@ class ShipperController extends Controller {
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('idShipper', $idShipper)
-					->whereBetween('idOrderStatus', array(3, 4))
+					//->whereBetween('idOrderStatus', array(3, 4))
+					->where('idOrderStatus', Config::get('constants.status_type.pickup'))
 					->get();
 
 				myDecrypt($users);
@@ -579,6 +580,7 @@ class ShipperController extends Controller {
 			return response()->json([
 				'error' => false,
 				'data' => $result_order->count(),
+				'data_order' => $result_order,
 				'errors' => null,
 			], 200);
 
