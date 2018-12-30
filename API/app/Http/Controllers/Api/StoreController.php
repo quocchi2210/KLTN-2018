@@ -723,7 +723,7 @@ class StoreController extends Controller {
 
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
-					->join('users', 'stores.idStore', '=', 'orders.idStore')
+					->join('users', 'stores.idUser', '=', 'users.idUser')
 					->where('idOrder', $idOrder)
 					->get();
 
