@@ -1,6 +1,5 @@
 package com.example.quocchi.shipper_app;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,24 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -201,10 +192,11 @@ public class MainActivity extends AppCompatActivity {
     }
         private void order_show(){
             //Intent intent = new Intent(MainActivity.this, History_Activity.class);
-            Intent intent = new Intent(MainActivity.this, Order_Activity.class);
+            //Intent intent = new Intent(MainActivity.this, Order_Activity.class);
             //Intent intent = new Intent(MainActivity.this, Order_Received_Activity.class);
             //Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             //Intent intent = new Intent(MainActivity.this, Fragment_Activity.class);
+            Intent intent = new Intent(MainActivity.this, Home_Activity.class);
 
             startActivity(intent);
         }

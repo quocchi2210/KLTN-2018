@@ -1,4 +1,4 @@
-package com.example.quocchi.shipper_app;
+package com.example.dell.store_app;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,13 +30,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Confirm_Fragment extends Fragment {
-    private View mRootView;
-
-    //private ArrayList<Order> data = new ArrayList<Order>();
+public class Done_Fragment extends Fragment {
     private String hostname = "luxexpress.cf";
-    OrderAdapter test;
-    String token = Login_Token.token;
+    private OrderAdapter test;
+    private String token = Login_Token.token;
+
+    private View mRootView;
 
     @Nullable
     @Override
@@ -61,7 +59,7 @@ public class Confirm_Fragment extends Fragment {
                 .build();
 
         Request request = new Request.Builder()
-                .url("https://luxexpress.cf/api/shipper/showOrder")
+                .url("https://luxexpress.cf/api/store/showOrder_done")
                 //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
                 .post(requestBody)
                 .addHeader("Authorization", "Bearer " + token)
@@ -184,84 +182,11 @@ public class Confirm_Fragment extends Fragment {
 
             final String id_order = arrayOrder.get(position).getId_order();
 
-            LinearLayout lnlo_order = (LinearLayout) convertView.findViewById(R.id.lnlo_order);
+            //LinearLayout lnlo_order = (LinearLayout) convertView.findViewById(R.id.lnlo_order);
 
             final View Testview = convertView;
 
             final int vitri = position;
-
-            btn_pick_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    OkHttpClient client = new OkHttpClient.Builder()
-//                            .certificatePinner(certificatePinner)
-//                            .build();
-
-                    CertificatePinner certificatePinner = new CertificatePinner.Builder()
-                            .add(hostname, "sha256/MPTkwqvsxxFu44jSBUkloPwzP8VQwYEaGybVkEmRuww=")
-                            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
-                            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
-                            .build();
-
-                    OkHttpClient client = new OkHttpClient.Builder()
-                            .certificatePinner(certificatePinner)
-                            .build();
-
-                    RequestBody requestBody = new MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("id_order", arrayOrder.get(vitri).getId_order())
-                            .addFormDataPart("status_order_rq", arrayOrder.get(vitri).getId_order_status())
-                            .build();
-
-                    Request request = new Request.Builder()
-                            //.url("http://192.168.0.132:8000/api/shipper/showOrderReceived")
-                            .url("https://luxexpress.cf/api/shipper/updateStatus")
-                            .post(requestBody)
-                            //.addHeader("name_your_token", "your_token")
-                            .addHeader("Authorization", "Bearer " + token)
-                            .build();
-
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            final String yourResponse = response.body().string();
-
-                            if (response.isSuccessful()) {
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        JSONObject Jobject = null;
-                                        try {
-
-                                            Jobject = new JSONObject(yourResponse);
-
-                                            Log.w("btn_done","Order: " + yourResponse.toString());
-
-
-                                            getActivity().finish();
-                                            startActivity( getActivity().getIntent());
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                });
-                            } else {
-                                Log.w("myApp", "Order received: " + yourResponse.toString());
-                            }
-
-
-                        }
-                    });
-                }
-            });
 
             return convertView;
         }
