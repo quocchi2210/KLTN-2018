@@ -6,6 +6,7 @@ return [
         'pickup' => '3',
         'delivery' => '4',
         'done' => '5',
+        'cancel' => '6',
     ]
 ];
 ?>

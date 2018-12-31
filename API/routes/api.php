@@ -27,6 +27,8 @@ Route::group(['middleware' => 'jwt'], function () {
 		Route::post('getDirection', "Api\ShipperController@getDirection");
 		Route::post('checkOrderShipper', "Api\ShipperController@checkOrderShipper");
 		Route::post('updateProfileShipper', "Api\ShipperController@updateProfileShipper");
+		Route::post('showProfileShipper', "Api\ShipperController@showProfileShipper");
+
 	});
 
 	Route::group(['prefix' => 'store'], function () {
@@ -44,6 +46,12 @@ Route::group(['middleware' => 'jwt'], function () {
 		Route::post('getInfoEditFromIdorder', "Api\StoreController@getInfoEditFromIdorder");
 
 		Route::post('getPreMoney', "Api\StoreController@getPreMoney");
+
+		Route::post('showOrder_pending', "Api\StoreController@showOrder_pending");
+		Route::post('showOrder_confirm', "Api\StoreController@showOrder_confirm");
+		Route::post('showOrder_pickup', "Api\StoreController@showOrder_pickup");
+		Route::post('showOrder_delivery', "Api\StoreController@showOrder_delivery");
+		Route::post('showOrder_done', "Api\StoreController@showOrder_done");
 
 	});
 
