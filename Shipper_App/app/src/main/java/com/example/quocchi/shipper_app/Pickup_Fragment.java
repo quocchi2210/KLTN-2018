@@ -36,7 +36,7 @@ import okhttp3.Response;
 public class Pickup_Fragment extends Fragment {
     private View mRootView;
 
-    private ArrayList<Order_Received> data = new ArrayList<Order_Received>();
+    //private ArrayList<Order_Received> data = new ArrayList<Order_Received>();
     private String hostname = "luxexpress.cf";
     private String token = Login_Token.token;
 
@@ -55,8 +55,9 @@ public class Pickup_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_pickup, container, false);
 
+        mRootView = inflater.inflate(R.layout.fragment_pickup, container, false);
+        Log.w("wtf1", "Order received eponse: " );
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("your_name_input", "your_value")
@@ -87,7 +88,7 @@ public class Pickup_Fragment extends Fragment {
                         public void run() {
                             JSONObject Jobject = null;
                             try {
-
+                                ArrayList<Order_Received> data = new ArrayList<Order_Received>();
                                 ListView list_view_order_received = (ListView) mRootView.findViewById(R.id.list_view_order_received);
 
                                 Jobject = new JSONObject(yourResponse);
@@ -131,6 +132,14 @@ public class Pickup_Fragment extends Fragment {
         obj.setMyContext(getActivity());
 
         return mRootView;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 
     private class Order_Received_Adapter extends BaseAdapter {
@@ -196,38 +205,38 @@ public class Pickup_Fragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent( getActivity(), MapsActivity.class);
-                    intent.putExtra("destination_address", data.get(vitri).getAddress_receive());
+                    intent.putExtra("destination_address", arrayOrder.get(vitri).getAddress_receive());
                     startActivity(intent);
 
                 }
             });
 
-            Log.w("Order", "Order getStatus_order: " + data.get(vitri).getStatus_order());
+            Log.w("Order", "Order getStatus_order: " + arrayOrder.get(vitri).getStatus_order());
 
-            if (data.get(vitri).getStatus_order().equals("3")) {
+            if (arrayOrder.get(vitri).getStatus_order().equals("3")) {
                 btn_done.setText("Chuyển hàng");
-            }else if (data.get(vitri).getStatus_order().equals("4")) {
+            }else if (arrayOrder.get(vitri).getStatus_order().equals("4")) {
                 btn_done.setText("Xong");
             }
 
             btn_done.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (data.get(vitri).getStatus_order().equals("4")) {
+                    if (arrayOrder.get(vitri).getStatus_order().equals("4")) {
                         Login_Token.update_check = false;
                     }
 
                     if(Login_Token.update_check==false) {
                         //Toast.makeText(Order_Received_Activity.this, "Ok: btn_done" , Toast.LENGTH_SHORT).show();
-                        if (data.get(vitri).getStatus_order().equals("3")) {
+                        if (arrayOrder.get(vitri).getStatus_order().equals("3")) {
                             Login_Token.update_check = true;
-                            Login_Token.id_order = data.get(vitri).getId_order();
+                            Login_Token.id_order = arrayOrder.get(vitri).getId_order();
                         }
 
                         RequestBody requestBody = new MultipartBody.Builder()
                                 .setType(MultipartBody.FORM)
-                                .addFormDataPart("id_order", data.get(vitri).getId_order())
-                                .addFormDataPart("status_order_rq", data.get(vitri).getStatus_order())
+                                .addFormDataPart("id_order", arrayOrder.get(vitri).getId_order())
+                                .addFormDataPart("status_order_rq", arrayOrder.get(vitri).getStatus_order())
                                 .build();
 
                         Request request = new Request.Builder()
@@ -259,8 +268,11 @@ public class Pickup_Fragment extends Fragment {
                                                 Jobject = new JSONObject(yourResponse);
 
                                                 Log.w("btn_done", "Order received: " + yourResponse.toString());
-                                               // finish();
-                                               // startActivity(getIntent());
+                                                //getActivity().finish();
+                                                //startActivity( getActivity().getIntent());
+
+
+
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

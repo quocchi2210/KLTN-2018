@@ -1,32 +1,34 @@
 package com.example.quocchi.shipper_app;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class Fragment_Activity extends AppCompatActivity {
-
+public class Fragment_Order extends Fragment {
+    private View mRootView;
     private ViewPager mVpDemo;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRootView = inflater.inflate(R.layout.activity_fragment, container, false);
         initUI();
 
+        return mRootView;
     }
 
     private void initUI(){
-        mVpDemo = (ViewPager) findViewById(R.id.vp_demo);
-        mVpDemo.setAdapter(new Fragment_Adapter(getSupportFragmentManager()));
+        mVpDemo = (ViewPager) mRootView.findViewById(R.id.vp_demo);
+        mVpDemo.setAdapter(new Fragment_Adapter(getChildFragmentManager()));
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        TabLayout tabLayout = (TabLayout) mRootView.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(mVpDemo);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_control_point);

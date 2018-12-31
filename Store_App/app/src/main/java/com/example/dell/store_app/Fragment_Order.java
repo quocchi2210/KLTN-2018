@@ -1,49 +1,51 @@
-package com.example.quocchi.shipper_app;
+package com.example.dell.store_app;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class Fragment_Activity extends AppCompatActivity {
-
+public class Fragment_Order extends Fragment {
+    private View mRootView;
     private ViewPager mVpDemo;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRootView = inflater.inflate(R.layout.activity_fragment, container, false);
         initUI();
 
+        return mRootView;
     }
 
     private void initUI(){
-        mVpDemo = (ViewPager) findViewById(R.id.vp_demo);
-        mVpDemo.setAdapter(new Fragment_Adapter(getSupportFragmentManager()));
+        mVpDemo = (ViewPager) mRootView.findViewById(R.id.vp_demo);
+        mVpDemo.setAdapter(new Fragment_Adapter(getChildFragmentManager()));
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        TabLayout tabLayout = (TabLayout) mRootView.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(mVpDemo);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_control_point);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_control_point);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_control_point);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_black_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home_black_24dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_home_black_24dp);
 
     }
 
     private class Fragment_Adapter extends FragmentStatePagerAdapter {
 
         private String listTab[] = {"Confirm","Pickup","Delivery"};
-        private Confirm_Fragment mConfirmFrament;
-        private Pending_Fragment mPendingFragment;
-        private Pickup_Fragment mPickupFragment;
-        private Delivery_Fragment mDeliveryFragment;
-        private Done_Fragment mDoneFragment;
-        private Cancel_Fragment mCancelFragment;
+//        private Confirm_Fragment mConfirmFrament;
+//        private Pending_Fragment mPendingFragment;
+//        private Pickup_Fragment mPickupFragment;
+//        private Delivery_Fragment mDeliveryFragment;
+//        private Done_Fragment mDoneFragment;
+//        private Cancel_Fragment mCancelFragment;
 
         public Fragment_Adapter(FragmentManager fm){
             super(fm);
@@ -56,11 +58,11 @@ public class Fragment_Activity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if(position == 0){
-                return new Confirm_Fragment();
+               // return new Confirm_Fragment();
             }else if(position == 1){
-                return new Pickup_Fragment();
+                //return new Pickup_Fragment();
             }else if(position == 2){
-                return new Delivery_Fragment();
+                //return new Delivery_Fragment();
             }
 //            else if(position == 3){
 //                return mDoneFragment;

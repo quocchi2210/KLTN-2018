@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên cửa hàng: "
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorDialog"
+        />
+
+    <EditText
+        android:id="@+id/name_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loại cửa hàng:"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorDialog"
+        />
+
+    <EditText
+        android:id="@+id/type_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ cửa hàng:"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorDialog"
+        />
+
+    <EditText
+        android:id="@+id/address_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mô tả về cửa hàng:"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorDialog"
+        />
+
+    <EditText
+        android:id="@+id/des_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorXam"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="6dp"/>
+
+    <Button
+        android:id="@+id/btn_done"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:text="Sửa"
+        android:layout_width="match_parent"
+        android:background="@drawable/button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+
+
+</LinearLayout>
