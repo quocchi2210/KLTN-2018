@@ -27,11 +27,11 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="{{ route('home') }}"><b>Lux</b>Express</a>
+        <a href="{{ route('home') }}"><b>GHC&K</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Forgot Password</p>
+        <p class="login-box-msg">Quên Mật Khẩu</p>
 
         {!! Form::open(['route' => 'password.email', 'method' => 'POST']) !!}
         @if ($errors->any())
@@ -48,7 +48,7 @@
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
 
-                <button type="submit" class="btn btn-primary btn-block btn-flat">Send Password Reset Link</button>
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Lấy Lại Mật Khẩu</button>
 
             <!-- /.col -->
         {!! Form::close() !!}

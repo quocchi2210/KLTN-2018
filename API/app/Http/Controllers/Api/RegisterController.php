@@ -120,8 +120,8 @@ class RegisterController extends Controller {
 		// ];
 		// $validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USERS_CREATE'], $message);
 		// if ($validator->fails()) {
-		// 	return $this->errorWithValidation($validator);
-		// }
+//		 	return $this->errorWithValidation($validator);
+//		 }
 		$create = User::create([
 			'fullName' => $request['name'],
 			'email' => $request['email'],

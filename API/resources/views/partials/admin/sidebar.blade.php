@@ -21,7 +21,7 @@
                 <a href="{{ route('admin.stores.index') }}"><i class="fa fa-list-alt"></i> <span>Cửa hàng</span></a>
             </li>
             <li>
-                <a href="{{ route('admin.delivers.index') }}"><i class="fa fa-list-alt"></i> <span>Giao hàng</span></a>
+                <a href="{{ route('admin.delivers.index') }}"><i class="fa fa-list-alt"></i> <span>Người giao hàng</span></a>
             </li>
             {{--<li class="header">Team</li>--}}
             {{--<li class="treeview">--}}

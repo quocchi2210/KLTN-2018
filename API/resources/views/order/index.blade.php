@@ -1,6 +1,6 @@
 @extends('layouts.masters')
 
-@section('title', 'Tạo Đơn Hàng')
+@section('title', 'Đơn Hàng')
 
 @section('content')
     <div class="row">
@@ -56,7 +56,7 @@
                                             <th scope="col">Địa chỉ giao hàng</th>
                                             <th scope="col">Tổng số tiền</th>
                                             <th scope="col">Ngày tạo đơn hàng</th>
-                                            <th scope="col">Thông tin chi tiết</th>
+                                            <th scope="col">Xóa</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -71,12 +71,12 @@
                                                 <td>{{$statusOrder->created_at}}</td>
                                                 <td nowrap="">
                                                     @if($statusItem->idStatus == 1)
-                                                        <button type="button"
-                                                                data-id="{{$statusOrder->idOrder}}"
-                                                                class="btn btn-outline-primary btn-sm btn-edit-order"
-                                                                data-url="{{route('orders.edit',['order' => $statusOrder->idOrder])}}">
-                                                            <i class="fa fa-pencil"></i>
-                                                        </button>
+                                                        {{--<button type="button"--}}
+                                                                {{--data-id="{{$statusOrder->idOrder}}"--}}
+                                                                {{--class="btn btn-outline-primary btn-sm btn-edit-order"--}}
+                                                                {{--data-url="{{route('orders.edit',['order' => $statusOrder->idOrder])}}">--}}
+                                                            {{--<i class="fa fa-pencil"></i>--}}
+                                                        {{--</button>--}}
                                                         <button type="button"
                                                                 data-id="{{$statusOrder->idOrder}}"
                                                                 class="btn btn-outline-danger btn-sm btn-delete-order"
@@ -84,12 +84,12 @@
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     @endif
-                                                    <button type="button"
-                                                            data-id="{{$statusOrder->idOrder}}"
-                                                            class="btn btn-outline-info btn-sm btn-info-order"
-                                                            data-url="{{route('orders.show',['order' => $statusOrder->idOrder])}}">
-                                                        <i class="fa fa-info-circle"></i>
-                                                    </button>
+                                                    {{--<button type="button"--}}
+                                                            {{--data-id="{{$statusOrder->idOrder}}"--}}
+                                                            {{--class="btn btn-outline-info btn-sm btn-info-order"--}}
+                                                            {{--data-url="{{route('orders.show',['order' => $statusOrder->idOrder])}}">--}}
+                                                        {{--<i class="fa fa-info-circle"></i>--}}
+                                                    {{--</button>--}}
                                                 </td>
                                             </tr>
                                         @empty
@@ -263,18 +263,18 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label id="order-money-label" style="float: left">Tổng tiền</label>
+                                    <label id="order-money-label" style="float: right">Tổng tiền</label>
                                 </div>
-                                <div class="col-md-6 pull-right">
-                                    <input id="order-money">
+                                <div class="col-md-6">
+                                    <input id="order-money" style="border:none; color: #3097D1;float: left; font-weight: bold">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label id="order-money-label" style="float: left">Ngày dự kiến giao hàng</label>
+                                    <label id="order-money-label" style="float: right">Ngày dự kiến giao hàng</label>
                                 </div>
-                                <div class="col-md-6 pull-right">
-                                    <input id="order-delivery">
+                                <div class="col-md-6">
+                                    <input id="order-delivery" style="border:none; color: #3097D1; float: left;font-weight: bold">
                                 </div>
                             </div>
                             <button type="button"

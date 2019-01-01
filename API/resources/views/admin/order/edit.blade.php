@@ -20,13 +20,13 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('order-status', 'Status') !!}
+                            {!! Form::label('order-status', 'Tình trạng') !!}
                             {!! Form::select('Status', $status, null, ['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('order-deliver', 'Deliver') !!}
+                            {!! Form::label('order-deliver', 'Người giao hàng') !!}
                             {!! Form::select('Deliver', $deliver, null, ['class' => 'form-control']) !!}
                         </div>
                     </div>
@@ -36,9 +36,9 @@
                         <button type="button"
                                 class="btn btn-default pull-right"
                                 data-dismiss="modal"
-                                style="margin-left: 5px">Cancel
+                                style="margin-left: 5px">Hủy
                         </button>
-                        {!! Form::submit('Save', ['class' => 'btn btn-primary btn-submit']) !!}
+                        {!! Form::submit('Lưu', ['class' => 'btn btn-primary btn-submit']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}

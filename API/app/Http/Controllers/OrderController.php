@@ -21,8 +21,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-//        $orders = Auth::user()->store->orders;
-        $orders = Order::all();
+        $orders = Auth::user()->store->orders;
         $status = OrderStatus::all();
         $serviceTypes = DB::table('service_types')->pluck('nameService', 'idService');
         $note = array(
@@ -149,7 +148,7 @@ class OrderController extends Controller
             $distance = floatval($distance['rows'][0]['elements'][0]['distance']['text']);
             $distance = $this->milesToKilometers($distance);
             $money = $this->calculateMoney($distance,$orderWeight,$servicePrice);
-            $timeDelivery = $this->getPreDelivery($distance,$idServices)->toFormattedDateString();
+            $timeDelivery = $this->getPreDelivery($distance,$idServices)->format('d/m/Y');
             return response()->json([
                 'preMoney' => $money,
                 'timeDelivery' => $timeDelivery

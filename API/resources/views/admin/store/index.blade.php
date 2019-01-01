@@ -21,7 +21,7 @@
                                     <th scope="col">Loại cửa hàng</th>
                                     <th scope="col">Địa chỉ cửa hàng</th>
                                     <th scope="col">Miêu tả</th>
-                                    <th scope="col">Chi tiết</th>
+                                    {{--<th scope="col">Chi tiết</th>--}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -46,12 +46,12 @@
                                                     {{--data-url="{{route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">--}}
                                                 {{--<i class="fa fa-trash"></i>--}}
                                             {{--</button>--}}
-                                            <button type="button"
-                                                    data-id="{{$store->id}}"
-                                                    class="btn btn-outline-info btn-sm btn-info-branch"
-                                                    data-url="{{route('admin.stores.edit',['branch' => $store->id])}}">
-                                                <i class="fa fa-info-circle"></i>
-                                            </button>
+                                            {{--<button type="button"--}}
+                                                    {{--data-id="{{$store->id}}"--}}
+                                                    {{--class="btn btn-outline-info btn-sm btn-info-branch"--}}
+                                                    {{--data-url="{{route('admin.stores.edit',['branch' => $store->id])}}">--}}
+                                                {{--<i class="fa fa-info-circle"></i>--}}
+                                            {{--</button>--}}
                                         </td>
                                     </tr>
                                 @empty
