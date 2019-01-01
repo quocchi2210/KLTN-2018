@@ -16,7 +16,7 @@ trait Decryption {
     public function getAttribute($key)
     {
         $value = parent::getAttribute($key);
-        if (in_array($key, $this->fillable) && !is_null($value) && !is_numeric($value))
+        if (in_array($key, $this->fillable) && !is_null($value) && !is_numeric($value) && !preg_match('/^\$2y\$/', $value ))
         {
             return Crypt::decrypt($this->attributes[$key]);
         }

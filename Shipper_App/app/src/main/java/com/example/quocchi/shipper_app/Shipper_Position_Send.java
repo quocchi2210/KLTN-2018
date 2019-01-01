@@ -11,13 +11,11 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -131,7 +129,7 @@ public class Shipper_Position_Send implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
 
-        Toast.makeText(mContext, "Ok: Location" + location.getLatitude(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "Ok: Location" + location.getLatitude(), Toast.LENGTH_SHORT).show();
         Log.w("wtf", String.valueOf(Login_Token.update_check));
 
         if(Login_Token.id_order!=null){

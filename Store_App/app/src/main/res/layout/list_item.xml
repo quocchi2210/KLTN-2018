@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorWhite">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <LinearLayout
+            android:id="@+id/lnlo_order"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="70"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bill_of_lading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Order LUXABC12345"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:drawableLeft="@drawable/ic_account_box"
+                    android:drawablePadding="5dp"
+                    android:id="@+id/name_receive"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="70"
+                    android:text="Nguyễn Đào Anh Khoa"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:layout_width="0dip"
+                    android:layout_height="20dp"
+                    android:layout_weight="30"
+                    android:text="Pick up"
+                    android:id="@+id/btn_pick_up"
+                    android:background="@drawable/button"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:drawableLeft="@drawable/ic_phone_android"
+                android:drawablePadding="5dp"
+                android:id="@+id/mobile_receive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0937891233232"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:drawableLeft="@drawable/ic_place"
+                android:drawablePadding="5dp"
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="114E Cách Mạng Tháng Tám P10 Q3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="70"
+            android:layout_gravity="left"
+            android:text="Tổng tiền: "
+            android:background="@color/colorXamt"
+            android:padding="5dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/total_money"
+            android:textColor="@color/colorRed"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="30"
+            android:layout_gravity="right"
+            android:text="50.000 VND"
+            android:background="@color/colorXamt"
+            android:padding="5dp"/>
+
+    </LinearLayout>
+</LinearLayout>

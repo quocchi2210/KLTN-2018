@@ -1,26 +1,18 @@
 package com.example.quocchi.shipper_app;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +36,7 @@ public class Confirm_Fragment extends Fragment {
 
     //private ArrayList<Order> data = new ArrayList<Order>();
     private String hostname = "luxexpress.cf";
-
+    OrderAdapter test;
     String token = Login_Token.token;
 
     @Nullable
@@ -86,44 +78,47 @@ public class Confirm_Fragment extends Fragment {
                 final String yourResponse = response.body().string();
 
                 if (response.isSuccessful()) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Toast.makeText(getActivity(),"any mesage",Toast.LENGTH_LONG).show();
+                                JSONObject Jobject = null;
+                                try {
+                                    //ListView lv = findViewById(R.id.list_view);
+                                    Jobject = new JSONObject(yourResponse);
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Toast.makeText(getActivity(),"any mesage",Toast.LENGTH_LONG).show();
-                            JSONObject Jobject = null;
-                            try {
-                                //ListView lv = findViewById(R.id.list_view);
-                                Jobject = new JSONObject(yourResponse);
+                                    JSONArray Jarray = Jobject.getJSONArray("data");
 
-                                JSONArray Jarray = Jobject.getJSONArray("data");
+                                    ArrayList<Order> data = new ArrayList<Order>();
 
-                                ArrayList<Order> data = new ArrayList<Order>();
+                                    for (int i = 0; i < Jarray.length(); i++) {
+                                        JSONObject object = Jarray.getJSONObject(i);
+                                        Log.w("myApp", object.toString());
+                                        String billOfLading = object.getString("billOfLading");
+                                        String address = object.getString("addressReceiver");
+                                        String idOrder = object.getString("idOrder");
+                                        String idOrderStatus = object.getString("idOrderStatus");
+                                        String name_received = object.getString("nameReceiver");
+                                        String phone_received = object.getString("phoneReceiver");
+                                        String total_money = object.getString("totalMoney");
 
-                                for (int i = 0; i < Jarray.length(); i++) {
-                                    JSONObject object = Jarray.getJSONObject(i);
-                                    Log.w("myApp", object.toString());
-                                    String billOfLading = object.getString("billOfLading");
-                                    String address = object.getString("addressReceiver");
-                                    String idOrder = object.getString("idOrder");
-                                    String idOrderStatus = object.getString("idOrderStatus");
-                                    String name_received = object.getString("nameReceiver");
-                                    String phone_received = object.getString("phoneReceiver");
-                                    String total_money = object.getString("totalMoney");
+                                        data.add(new Order(billOfLading, address, idOrder, idOrderStatus, name_received, phone_received, total_money));
+                                    }
 
-                                    data.add(new Order(billOfLading, address, idOrder, idOrderStatus,name_received,phone_received,total_money));
+                                    test = new OrderAdapter(getActivity(), R.layout.list_item, data);
+
+                                    lv.setAdapter(test);
+                                    Log.w("Order: ", yourResponse.toString());
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                //new TaskItemAdapter(getActivity(), itemList)
-                                lv.setAdapter(new OrderAdapter(getActivity(), R.layout.list_item, data));
-                                Log.w("Order: ", yourResponse.toString());
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
 
-                        }
-                    });
-
+                        });
+                    }
                 } else {
 
                     Log.w("error order", yourResponse.toString());
@@ -238,23 +233,26 @@ public class Confirm_Fragment extends Fragment {
 
                             if (response.isSuccessful()) {
 
-//                                Confirm_Fragment.this.runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        JSONObject Jobject = null;
-//                                        try {
-//
-//                                            Jobject = new JSONObject(yourResponse);
-//
-//                                            Log.w("btn_done","Order: " + yourResponse.toString());
-//                                            finish();
-//                                            startActivity(getIntent());
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-//
-//                                    }
-//                                });
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        JSONObject Jobject = null;
+                                        try {
+
+                                            Jobject = new JSONObject(yourResponse);
+
+                                            Log.w("btn_done","Order: " + yourResponse.toString());
+
+
+                                            getActivity().finish();
+                                            startActivity( getActivity().getIntent());
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
                             } else {
                                 Log.w("myApp", "Order received: " + yourResponse.toString());
                             }

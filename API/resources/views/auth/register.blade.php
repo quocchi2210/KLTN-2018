@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Lux Express</title>
+    <title>GHC&K</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -28,11 +28,11 @@
 <body class="hold-transition register-page">
 <div class="register-box">
     <div class="register-logo">
-        <a href="{{ route('home') }}"><b>Lux </b>Express</a>
+        <a href="{{ route('home') }}"><b>GHC&K</b></a>
     </div>
 
     <div class="register-box-body">
-        <p class="login-box-msg">Register a new membership</p>
+        <p class="login-box-msg">Đăng Kí Tài Khoản</p>
 
         {!! Form::open(['route' => 'register', 'method' => 'POST']) !!}
         @if ($errors->any())
@@ -46,7 +46,7 @@
         @endif
         <div class="bussiness-info">
             <div class="form-group has-feedback">
-                {!! Form::label('store-name', 'Store Name') !!}
+                {!! Form::label('store-name', 'Tên cửa hàng') !!}
                 {!! Form::text(
                     'Store[name]',
                     old('Store[name]'),
@@ -61,7 +61,7 @@
                 <span class="glyphicon glyphicon-bold form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                {!! Form::label('full-name', 'Full Name') !!}
+                {!! Form::label('full-name', 'Tên đầy đủ') !!}
                 {!! Form::text(
                     'fullName[name]',
                     old('fullName[name]'),
@@ -94,7 +94,7 @@
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    {!! Form::label('store-name', 'Password') !!}
+                    {!! Form::label('store-name', 'Mật khẩu') !!}
                     {!! Form::password(
                                 'User[password]',
                                 [
@@ -107,7 +107,7 @@
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    {!! Form::label('store-name', 'Confirm') !!}
+                    {!! Form::label('store-name', 'Xác nhận mật khẩu') !!}
                     {!! Form::password(
                                 'User[password_confirmation]',
                                 [
@@ -121,11 +121,11 @@
                 </div>
             </div>
         <div class="form-group no-margin">
-            {!! Form::submit('Register', ['class' => 'btn btn-primary btn-block']) !!}
+            {!! Form::submit('Đăng Kí', ['class' => 'btn btn-primary btn-block']) !!}
         </div>
         @guest
             <div class="text-center small" style="margin-top: 1rem !important;">
-                Already have an account? <a href="{{ route('login') }}">Login here</a>
+                Bạn đã có tài khoản ? <a href="{{ route('login') }}">Đăng Nhập</a>
             </div>
         @endguest
         {!! Form::close() !!}

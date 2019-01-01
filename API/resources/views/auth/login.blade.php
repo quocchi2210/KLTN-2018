@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Lux Express</title>
+    <title>GHC&K</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -26,11 +26,11 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="{{ route('home') }}"><b>Lux</b>Express</a>
+        <a href="{{ route('home') }}"><b>GHC&K</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">Đăng nhập để tiếp tục</p>
 
         {!! Form::open(['route' => 'login', 'method' => 'POST']) !!}
         @if ($errors->any())
@@ -47,27 +47,27 @@
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-            {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) !!}
+            {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Mật khẩu']) !!}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
             <div class="col-xs-8">
                 <div class="checkbox icheck">
-                    <label>
-                        <input type="checkbox" name="remember"{{ old('remember') ? 'checked' : '' }}> Remember me
-                    </label>
+                    {{--<label>--}}
+                        {{--<input type="checkbox" name="remember"{{ old('remember') ? 'checked' : '' }}> Remember me--}}
+                    {{--</label>--}}
                 </div>
             </div>
             <!-- /.col -->
             <div class="col-xs-4">
-                <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                <button type="submit" class="btn btn-primary btn-flat">Đăng Nhập</button>
             </div>
             <!-- /.col -->
         </div>
         {!! Form::close() !!}
 
-        <a href="{{route('password.request')}}">I forgot my password</a><br>
-        <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
+        <a href="{{route('password.request')}}">Quên Mật Khẩu</a><br>
+        <a href="{{ route('register') }}" class="text-center">Đăng Kí Tài Khoản</a>
 
     </div>
     <!-- /.login-box-body -->

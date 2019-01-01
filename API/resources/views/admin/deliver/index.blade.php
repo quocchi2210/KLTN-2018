@@ -1,12 +1,11 @@
 @extends('layouts.admin.master')
 
-@section('title', 'Delivers')
+@section('title', 'Giao hàng')
 
 @section('content-header')
 
     <div style="margin-bottom: 25px;" class="form-group">
-        <button class="btn btn-success btn-sm pull-left" data-toggle="modal" data-target="#ModalAddDeliver">Add New
-            Deliver
+        <button class="btn btn-success btn-sm pull-left" data-toggle="modal" data-target="#ModalAddDeliver">Tạo tài khoản giao hàng
         </button>
     </div>
 @endsection
@@ -22,12 +21,12 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th scope="col">Name</th>
+                                    <th scope="col">Tên</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Day of Birth</th>
-                                    <th scope="col">License Plates</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Giới tính</th>
+                                    <th scope="col">Ngày sinh</th>
+                                    <th scope="col">Biển số xe</th>
+                                    <th scope="col">Chi tiết</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -62,7 +61,7 @@
                                     </tr>
                                 @empty
                                     <tr class="text-center">
-                                        <td colspan="5">No restaurants created</td>
+                                        <td colspan="5">Không có người giao hàng nào</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
@@ -83,7 +82,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"
-                        id="favoritesModalLabel">New Deliver</h4>
+                        id="favoritesModalLabel">Giao hàng mới</h4>
                     <button type="button" class="close"
                             data-dismiss="modal"
                             aria-label="Close">
@@ -93,7 +92,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-6">
-                            {!! Form::label('', 'Full Name:') !!}
+                            {!! Form::label('', 'Tên đầy đủ:') !!}
                             {!! Form::text('Deliver[full_name]', old('Deliver[full_name]'), [
                                 'class' => 'form-control',
                                 'placeholder' => 'John'
@@ -112,9 +111,9 @@
                     <button type="button"
                             class="btn btn-default pull-right"
                             data-dismiss="modal"
-                            style="margin-left: 5px">Cancel
+                            style="margin-left: 5px">Hủy
                     </button>
-                    {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                    {!! Form::submit('Lưu', ['class' => 'btn btn-primary']) !!}
                 </div>
             </div>
         </div>

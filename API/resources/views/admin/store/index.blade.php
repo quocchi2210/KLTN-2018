@@ -3,7 +3,7 @@
 
 @extends('layouts.admin.master')
 
-@section('title', 'Stores')
+@section('title', 'Cửa hàng')
 
 @section('content')
     <div class="box box-primary">
@@ -16,12 +16,12 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Tên đầy đủ</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Type Store</th>
-                                    <th scope="col">Address Store</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Loại cửa hàng</th>
+                                    <th scope="col">Địa chỉ cửa hàng</th>
+                                    <th scope="col">Miêu tả</th>
+                                    <th scope="col">Chi tiết</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -56,7 +56,7 @@
                                     </tr>
                                 @empty
                                     <tr class="text-center">
-                                        <td colspan="5">No restaurants created</td>
+                                        <td colspan="5">Không có cửa hàng nào</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

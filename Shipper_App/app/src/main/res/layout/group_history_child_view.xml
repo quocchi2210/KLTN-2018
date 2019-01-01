@@ -47,15 +47,6 @@
                     android:layout_marginTop="10dp"
                     />
 
-                <Button
-                    android:layout_marginTop="10dp"
-                    android:layout_width="0dip"
-                    android:layout_height="20dp"
-                    android:layout_weight="30"
-                    android:text="Pick up"
-                    android:id="@+id/btn_pick_up"
-                    android:background="@drawable/button"/>
-
             </LinearLayout>
 
             <TextView

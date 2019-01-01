@@ -48,7 +48,8 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".Register_Activity" />
-        <activity android:name=".Fragment_Activity"></activity>
+        <activity android:name=".Fragment_Activity" />
+        <activity android:name=".Home_Activity"></activity>
     </application>
 
 </manifest>

@@ -116,14 +116,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"
-                        id="modalLabel">Error</h4>
+                        id="modalLabel">Lỗi</h4>
                     <button type="button" class="close"
                             data-dismiss="modal"
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <h6>Your account is not activated. Please check your email to activated !!!</h6>
+                    <h6>Tài khoản của bạn chưa xác thực. Kiểm tra email của bạn !</h6>
                 </div>
             </div>
         </div>
@@ -280,9 +280,9 @@
                             <button type="button"
                                     class="btn btn-default pull-right"
                                     style="margin-left: 5px"
-                                    data-dismiss="modal">Close
+                                    data-dismiss="modal">Hủy
                             </button>
-                              {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                              {!! Form::submit('Lưu', ['class' => 'btn btn-primary']) !!}
                         </div>
                     </div>
                 </div>

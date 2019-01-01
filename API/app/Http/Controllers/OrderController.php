@@ -32,15 +32,26 @@ class OrderController extends Controller
         return view('order.index', ['orders' => $orders,'status' => $status,'serviceTypes'=>$serviceTypes,'note'=>$note]);
     }
 
+    public function getidOrderStatus($bill)
+    {
+        $billOfLadings = Order::all();
+        foreach ($billOfLadings as $billOfLading) {
+            if($bill === $billOfLading['billOfLading'])
+                return $idOrderStatus = $billOfLading['idOrder'];
+        }
+
+    }
+
     public function tracking(Request $request)
     {
         $bill = $request->get('bill_of_lading');
         if ($bill){
-            $idOrderStatus = DB::table('orders')->where('billOfLading',$bill)->first();
-            if ($idOrderStatus){
-                $status = DB::table('order_status')->where('idStatus',$idOrderStatus->idOrderStatus)->first();
+            $idOrderStatus = $this->getidOrderStatus($bill);
+            $order = Order::find($idOrderStatus);
+            if ($order){
+                $status = DB::table('order_status')->where('idStatus',$order->idOrderStatus)->first();
                 if ($status)
-                    return view('tracking.trackingStatus', ['status' => $status->statusName,'bill'=>$bill,'nameReceiver'=>$idOrderStatus->nameReceiver]);
+                    return view('tracking.trackingStatus', ['status' => $status->statusName,'bill'=>$bill,'nameReceiver'=>$order['nameReceiver']]);
             }
             else
                 return view('handleError.notfoundbill',['bill'=>$bill]);

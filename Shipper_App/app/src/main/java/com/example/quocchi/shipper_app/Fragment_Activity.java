@@ -20,7 +20,6 @@ public class Fragment_Activity extends AppCompatActivity {
 
         initUI();
 
-
     }
 
     private void initUI(){
@@ -48,9 +47,8 @@ public class Fragment_Activity extends AppCompatActivity {
 
         public Fragment_Adapter(FragmentManager fm){
             super(fm);
-            mConfirmFrament = new Confirm_Fragment();
-            mPickupFragment = new Pickup_Fragment();
-            mDeliveryFragment = new Delivery_Fragment();
+            //mConfirmFrament = new Confirm_Fragment();
+//           // mDeliveryFragment = new Delivery_Fragment();
             //mDoneFragment = new Done_Fragment();
         }
 
@@ -58,11 +56,11 @@ public class Fragment_Activity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if(position == 0){
-                return mConfirmFrament;
+                return new Confirm_Fragment();
             }else if(position == 1){
-                return mPickupFragment;
+                return new Pickup_Fragment();
             }else if(position == 2){
-                return mDeliveryFragment;
+                return new Delivery_Fragment();
             }
 //            else if(position == 3){
 //                return mDoneFragment;
