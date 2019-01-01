@@ -86,6 +86,63 @@ class ShipperController extends Controller {
 
 	/**
 	 * @SWG\POST(
+	 *   path="/api/shipper/showProfileShipper",
+	 *     tags={"Shipper"},
+	 *   summary="showProfileShipper",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+	public function showProfileShipper(){
+		if ($request->isMethod('post')) {
+			$idUser = auth()->user()->idUser;
+
+			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
+
+			if ($result_shipper->count() > 0) {
+
+				$idShipper = $result_shipper[0]->idShipper;
+
+				$result_shipper = DB::table('shippers')->where('idShipper', $idShipper)->get();
+
+				$result_user = DB::table('users')->where('idUser', $idUser)->get();
+
+				if ($affected_store) {
+					return response()->json([
+						'error' => false,
+						'data' => $result_shipper,
+						'data1' => $result_user,
+						'errors' => null,
+					], 400);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => $result_shipper,
+						'data1' => $result_user,
+						'errors' => null,
+					], 400);
+				}
+
+
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	/**
+	 * @SWG\POST(
 	 *   path="/api/shipper/updateProfileShipper",
 	 *     tags={"Shipper"},
 	 *   summary="Show Profile",
@@ -123,12 +180,14 @@ class ShipperController extends Controller {
 	 *   ),
 	 *	 security={{"api_key":{}}}
 	 * )
-	 */public function updateProfileShipper(Request $request) {
+	 */
+	public function updateProfileShipper(Request $request) {
 		if ($request->isMethod('post')) {
 			$license_plates = $request->get('license_plates');
 			$date_of_Birth = $request->get('date_of_Birth');
 			$gender = $request->get('gender');
 			$id_number = $request->get('id_number');
+			$full_name = $request->get('full_name');
 
 			$idUser = auth()->user()->idUser;
 
@@ -143,22 +202,23 @@ class ShipperController extends Controller {
 				]);
 
 				$affected_user = DB::table('users')->where('idUser', $idUser)->update([
-					'idNumberIndex' => encrypt($id_number),
+					'idNumber' => encrypt($id_number),
 					'dateOfBirth' => encrypt($date_of_Birth),
 					'gender' => encrypt($gender),
+					'fullName' => encrypt($full_name),
 				]);
 
 				if ($affected_store) {
 					return response()->json([
 						'error' => false,
-						'data' => $affected_store,
+						'data' => $affected_shipper,
 						'data1' => $affected_user,
 						'errors' => null,
 					], 400);
 				} else {
 					return response()->json([
 						'error' => true,
-						'data' => $affected_store,
+						'data' => $affected_shipper,
 						'data1' => $affected_user,
 						'errors' => null,
 					], 400);
@@ -578,6 +638,8 @@ class ShipperController extends Controller {
 				->where('idShipper', $idShipper)
 				->where('idOrderStatus', Config::get('constants.status_type.delivery'))
 				->get();
+
+			myDecrypt($result_order);
 
 			return response()->json([
 				'error' => false,

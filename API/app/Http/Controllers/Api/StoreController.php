@@ -387,6 +387,258 @@ class StoreController extends Controller {
 		}
 	}
 
+	public function showOrder_pending(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = auth()->user()->idUser;
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$idStore = $result_store[0]->idStore;
+			
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('orders.idStore', $idStore)
+					->where('idOrderStatus', Config::get('constants.status_type.pending'))
+					->get();
+
+				myDecrypt($users);
+		
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	public function showOrder_confirm(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = auth()->user()->idUser;
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$idStore = $result_store[0]->idStore;
+			
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('orders.idStore', $idStore)
+					->where('idOrderStatus', Config::get('constants.status_type.confirm'))
+					->get();
+
+				myDecrypt($users);
+		
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	public function showOrder_pickup(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = auth()->user()->idUser;
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$idStore = $result_store[0]->idStore;
+			
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('orders.idStore', $idStore)
+					->where('idOrderStatus', Config::get('constants.status_type.pickup'))
+					->get();
+
+				myDecrypt($users);
+		
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	public function showOrder_delivery(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = auth()->user()->idUser;
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$idStore = $result_store[0]->idStore;
+			
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('orders.idStore', $idStore)
+					->where('idOrderStatus', Config::get('constants.status_type.delivery'))
+					->get();
+
+				myDecrypt($users);
+		
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	public function showOrder_done(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = auth()->user()->idUser;
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$idStore = $result_store[0]->idStore;
+			
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('orders.idStore', $idStore)
+					->where('idOrderStatus', Config::get('constants.status_type.done'))
+					->get();
+
+				myDecrypt($users);
+		
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
+	public function showOrder_cancel(Request $request) {
+		if ($request->isMethod('post')) {
+
+			$idUser = auth()->user()->idUser;
+
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
+			if ($result_store->count() > 0) {
+
+				$idStore = $result_store[0]->idStore;
+			
+				$users = DB::table('orders')
+					->join('stores', 'stores.idStore', '=', 'orders.idStore')
+					->where('orders.idStore', $idStore)
+					->where('idOrderStatus', Config::get('constants.status_type.cancel'))
+					->get();
+
+				myDecrypt($users);
+		
+				if ($users) {
+					return response()->json([
+						'error' => false,
+						'data' => $users,
+						'errors' => null,
+					], 200);
+				} else {
+					return response()->json([
+						'error' => true,
+						'data' => null,
+						'errors' => null,
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'error' => true,
+					'data' => 'count > 0',
+					'errors' => null,
+				], 400);
+			}
+		}
+	}
+
 	/**
 	 * @SWG\POST(
 	 *   path="/api/store/showDetailOrder",
