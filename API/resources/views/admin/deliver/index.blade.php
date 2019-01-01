@@ -26,7 +26,7 @@
                                     <th scope="col">Giới tính</th>
                                     <th scope="col">Ngày sinh</th>
                                     <th scope="col">Biển số xe</th>
-                                    <th scope="col">Chi tiết</th>
+                                    {{--<th scope="col">Chi tiết</th>--}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -51,12 +51,12 @@
                                                     {{--data-url="{{domain_route('business.admin.branches.edit',['branch' => $businessBranch->id])}}">--}}
                                                 {{--<i class="fa fa-trash"></i>--}}
                                             {{--</button>--}}
-                                            <button type="button"
-                                                    data-id="{{$deliver->idUser}}"
-                                                    class="btn btn-outline-info btn-sm btn-info-branch"
-                                                    data-url="{{route('admin.delivers.edit',['branch' => $deliver->idUser])}}">
-                                                <i class="fa fa-info-circle"></i>
-                                            </button>
+                                            {{--<button type="button"--}}
+                                                    {{--data-id="{{$deliver->idUser}}"--}}
+                                                    {{--class="btn btn-outline-info btn-sm btn-info-branch"--}}
+                                                    {{--data-url="{{route('admin.delivers.edit',['branch' => $deliver->idUser])}}">--}}
+                                                {{--<i class="fa fa-info-circle"></i>--}}
+                                            {{--</button>--}}
                                         </td>
                                     </tr>
                                 @empty
@@ -82,7 +82,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"
-                        id="favoritesModalLabel">Giao hàng mới</h4>
+                        id="favoritesModalLabel">Tài khoản giao hàng mới</h4>
                     <button type="button" class="close"
                             data-dismiss="modal"
                             aria-label="Close">

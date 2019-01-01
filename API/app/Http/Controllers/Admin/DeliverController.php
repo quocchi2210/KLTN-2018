@@ -47,10 +47,13 @@ class DeliverController extends Controller
         $deliver = $request->get('Deliver');
         $password = str_random(10);
         $user = User::create([
-            'email' => $deliver['email'],
-            'fullName' => $deliver['full_name'],
+            'email' => encrypt($deliver['email']),
+            'fullName' => encrypt($deliver['full_name']),
             'roleId' => 2,
             'password' => bcrypt($password)
+        ]);
+        Deliver::create([
+            'idUser' => $user->idUser
         ]);
 
         $verifyUser = VerifyResetUser::create([

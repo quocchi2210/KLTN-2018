@@ -64,7 +64,7 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::find($id);
-        $status = DB::table('order_status')->whereIn('statusName', ['Confirm', 'Cancel'])->pluck('statusName', 'idStatus');
+        $status = DB::table('order_status')->whereIn('statusName', ['Đã xác nhận', 'Đã Hủy'])->pluck('statusName', 'idStatus');
         $deliver = DB::table('shippers')->pluck('idShipper', 'idShipper');
         return response()->json(view('admin.order.edit',
             ['deliver' => $deliver,

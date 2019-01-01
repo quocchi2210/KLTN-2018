@@ -9,7 +9,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"
-                    id="modalLabel">Order</h4>
+                    id="modalLabel">Xóa đơn hàng</h4>
                 <button type="button" class="close"
                         data-dismiss="modal"
                         aria-label="Close">
@@ -17,14 +17,14 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(array('url' => route('orders.destroy',['order' => $order->idOrder]) , 'method' => 'DELETE')) !!}
-                <h6>Are you sure that you want to delete this order?</h6>
+                <h6>Bạn có muốn xóa đơn hàng này không?</h6>
                 <div class="form-group">
                     <div class="modal-footer">
                         <span class="pull-right">
-                                  {!! Form::submit('Yes', ['class' => 'btn btn-primary btn-submit']) !!}
+                                  {!! Form::submit('Có', ['class' => 'btn btn-primary btn-submit']) !!}
                             <button type="button"
                                     class="btn btn-default"
-                                    data-dismiss="modal">No</button>
+                                    data-dismiss="modal">Không</button>
                             </span>
                     </div>
                 </div>

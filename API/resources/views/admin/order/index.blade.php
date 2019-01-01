@@ -46,7 +46,7 @@
                                                             <th scope="col">Mã vận đơn</th>
                                                             <th scope="col">Tổng tiền</th>
                                                             <th scope="col">Ngày tao đơn hàng</th>
-                                                            <th scope="col">Chi tiết</th>
+                                                            <th scope="col">Xác nhận</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
@@ -72,12 +72,12 @@
                                                                     {{--<i class="fa fa-trash"></i>--}}
                                                                     {{--</button>--}}
                                                                     {{--@endif--}}
-                                                                    <button type="button"
-                                                                            data-id="{{$statusOrder->idOrder}}"
-                                                                            class="btn btn-outline-info btn-sm btn-info-order"
-                                                                            data-url="{{route('admin.orders.show',['order' => $statusOrder->idOrder])}}">
-                                                                        <i class="fa fa-info-circle"></i>
-                                                                    </button>
+                                                                    {{--<button type="button"--}}
+                                                                            {{--data-id="{{$statusOrder->idOrder}}"--}}
+                                                                            {{--class="btn btn-outline-info btn-sm btn-info-order"--}}
+                                                                            {{--data-url="{{route('admin.orders.show',['order' => $statusOrder->idOrder])}}">--}}
+                                                                        {{--<i class="fa fa-info-circle"></i>--}}
+                                                                    {{--</button>--}}
                                                                 </td>
                                                             </tr>
                                                         @empty

@@ -1,6 +1,6 @@
 @extends('layouts.masters')
 
-@section('title', 'Bussiness Management')
+@section('title', 'Cửa hàng')
 
 @section('content')
     <!-- Content Header (Page header) -->
