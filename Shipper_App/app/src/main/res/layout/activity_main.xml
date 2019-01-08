@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity"
-    android:background="@color/colorWhite">
+    android:background="@drawable/bgimage">
 
 
     <TextView
@@ -48,16 +48,8 @@
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_register"
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="30"
-            android:text="ĐĂNG KÝ"
-            android:background="@drawable/button"/>
 
         <Button
             android:layout_marginLeft="20dp"
@@ -74,6 +66,7 @@
             android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_weight="30"
+            android:layout_marginEnd="18dp"
             android:text="THOÁT"
             android:background="@drawable/button"/>
 

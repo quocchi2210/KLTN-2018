@@ -39,7 +39,7 @@ public class Fragment_Order extends Fragment {
 
     private class Fragment_Adapter extends FragmentStatePagerAdapter {
 
-        private String listTab[] = {"Confirm","Pickup","Delivery"};
+        private String listTab[] = {"Đã xác nhận","Đã lấy hàng","Đang giao hàng"};
         private Confirm_Fragment mConfirmFrament;
         private Pending_Fragment mPendingFragment;
         private Pickup_Fragment mPickupFragment;

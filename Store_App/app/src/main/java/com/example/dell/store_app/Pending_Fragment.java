@@ -171,12 +171,12 @@ public class Pending_Fragment extends Fragment {
             TextView name_receive = (TextView) convertView.findViewById(R.id.name_receive);
             TextView total_money = (TextView) convertView.findViewById(R.id.total_money);
 
-            Button btn_pick_up = (Button) convertView.findViewById(R.id.btn_pick_up);
+            //Button btn_pick_up = (Button) convertView.findViewById(R.id.btn_pick_up);
 
             bill_of_lading.setText("Order " + arrayOrder.get(position).getBill_of_lading());
             address.setText(arrayOrder.get(position).getAddress());
-            mobile_receive.setText(arrayOrder.get(position).getName_received());
-            name_receive.setText(arrayOrder.get(position).getPhone_received());
+            mobile_receive.setText(arrayOrder.get(position).getPhone_received());
+            name_receive.setText(arrayOrder.get(position).getName_received());
             total_money.setText(arrayOrder.get(position).getTotal_money() + " VNĐ");
 
             //total_money.setText();

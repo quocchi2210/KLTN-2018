@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity"
-    android:background="@color/colorWhite">
+    android:background="@drawable/bgimage">
 
 
     <TextView
@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30dp"
-        android:text="ĐĂNG NHẬP"/>
+        android:text="ĐĂNG NHẬP"
+        android:textColor="@color/colorAccent"/>
 
     <EditText
         android:layout_marginTop="50dp"
@@ -29,6 +30,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:padding="6dp"
+        android:paddingStart="15dp"
         />
 
     <EditText
@@ -42,6 +44,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:padding="6dp"
+        android:paddingStart="15dp"
         />
 
     <TextView
@@ -51,6 +54,7 @@
         android:layout_height="wrap_content"
         android:text="Quên mật khẩu?"
         android:layout_marginTop="10dp"
+        android:textColor="@color/colorRed"
         />
 
     <LinearLayout
@@ -59,7 +63,7 @@
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:orientation="horizontal">
 
         <Button
@@ -68,7 +72,8 @@
             android:layout_height="fill_parent"
             android:layout_weight="30"
             android:text="ĐĂNG KÝ"
-            android:background="@drawable/button"/>
+            android:background="@drawable/button"
+            android:textColor="@color/colorWhite"/>
 
         <Button
             android:layout_marginLeft="20dp"
@@ -78,15 +83,8 @@
             android:layout_height="fill_parent"
             android:layout_weight="30"
             android:text="ĐĂNG NHẬP"
-            android:background="@drawable/button"/>
-
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="30"
-            android:text="THOÁT"
-            android:background="@drawable/button"/>
+            android:background="@drawable/button"
+            android:textColor="@color/colorWhite"/>
 
     </LinearLayout>
 

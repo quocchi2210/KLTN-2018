@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         btn_login = (Button)findViewById(R.id.btn_login);
-        btn_register = (Button)findViewById(R.id.btn_register);
+        //btn_register = (Button)findViewById(R.id.btn_register);
         btn_logout = (Button)findViewById(R.id.btn_logout);
     }
 
@@ -103,12 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            btn_register.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    t.cancel(false);
-                }
-            });
+//            btn_register.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    t.cancel(false);
+//                }
+//            });
 
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override

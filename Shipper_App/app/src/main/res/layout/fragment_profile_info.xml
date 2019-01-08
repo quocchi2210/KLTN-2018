@@ -104,11 +104,13 @@
         android:id="@+id/btn_done"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:text="DONE"
+        android:text="Lưu"
         android:layout_width="match_parent"
         android:background="@drawable/button"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"/>
+
+
 
 
 </LinearLayout>
