@@ -176,8 +176,8 @@ public class Confirm_Fragment extends Fragment {
 
             bill_of_lading.setText("Order " + arrayOrder.get(position).getBill_of_lading());
             address.setText(arrayOrder.get(position).getAddress());
-            mobile_receive.setText(arrayOrder.get(position).getName_received());
-            name_receive.setText(arrayOrder.get(position).getPhone_received());
+            mobile_receive.setText(arrayOrder.get(position).getPhone_received());
+            name_receive.setText(arrayOrder.get(position).getName_received());
             total_money.setText(arrayOrder.get(position).getTotal_money() + " VNĐ");
 
             //total_money.setText();

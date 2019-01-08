@@ -72,38 +72,38 @@ public class MainActivity extends AppCompatActivity {
         edt_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         btn_login = (Button)findViewById(R.id.btn_login);
         btn_register = (Button)findViewById(R.id.btn_register);
-        btn_logout = (Button)findViewById(R.id.btn_logout);
+        //btn_logout = (Button)findViewById(R.id.btn_logout);
 
         txt_forgot_password = (TextView)findViewById(R.id.txt_forgot_password);
     }
 
     private void control_button(){
         try{
-            btn_logout.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog);
-                    builder.setTitle("Bạn có chắc muốn thoát khỏi chương trình.");
-                    builder.setMessage("Hãy lựa chọn bên dưới để xác nhận");
-                    builder.setIcon(android.R.drawable.ic_dialog_alert);
-
-                    builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            onBackPressed();
-                        }
-                    });
-
-                    builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-
-                    builder.show();
-                }
-            });
+//            btn_logout.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View view){
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog);
+//                    builder.setTitle("Bạn có chắc muốn thoát khỏi chương trình.");
+//                    builder.setMessage("Hãy lựa chọn bên dưới để xác nhận");
+//                    builder.setIcon(android.R.drawable.ic_dialog_alert);
+//
+//                    builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            onBackPressed();
+//                        }
+//                    });
+//
+//                    builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                        }
+//                    });
+//
+//                    builder.show();
+//                }
+//            });
 
             btn_register.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -279,10 +279,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show(){
-        Intent intent = new Intent(MainActivity.this, Store_Manage_Activity.class);
+        //Intent intent = new Intent(MainActivity.this, Store_Manage_Activity.class);
         //Intent intent = new Intent(MainActivity.this, Add_Activity.class);
         //Intent intent = new Intent(MainActivity.this, Register_Activity.class);
         //Intent intent = new Intent(MainActivity.this, Updateprofile_Activity.class);
+        Intent intent = new Intent(MainActivity.this, Home_Activity.class);
         startActivity(intent);
     }
 

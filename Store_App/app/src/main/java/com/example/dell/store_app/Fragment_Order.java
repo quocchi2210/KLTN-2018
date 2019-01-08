@@ -31,15 +31,19 @@ public class Fragment_Order extends Fragment {
         TabLayout tabLayout = (TabLayout) mRootView.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(mVpDemo);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_black_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home_black_24dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_home_black_24dp);
+//        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_black_24dp);
+//        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home_black_24dp);
+//        tabLayout.getTabAt(2).setIcon(R.drawable.ic_home_black_24dp);
+//        tabLayout.getTabAt(3).setIcon(R.drawable.ic_home_black_24dp);
+//        tabLayout.getTabAt(4).setIcon(R.drawable.ic_home_black_24dp);
+//        tabLayout.getTabAt(5).setIcon(R.drawable.ic_home_black_24dp);
+
 
     }
 
     private class Fragment_Adapter extends FragmentStatePagerAdapter {
 
-        private String listTab[] = {"Confirm","Pickup","Delivery"};
+        private String listTab[] = {"Chờ xác nhận","Đã xác nhận","Đã lấy hàng","Đang giao hàng","Đã giao hàng","Đã hủy"};
 //        private Confirm_Fragment mConfirmFrament;
 //        private Pending_Fragment mPendingFragment;
 //        private Pickup_Fragment mPickupFragment;
@@ -58,17 +62,19 @@ public class Fragment_Order extends Fragment {
         @Override
         public Fragment getItem(int position) {
             if(position == 0){
-               // return new Confirm_Fragment();
+                return new Pending_Fragment();
             }else if(position == 1){
-                //return new Pickup_Fragment();
+                return new Confirm_Fragment();
             }else if(position == 2){
-                //return new Delivery_Fragment();
+                return new Pickup_Fragment();
+            }else if(position == 3){
+                return new Delivery_Fragment();
             }
-//            else if(position == 3){
-//                return mDoneFragment;
-//            }else if(position == 4) {
-//                return mCancelFragment;
-//            }
+            else if(position == 4){
+                return new Done_Fragment();
+            }else if(position == 5) {
+                return new Cancel_Fragment();
+            }
             return null;
         }
 

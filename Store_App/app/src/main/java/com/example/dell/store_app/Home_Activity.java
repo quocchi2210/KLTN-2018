@@ -31,8 +31,8 @@ public class Home_Activity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewpager_home);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home_black_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home_black_24dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_home_black_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_format_align_left_black_24dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_account_box_24);
 
     }
 

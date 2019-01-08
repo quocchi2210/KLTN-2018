@@ -52,7 +52,7 @@
                     android:layout_width="0dip"
                     android:layout_height="20dp"
                     android:layout_weight="30"
-                    android:text="Pick up"
+                    android:text="Lấy hàng"
                     android:id="@+id/btn_pick_up"
                     android:background="@drawable/button"/>
 
