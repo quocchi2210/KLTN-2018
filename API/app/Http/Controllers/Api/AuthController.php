@@ -101,11 +101,14 @@ class AuthController extends Controller {
 			'email.regex' => 'The email is not correct format',
 			'password.required' => 'The password is required',
 		];
+
 		$validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USER_CHECK'], $message);
 		if ($validator->fails()) {
 			return $this->errorWithValidation($validator);
 		}
+
 		$input = $request->only('email', 'password');
+		   
 		$jwt_token = null;
 
 		if (!$jwt_token = JWTAuth::attempt($input)) {

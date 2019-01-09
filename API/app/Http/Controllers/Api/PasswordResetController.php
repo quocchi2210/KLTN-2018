@@ -8,6 +8,7 @@ use App\User;
 use App\VerifyResetUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class PasswordResetController extends Controller {
 	/** @SWG\Post(
@@ -34,6 +35,15 @@ class PasswordResetController extends Controller {
 		$errorCode = $this->apiErrorCodes;
 		$email = $request->get('email');
 		$user = User::where('email', $email)->first();
+
+		$test = User::all();
+
+		foreach ($test as $user) {
+            // if ($email === $user['email']) {
+            //     //Log::debug("wtf ". print_r($user,1));
+            // }
+        }
+
 		if ($user) {
 
 			$resetPassword = VerifyResetUser::create([
@@ -41,7 +51,9 @@ class PasswordResetController extends Controller {
 				'token' => str_random(32),
 				'reset' => 1,
 			]);
+			Log::debug("wtf ". print_r($user->email,1));
 			Mail::to($user->email)->send(new ResetPassword($user, $resetPassword));
+
 			return response()->json([
 				'error' => false,
 				'data' => 'Your new password sending successful!!! Check your email',
