@@ -210,13 +210,13 @@ class ShipperController extends Controller {
 					'fullName' => encrypt($full_name),
 				]);
 
-				if ($affected_store) {
+				if ($affected_shipper && $affected_user) {
 					return response()->json([
 						'error' => false,
 						'data' => $affected_shipper,
 						'data1' => $affected_user,
 						'errors' => null,
-					], 400);
+					], 200);
 				} else {
 					return response()->json([
 						'error' => true,
