@@ -114,7 +114,10 @@ class ShipperController extends Controller {
 
 				$result_user = DB::table('users')->where('idUser', $idUser)->get();
 
-				if ($affected_store) {
+				myDecrypt($result_shipper);
+				myDecrypt($result_user);
+
+				if ($result_user && $result_shipper) {
 					return response()->json([
 						'error' => false,
 						'data' => $result_shipper,
