@@ -39,6 +39,6 @@ function myDecrypt($str_array) {
 		}
 	}
 
-	return $str;
+	//return $str;
 }
 ?>
