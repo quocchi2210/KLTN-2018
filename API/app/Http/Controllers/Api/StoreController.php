@@ -293,11 +293,11 @@ class StoreController extends Controller {
 
 			$idUser = auth()->user()->idUser;
 
-			$store_id = $result_store[0]->idStore;
-
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
 			if ($result_store->count() > 0) {
+
+				$store_id = $result_store[0]->idStore;
 
 				$affected = DB::table('stores')
 					->join('users', 'stores.idUser', '=', 'users.idUser')
