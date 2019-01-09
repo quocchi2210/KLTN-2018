@@ -25,7 +25,8 @@
         <activity android:name=".Edit_Activity" />
         <activity android:name=".Register_Activity" />
         <activity android:name=".Updateprofile_Activity" />
-        <activity android:name=".Home_Activity"></activity>
+        <activity android:name=".Home_Activity" />
+        <activity android:name=".Search_Activity"></activity>
     </application>
 
 </manifest>
