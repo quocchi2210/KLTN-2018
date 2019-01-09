@@ -43,15 +43,19 @@ class ForgotPasswordController extends Controller
     {
         $this->validateEmail($request);
         $email = $request->only('email');
-        $user = User::where('email',$email['email'])->first();
-        $resetPassword = VerifyResetUser::create([
-            'user_id' => $user->idUser,
-            'token' => str_random(32),
-            'reset' => 1
-        ]);
-        Mail::to($user->email)->send(new ResetPassword($user,$resetPassword));
-        return redirect(route('home'));
+        $users = User::all();
+        foreach ($users as $user) {
+            if ($email['email'] === $user['email']) {
+                $resetPassword = VerifyResetUser::create([
+                    'user_id' => $user->idUser,
+                    'token' => str_random(32),
+                    'reset' => 1
+                ]);
+                Mail::to($user->email)->send(new ResetPassword($user,$resetPassword));
+                return redirect(route('home'));
+            }
 
+        }
     }
 
     protected function validateEmail(Request $request)
