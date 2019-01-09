@@ -291,27 +291,40 @@ class StoreController extends Controller {
 	public function showProfileStore(Request $request) {
 		if ($request->isMethod('post')) {
 
-			$user_id = $request->authen_id;
-			$store_id = 1;
+			$idUser = auth()->user()->idUser;
 
-			$affected = DB::table('stores')
-				->join('users', 'stores.idUser', '=', 'users.idUser')
-				->where('idStore', 1)
-				->get();
+			$store_id = $result_store[0]->idStore;
 
-			myDecrypt($affected);
+			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 
-			if ($affected) {
-				return response()->json([
-					'error' => false,
-					'data' => $affected,
-					'errors' => null,
-				], 200);
+			if ($result_store->count() > 0) {
+
+				$affected = DB::table('stores')
+					->join('users', 'stores.idUser', '=', 'users.idUser')
+					->where('idStore', 1)
+					->get();
+
+				myDecrypt($affected);
+
+				if ($affected) {
+					return response()->json([
+						'error' => false,
+						'data' => $affected,
+						'errors' => null,
+					], 200);
+				} else {
+
+					response()->json([
+						'error' => true,
+						'data' => $affected,
+						'errors' => null,
+					], 400);
+				}
+
 			} else {
-
-				response()->json([
+				return response()->json([
 					'error' => true,
-					'data' => $affected,
+					'data' => 'count > 0',
 					'errors' => null,
 				], 400);
 			}
