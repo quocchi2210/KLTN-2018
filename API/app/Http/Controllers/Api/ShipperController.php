@@ -123,7 +123,7 @@ class ShipperController extends Controller {
 						'data' => $result_shipper,
 						'data1' => $result_user,
 						'errors' => null,
-					], 400);
+					], 200);
 				} else {
 					return response()->json([
 						'error' => true,
