@@ -387,6 +387,23 @@ class StoreController extends Controller {
 		}
 	}
 
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/showOrder_pending",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
+
 	public function showOrder_pending(Request $request) {
 		if ($request->isMethod('post')) {
 
@@ -397,7 +414,7 @@ class StoreController extends Controller {
 			if ($result_store->count() > 0) {
 
 				$idStore = $result_store[0]->idStore;
-			
+
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('orders.idStore', $idStore)
@@ -405,7 +422,7 @@ class StoreController extends Controller {
 					->get();
 
 				myDecrypt($users);
-		
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -428,6 +445,23 @@ class StoreController extends Controller {
 			}
 		}
 	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/showOrder_confirm",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
 
 	public function showOrder_confirm(Request $request) {
 		if ($request->isMethod('post')) {
@@ -439,7 +473,7 @@ class StoreController extends Controller {
 			if ($result_store->count() > 0) {
 
 				$idStore = $result_store[0]->idStore;
-			
+
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('orders.idStore', $idStore)
@@ -447,7 +481,7 @@ class StoreController extends Controller {
 					->get();
 
 				myDecrypt($users);
-		
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -470,6 +504,23 @@ class StoreController extends Controller {
 			}
 		}
 	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/showOrder_pickup",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
 
 	public function showOrder_pickup(Request $request) {
 		if ($request->isMethod('post')) {
@@ -481,7 +532,7 @@ class StoreController extends Controller {
 			if ($result_store->count() > 0) {
 
 				$idStore = $result_store[0]->idStore;
-			
+
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('orders.idStore', $idStore)
@@ -489,7 +540,7 @@ class StoreController extends Controller {
 					->get();
 
 				myDecrypt($users);
-		
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -512,6 +563,23 @@ class StoreController extends Controller {
 			}
 		}
 	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/showOrder_delivery",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
 
 	public function showOrder_delivery(Request $request) {
 		if ($request->isMethod('post')) {
@@ -523,7 +591,7 @@ class StoreController extends Controller {
 			if ($result_store->count() > 0) {
 
 				$idStore = $result_store[0]->idStore;
-			
+
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('orders.idStore', $idStore)
@@ -531,7 +599,7 @@ class StoreController extends Controller {
 					->get();
 
 				myDecrypt($users);
-		
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -554,6 +622,23 @@ class StoreController extends Controller {
 			}
 		}
 	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/showOrder_done",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
 
 	public function showOrder_done(Request $request) {
 		if ($request->isMethod('post')) {
@@ -565,7 +650,7 @@ class StoreController extends Controller {
 			if ($result_store->count() > 0) {
 
 				$idStore = $result_store[0]->idStore;
-			
+
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('orders.idStore', $idStore)
@@ -573,7 +658,7 @@ class StoreController extends Controller {
 					->get();
 
 				myDecrypt($users);
-		
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -597,6 +682,23 @@ class StoreController extends Controller {
 		}
 	}
 
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/showOrder_cancel",
+	 *     tags={"Store"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *     security={{"api_key":{}}}
+	 * )
+	 */
+
 	public function showOrder_cancel(Request $request) {
 		if ($request->isMethod('post')) {
 
@@ -607,7 +709,7 @@ class StoreController extends Controller {
 			if ($result_store->count() > 0) {
 
 				$idStore = $result_store[0]->idStore;
-			
+
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('orders.idStore', $idStore)
@@ -615,7 +717,7 @@ class StoreController extends Controller {
 					->get();
 
 				myDecrypt($users);
-		
+
 				if ($users) {
 					return response()->json([
 						'error' => false,
@@ -1412,6 +1514,82 @@ class StoreController extends Controller {
 
 		}
 
+	}
+
+	/**
+	 * @SWG\POST(
+	 *   path="/api/store/searchBilloflading",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="bill_of_lading",
+	 *     in="query",
+	 *     description="bill_of_lading",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+	public function searchBilloflading(Request $request) {
+		$idUser = auth()->user()->idUser;
+
+		$bill_of_lading = $request->get('bill_of_lading');
+
+		//Log::debug('bill_of_lading' . print_r($bill_of_lading, 1));
+
+		$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
+
+		if ($result_shipper->count() > 0) {
+
+			$idShipper = $result_shipper[0]->idShipper;
+
+			$result_order = DB::table('orders')
+				->join('stores', 'stores.idStore', '=', 'orders.idStore')
+				->join('users', 'stores.idUser', '=', 'users.idUser')
+				->where('idShipper', $idShipper)
+			//->where('billOfLading', $bill_of_lading);
+				->get();
+
+			myDecrypt($result_order);
+
+			$result = array();
+
+			foreach ($result_order as $key => $line) {
+
+				foreach ($line as $key_line => $value) {
+					if ($key_line == "billOfLading") {
+						if ($line->$key_line == $bill_of_lading) {
+							$result = $line;
+						}
+
+					}
+
+					//Log::debug('search' . print_r($line->$key_line, 1));
+				}
+			}
+
+			return response()->json([
+				'error' => false,
+				'data' => $result,
+				//'data' => $result_order,
+				'errors' => null,
+			], 200);
+
+		} else {
+			return response()->json([
+				'error' => true,
+				'data' => null,
+				'errors' => null,
+			], 400);
+		}
 	}
 
 }
