@@ -53,7 +53,7 @@ Route::group(['middleware' => 'jwt'], function () {
 		Route::post('showOrder_delivery', "Api\StoreController@showOrder_delivery");
 		Route::post('showOrder_done', "Api\StoreController@showOrder_done");
 		Route::post('searchBilloflading', "Api\StoreController@searchBilloflading");
-	});
+
 	});
 
 });
