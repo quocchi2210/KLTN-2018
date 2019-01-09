@@ -16,12 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -119,6 +121,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+
         ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -152,12 +156,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setTrafficEnabled(true);
+
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         List<LatLng> List_lat_long = new ArrayList<LatLng>();
         send_post();
+
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                CameraPosition cameraPosition = mMap.getCameraPosition();
+
+                Log.i("camerazoom",  String.valueOf(cameraPosition.zoom));
+
+                if(cameraPosition.zoom > 17.0) {
+                    mMap.setTrafficEnabled(false);
+                } else {
+                    mMap.setTrafficEnabled(true);
+                }
+            }
+        });
 
     }
 
@@ -182,10 +203,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     color(Color.BLUE).
                     width(10);
 
+            PolylineOptions polylineOptions1 = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.GREEN).
+                    width(10);
+
             for (int i = 0; i < route.points.size(); i++)
-                polylineOptions.add(route.points.get(i));
+            {
+//                if(i<5){
+                    polylineOptions.add(route.points.get(i));
+//                }else{
+//                    polylineOptions1.add(route.points.get(i));
+//                }
+
+            }
+
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
+           // polylinePaths.add(mMap.addPolyline(polylineOptions1));
         }
 
     }

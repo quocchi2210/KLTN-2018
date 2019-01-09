@@ -186,12 +186,27 @@ public class History_Activity extends AppCompatActivity {
 
                                             Log.w("History ",object_data.toString());
 
-
                                             String billOfLading = object_data.getString("billOfLading");
                                             String address = object_data.getString("addressReceiver");
                                             String name_received = object_data.getString("nameReceiver");
                                             String phone_received = object_data.getString("phoneReceiver");
                                             String total_money = object_data.getString("totalMoney");
+
+                                            if(billOfLading.equals("null")){
+                                                billOfLading = "";
+                                            }
+                                            if(name_received.equals("null")){
+                                                name_received = "";
+                                            }
+                                            if(phone_received.equals("null")){
+                                                phone_received = "";
+                                            }
+                                            if(address.equals("null")){
+                                                address = "";
+                                            }
+                                            if(total_money.equals("null")){
+                                                total_money = "";
+                                            }
 
                                             array_tmp.add(new History(billOfLading,address,name_received,phone_received,total_money));
                                         }

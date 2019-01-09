@@ -103,6 +103,22 @@ public class Confirm_Fragment extends Fragment {
                                         String phone_received = object.getString("phoneReceiver");
                                         String total_money = object.getString("totalMoney");
 
+                                        if(billOfLading.equals("null")){
+                                            billOfLading = "";
+                                        }
+                                        if(name_received.equals("null")){
+                                            name_received = "";
+                                        }
+                                        if(phone_received.equals("null")){
+                                            phone_received = "";
+                                        }
+                                        if(address.equals("null")){
+                                            address = "";
+                                        }
+                                        if(total_money.equals("null")){
+                                            total_money = "";
+                                        }
+
                                         data.add(new Order(billOfLading, address, idOrder, idOrderStatus, name_received, phone_received, total_money));
                                     }
 
