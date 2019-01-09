@@ -100,7 +100,7 @@ class ShipperController extends Controller {
 	 *	 security={{"api_key":{}}}
 	 * )
 	 */
-	public function showProfileShipper(){
+	public function showProfileShipper(Request $request) {
 		if ($request->isMethod('post')) {
 			$idUser = auth()->user()->idUser;
 
@@ -129,7 +129,6 @@ class ShipperController extends Controller {
 						'errors' => null,
 					], 400);
 				}
-
 
 			} else {
 				return response()->json([
@@ -332,7 +331,7 @@ class ShipperController extends Controller {
 				$users = DB::table('orders')
 					->join('stores', 'stores.idStore', '=', 'orders.idStore')
 					->where('idShipper', $idShipper)
-					//->whereBetween('idOrderStatus', array(3, 4))
+				//->whereBetween('idOrderStatus', array(3, 4))
 					->where('idOrderStatus', Config::get('constants.status_type.pickup'))
 					->get();
 
