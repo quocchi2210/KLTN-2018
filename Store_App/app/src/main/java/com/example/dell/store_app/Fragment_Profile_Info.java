@@ -42,7 +42,7 @@ public class Fragment_Profile_Info extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
-       // initUI();
+        initUI();
 
         //sendpost();
 
@@ -75,7 +75,6 @@ public class Fragment_Profile_Info extends Fragment{
 
         Request request = new Request.Builder()
                 .url("https://luxexpress.cf/api/store/showProfileStore")
-                //.url(" http://192.168.0.132:8000/api/shipper/showOrder")
                 .post(requestBody)
                 .addHeader("Authorization", "Bearer " + token)
                 .build();
@@ -107,10 +106,30 @@ public class Fragment_Profile_Info extends Fragment{
                                     JSONObject object = Jarray.getJSONObject(0);
 
                                     //full_name, id_number, date_of_birth, license_plates
-                                    name_store.setText(object.getString("object"));
-                                    type_store.setText(object.getString("typeStore"));
-                                    address_store.setText(object.getString("addressStore"));
-                                    des_store.setText(object.getString("descriptionStore"));
+
+
+                                    String nameStore = object.getString("nameStore");
+                                    String typeStore = object.getString("typeStore");
+                                    String addressStore = object.getString("addressStore");
+                                    String descriptionStore = object.getString("descriptionStore");
+
+                                    if(nameStore.equals("null")){
+                                        nameStore = "";
+                                    }
+                                    if(typeStore.equals("null")){
+                                        typeStore = "";
+                                    }
+                                    if(addressStore.equals("null")){
+                                        addressStore = "";
+                                    }
+                                    if(descriptionStore.equals("null")){
+                                        descriptionStore = "";
+                                    }
+
+                                    name_store.setText(nameStore);
+                                    type_store.setText(typeStore);
+                                    address_store.setText(addressStore);
+                                    des_store.setText(descriptionStore);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
