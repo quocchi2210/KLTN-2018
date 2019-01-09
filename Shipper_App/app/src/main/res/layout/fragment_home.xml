@@ -8,8 +8,8 @@
     android:background="@color/colorWhite">
 
     <EditText
-        android:id="@+id/name_sender"
-        android:hint="Tìm kiếm"
+        android:id="@+id/search"
+        android:hint="Tìm kiếm đơn hàng"
         android:drawablePadding="10dp"
         android:drawableLeft="@drawable/ic_action_name"
         android:layout_width="match_parent"
@@ -19,5 +19,24 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:padding="6dp"/>
+
+    <Button
+        android:id="@+id/btn_done_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tìm kiếm"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"/>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="30"
+        android:layout_marginEnd="18dp"
+        android:text="THOÁT"
+        android:background="@drawable/button"/>
 
 </LinearLayout>

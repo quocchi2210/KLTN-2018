@@ -109,6 +109,22 @@ public class Pickup_Fragment extends Fragment {
                                     String name_received = object.getString("nameReceiver");
                                     String phone_received = object.getString("phoneReceiver");
 
+                                    if(billOfLading.equals("null")){
+                                        billOfLading = "";
+                                    }
+                                    if(name_received.equals("null")){
+                                        name_received = "";
+                                    }
+                                    if(phone_received.equals("null")){
+                                        phone_received = "";
+                                    }
+                                    if(addressReceiver.equals("null")){
+                                        addressReceiver = "";
+                                    }
+                                    if(total_money.equals("null")){
+                                        total_money = "";
+                                    }
+
                                     data.add(new Order_Received(addressReceiver, addressStore, timeDelivery, idOrder, idOrderStatus,billOfLading,total_money,name_received,phone_received));
                                 }
 
@@ -190,9 +206,6 @@ public class Pickup_Fragment extends Fragment {
 
             LinearLayout btn_see_map = (LinearLayout) convertView.findViewById(R.id.btn_see_map);
 
-           // txt_address_delivery.setText(data.get(position).getAddress_delivery());
-            //txt_address_receive.setText(data.get(position).getAddress_receive());
-           // txt_time.setText(data.get(position).getTime());
             bill_of_lading.setText("Order " + arrayOrder.get(position).getBillOfLading());
             address.setText(arrayOrder.get(position).getAddress_receive());
             mobile_receive.setText(arrayOrder.get(position).getName_received());
@@ -215,15 +228,20 @@ public class Pickup_Fragment extends Fragment {
 
             if (arrayOrder.get(vitri).getStatus_order().equals("3")) {
                 btn_done.setText("Chuyển hàng");
-            }else if (arrayOrder.get(vitri).getStatus_order().equals("4")) {
-                btn_done.setText("Xong");
             }
+//            else if (arrayOrder.get(vitri).getStatus_order().equals("4")) {
+//                btn_done.setText("Xong");
+//            }
 
             btn_done.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (arrayOrder.get(vitri).getStatus_order().equals("4")) {
-                        Login_Token.update_check = false;
+//                    if (arrayOrder.get(vitri).getStatus_order().equals("4")) {
+//                        Login_Token.update_check = false;
+//                    }
+                    Log.w("btn_done", "Pickup " + Login_Token.update_check);
+                    if(Login_Token.id_order!=null){
+                        Login_Token.update_check = true;
                     }
 
                     if(Login_Token.update_check==false) {
@@ -268,9 +286,9 @@ public class Pickup_Fragment extends Fragment {
                                                 Jobject = new JSONObject(yourResponse);
 
                                                 Log.w("btn_done", "Order received: " + yourResponse.toString());
-                                                //getActivity().finish();
-                                                //startActivity( getActivity().getIntent());
 
+                                                getActivity().finish();
+                                                startActivity( getActivity().getIntent());
 
 
                                             } catch (JSONException e) {

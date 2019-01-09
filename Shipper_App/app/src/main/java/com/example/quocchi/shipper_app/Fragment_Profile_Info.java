@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -133,16 +134,17 @@ public class Fragment_Profile_Info extends Fragment {
                                         case "Nam":
                                             gen = 0;
                                             break;
-                                        case "Cho thử hàng":
+                                        case "Nữ":
                                             gen = 1;
                                             break;
                                     }
-
+                                    Log.w("showprofile", String.valueOf(gen));
                                     spinner_gender.setSelection(gen);
-
+                                    Log.w("showprofile", yourResponse.toString());
 
 
                                 } catch (JSONException e) {
+                                    Log.w("showprofile error", yourResponse.toString());
                                     e.printStackTrace();
                                 }
 
@@ -152,7 +154,7 @@ public class Fragment_Profile_Info extends Fragment {
                     }
                 } else {
 
-                    Log.w("error order", yourResponse.toString());
+                    Log.w("error showprofile", yourResponse.toString());
                 }
 
 
@@ -212,10 +214,11 @@ public class Fragment_Profile_Info extends Fragment {
 
                                             //JSONArray Jarray = Jobject.getJSONArray("data");
 
-
-
+                                            Toast.makeText(getActivity(),"Cập nhật thành công.",Toast.LENGTH_LONG).show();
+                                            Log.w("sendprofile", yourResponse.toString());
 
                                         } catch (JSONException e) {
+                                            Log.w("sendprofile error", yourResponse.toString());
                                             e.printStackTrace();
                                         }
 
@@ -225,7 +228,7 @@ public class Fragment_Profile_Info extends Fragment {
                             }
                         } else {
 
-                            Log.w("error order", yourResponse.toString());
+                            Log.w("error sendprofile", yourResponse.toString());
                         }
 
 

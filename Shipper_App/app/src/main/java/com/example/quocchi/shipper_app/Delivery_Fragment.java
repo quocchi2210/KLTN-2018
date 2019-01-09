@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +77,7 @@ public class Delivery_Fragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(Login_Token.update_check==false) {
+                //if(Login_Token.update_check==false) {
 
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
@@ -112,24 +113,27 @@ public class Delivery_Fragment extends Fragment {
 
                                             Jobject = new JSONObject(yourResponse);
 
-                                            Log.w("btn_done", "Order received: " + yourResponse.toString());
+                                            Log.w("btn_done", "delivery_btn_done " + yourResponse.toString());
+                                            getActivity().finish();
+                                            startActivity( getActivity().getIntent());
 
                                         } catch (JSONException e) {
+                                            Log.w("btn_done", "delivery_btn_done error" + yourResponse.toString());
                                             e.printStackTrace();
                                         }
 
                                     }
                                 });
                             } else {
-                                Log.w("myApp", "Order received: " + yourResponse.toString());
+                                Log.w("btn_done", "error delivery_btn_done " + yourResponse.toString());
                             }
 
 
                         }
                     });
-                }else{
-                    //Toast.makeText(getActivity(), "Bạn cần giao hàng trước.", Toast.LENGTH_SHORT).show();
-                }
+//                }else{
+//                    //Toast.makeText(getActivity(), "Bạn cần giao hàng trước.", Toast.LENGTH_SHORT).show();
+//                }
 
             }
         });
@@ -184,7 +188,32 @@ public class Delivery_Fragment extends Fragment {
                                         String name_received_str = object.getString("nameReceiver");
                                         String phone_received_str = object.getString("phoneReceiver");
                                         String phone_store_str = object.getString("phoneNumber");
-                                        // Log.w("delivery", "delivery: " + name_received_str);
+
+                                        if(timeDelivery.equals("null")){
+                                            timeDelivery = "";
+                                        }
+                                        if(addressReceiver.equals("null")){
+                                            addressReceiver = "";
+                                        }
+                                        if(addressStore.equals("null")){
+                                            addressStore = "";
+                                        }
+                                        if(billOfLading_str.equals("null")){
+                                            billOfLading_str = "";
+                                        }
+                                        if(total_money_str.equals("null")){
+                                            total_money_str = "";
+                                        }
+                                        if(name_received_str.equals("null")){
+                                            name_received_str = "";
+                                        }
+                                        if(phone_received_str.equals("null")){
+                                            phone_received_str = "";
+                                        }
+                                        if(phone_store_str.equals("null")){
+                                            phone_store_str = "";
+                                        }
+
                                         phone_store.setText(phone_store_str);
                                         address_store.setText(addressStore);
                                         bill_of_lading_order.setText(billOfLading_str);
@@ -196,14 +225,18 @@ public class Delivery_Fragment extends Fragment {
                                         id_order = object.getString("idOrder");
                                         id_status = object.getString("idOrderStatus");
 
+                                        Log.w("deliveryfragment", yourResponse.toString());
+
                                         mRootView.setVisibility(View.VISIBLE);
                                     } else {
+                                        Log.w("deliveryfragment error", yourResponse.toString());
                                         mRootView.setVisibility(View.GONE);
-                                        //Toast.makeText(getActivity(), "Khong co delivery nao: ",Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getActivity(), "Hiện tại không có đơn hàng nào: ",Toast.LENGTH_SHORT).show();
                                     }
                                     //phone_store, address_store, bill_of_lading_order, receiver, phone_receiver, address_receiver
 
                                 } catch (JSONException e) {
+                                    Log.w("error deliveryfragment", yourResponse.toString());
                                     e.printStackTrace();
                                 }
 

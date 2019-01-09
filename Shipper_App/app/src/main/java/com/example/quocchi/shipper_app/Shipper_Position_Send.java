@@ -133,10 +133,12 @@ public class Shipper_Position_Send implements LocationListener {
         Log.w("wtf", String.valueOf(Login_Token.update_check));
 
         if(Login_Token.id_order!=null){
-            Log.w("wtf",  Login_Token.id_order);
-        }else{
-            Log.w("wtf",  "Sax");
+            //Log.w("wtf",  Login_Token.id_order);
+            Login_Token.update_check = true;
         }
+//        else{
+//            //Log.w("wtf",  "Sax");
+//        }
 
         if(Login_Token.update_check==true) {
             Toast.makeText(mContext, "Ok: Location UPDATE TRUE", Toast.LENGTH_SHORT).show();
@@ -144,9 +146,6 @@ public class Shipper_Position_Send implements LocationListener {
             if(Login_Token.id_order!=null){
                 requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
-                        //.addFormDataPart("origin",  "10.766090,106.642000")
-                        //10.766080 106.652260
-                        //.addFormDataPart("destination", "132E Cách Mạng Tháng Tám P10 Q3")
                         .addFormDataPart("lat", String.valueOf(location.getLatitude()))
                         .addFormDataPart("long", String.valueOf(location.getLongitude()))
                         .addFormDataPart("order_id", Login_Token.id_order)
@@ -162,9 +161,7 @@ public class Shipper_Position_Send implements LocationListener {
                         .build();
             }
 
-
             Request request = new Request.Builder()
-                    //.url("http://192.168.0.132:8000/api/shipper/getDirection")
                     .url("https://luxexpress.cf/api/ordertrakings/updatePosition")
                     .post(requestBody)
                     .addHeader("Authorization", "Bearer " + token)
@@ -265,7 +262,7 @@ public class Shipper_Position_Send implements LocationListener {
 
         Log.i("send_post", "origin_address: " + latitude + ", Longitude: " + longitude);
 
-        //10.766080   //106.652260
+        //10.766080  //106.652260
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
