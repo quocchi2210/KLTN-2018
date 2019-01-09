@@ -12,6 +12,9 @@ function myDecrypt($str_array) {
 				if ($value && $key != "created_at" && $key != "updated_at") {
 					try {
 						$str->$key = decrypt($value);
+						Log::debug("myDecrypt 111111");
+						Log::debug("myDecrypt " . print_r($key, 1));
+
 					} catch (Exception $e) {
 						Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
 						Log::debug("myDecrypt " . print_r($key, 1));
@@ -20,6 +23,17 @@ function myDecrypt($str_array) {
 
 				}
 
+			} else if ($key == "idNumber") {
+				try {
+					$str->$key = decrypt($value);
+					Log::debug("myDecrypt 111111");
+					Log::debug("myDecrypt " . print_r($key, 1));
+
+				} catch (Exception $e) {
+					Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
+					Log::debug("myDecrypt " . print_r($key, 1));
+
+				}
 			}
 
 		}
