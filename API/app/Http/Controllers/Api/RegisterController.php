@@ -123,13 +123,22 @@ class RegisterController extends Controller {
 //		 	return $this->errorWithValidation($validator);
 //		 }
 		$create = User::create([
-			'fullName' => $request['name'],
-			'email' => $request['email'],
-			'username' => $request['username'],
+			'fullName' => encrypt($request['name']),
+			'email' => encrypt($request['email']),
+			'username' => encrypt($request['username']),
 			'password' => bcrypt($request['password']),
-			'dateOfBirth' => $request->input('date_of_birth'),
-			'gender' => $request->input('gender'),
+			'dateOfBirth' => encrypt($request->input('date_of_birth')),
+			'gender' => encrypt($request->input('gender')),
 		]);
+
+		if ($create->idUser) {
+			Store::create([
+				'idUser' => $create->idUser,
+				'nameStore' => encrypt($create['name']),
+			]);
+			// $this->guard()->login($user);
+			// return redirect(route('home'));
+		}
 
 		$verifyUser = VerifyResetUser::create([
 			'user_id' => $create->idUser,
@@ -137,16 +146,10 @@ class RegisterController extends Controller {
 			'confirmation' => 1,
 		]);
 
-		Mail::to($create->email)->send(new VerifyMail($create, $verifyUser));
+		$userDecypt = User::find($create->idUser);
+        Mail::to($userDecypt->email)->send(new VerifyMail($userDecypt,$verifyUser));
 
-		if ($create->idUser) {
-			Store::create([
-				'idUser' => $create->idUser,
-				'nameStore' => $create['name'],
-			]);
-			// $this->guard()->login($user);
-			// return redirect(route('home'));
-		}
+		
 
 		return response()->json([
 			'error' => false,
