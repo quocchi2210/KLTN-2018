@@ -1608,7 +1608,7 @@ class StoreController extends Controller {
 			$result_order = DB::table('orders')
 				->join('stores', 'stores.idStore', '=', 'orders.idStore')
 				->join('users', 'stores.idUser', '=', 'users.idUser')
-				->where('idStore', $idStore)
+				->where('stores.idStore', $idStore)
 			//->where('billOfLading', $bill_of_lading);
 				->get();
 
