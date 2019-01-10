@@ -1601,7 +1601,7 @@ class StoreController extends Controller {
 
 		$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 			
-		if ($result_shipper->count() > 0) {
+		if ($result_store->count() > 0) {
 
 			$idStore = $result_store[0]->idStore;
 
