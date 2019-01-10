@@ -71,7 +71,14 @@ trait Encryptable
     {
         if (in_array($key, $this->encrypt))
         {
-            return Crypt::decrypt($this->attributes[$key]);
+            try {
+                return Crypt::decrypt($this->attributes[$key]);
+
+            } catch (Exception $e) {
+                Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
+                Log::debug("myDecrypt " . print_r($key, 1));
+
+            }
         }
 
         return parent::getAttribute($key);
@@ -85,7 +92,15 @@ trait Encryptable
         {
             if (in_array($key, $this->encrypt))
             {
-                $attributes[$key] = Crypt::decrypt($value);
+                try {
+                    $attributes[$key] = Crypt::decrypt($value);
+
+                } catch (Exception $e) {
+                    Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
+                    Log::debug("myDecrypt " . print_r($key, 1));
+
+                }
+                
             }
         }
         return $attributes;
