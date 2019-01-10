@@ -94,17 +94,15 @@ class RegisterController extends Controller {
 		$rules = new User;
 		$email = $request->get('email');
 		$username = $request->get('username');
-
-		$full_name = $request->get('full_name');
 		$dataEmail = User::where('email', $email)->first();
 		$dataUsername = User::where('username', $username)->first();
 		if ($dataEmail) {
 			return $this->respondWithErrorMessage('This email has been exists', 2018);
 		}
 
-		// if ($dataUsername) {
-		// 	return $this->respondWithErrorMessage('This username has been exists', 2019);
-		// }
+		if ($dataUsername) {
+			return $this->respondWithErrorMessage('This username has been exists', 2019);
+		}
 
 		// $message = [
 		// 	'name.required' => 'The name is required',
@@ -125,9 +123,9 @@ class RegisterController extends Controller {
 //		 	return $this->errorWithValidation($validator);
 //		 }
 		$create = User::create([
-			'fullName' => encrypt($full_name),
+			'fullName' => encrypt($request['name']),
 			'email' => encrypt($request['email']),
-			'username' => encrypt($full_name),
+			'username' => encrypt($request['username']),
 			'password' => bcrypt($request['password']),
 			'dateOfBirth' => encrypt($request->input('date_of_birth')),
 			'gender' => encrypt($request->input('gender')),
@@ -155,7 +153,7 @@ class RegisterController extends Controller {
 
 		return response()->json([
 			'error' => false,
-			'data' => $$userDecypt,
+			'data' => $create,
 			'errors' => null,
 		], 200);
 	}
