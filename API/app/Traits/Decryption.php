@@ -10,6 +10,7 @@ namespace App\Traits;
 
 
 use Illuminate\Support\Facades\Crypt;
+use Log;
 
 trait Decryption {
 
@@ -18,7 +19,15 @@ trait Decryption {
         $value = parent::getAttribute($key);
         if (in_array($key, $this->fillable) && !is_null($value) && !is_numeric($value) && !preg_match('/^\$2y\$/', $value ))
         {
-            return Crypt::decrypt($this->attributes[$key]);
+            try {
+                return Crypt::decrypt($this->attributes[$key]);
+
+            } catch (Exception $e) {
+                Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
+                Log::debug("myDecrypt " . print_r($key, 1));
+
+            }
+            
         }
 
         return parent::getAttribute($key);
@@ -32,7 +41,15 @@ trait Decryption {
         {
             if (in_array($key, $this->fillable))
             {
-                $attributes[$key] = Crypt::decrypt($value);
+                try {
+                    $attributes[$key] = Crypt::decrypt($value);
+
+                } catch (Exception $e) {
+                    Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
+                    Log::debug("myDecrypt " . print_r($key, 1));
+
+                }
+               
             }
         }
 
