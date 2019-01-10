@@ -8,8 +8,8 @@ function myDecrypt($str_array) {
 		foreach ($str as $key => $value) {
 			//Log::debug("myDecrypt " . print_r($key, 1));
 			if ($key[0] != "i" || $key[1] != "d") {
-				Log::debug("myDecrypt " . print_r($key, 1));
-				Log::debug("myDecrypt " . print_r(decrypt($value), 1));
+				// Log::debug("myDecrypt " . print_r($key, 1));
+				// Log::debug("myDecrypt " . print_r(decrypt($value), 1));
 				if ($value && $key != "created_at" && $key != "updated_at") {
 					try {
 						$str->$key = decrypt($value);
