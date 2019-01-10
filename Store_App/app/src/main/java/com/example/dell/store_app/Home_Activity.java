@@ -1,5 +1,6 @@
 package com.example.dell.store_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class Home_Activity extends AppCompatActivity {
 
@@ -21,6 +24,39 @@ public class Home_Activity extends AppCompatActivity {
 
         initUI();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_store, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.menu_item_add_order:
+
+                intent = new Intent(getBaseContext(), Add_Activity.class);
+                startActivity(intent);
+
+                break;
+            case R.id.menu_item_manage_order:
+
+                intent = new Intent(getBaseContext(), Store_Manage_Activity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.menu_item_home:
+
+                intent = new Intent(getBaseContext(), Home_Activity.class);
+                startActivity(intent);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void initUI(){
         viewpager_home = (ViewPager) findViewById(R.id.viewpager_home);
@@ -35,7 +71,6 @@ public class Home_Activity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_account_box_24);
 
     }
-
 
     private class Home_Adapter extends FragmentStatePagerAdapter {
 

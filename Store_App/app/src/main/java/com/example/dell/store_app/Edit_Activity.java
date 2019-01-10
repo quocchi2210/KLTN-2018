@@ -567,14 +567,14 @@ public class Edit_Activity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 Log.w("Add_Activity", "Add success");
 
-                                Intent intent = new Intent(Edit_Activity.this, Store_Manage_Activity.class);
+                                Intent intent = new Intent(Edit_Activity.this, Home_Activity.class);
                                 intent.putExtra("check_edit",true);
                                 startActivity(intent);
 
                             } else {
                                 Log.w("Add_Activity", "Add faild " + yourResponse.toString());
 
-                                Intent intent = new Intent(Edit_Activity.this, Store_Manage_Activity.class);
+                                Intent intent = new Intent(Edit_Activity.this, Home_Activity.class);
                                 intent.putExtra("check_edit",false);
                                 startActivity(intent);
                             }

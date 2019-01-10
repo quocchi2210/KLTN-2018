@@ -9,8 +9,8 @@
         android:id="@+id/menu_item_manage_order"
         />
 
-    <item android:title="Chỉnh sửa thông tin"
-        android:id="@+id/menu_item_update_profile"
+    <item android:title="Trang chủ"
+        android:id="@+id/menu_item_home"
         />
 
 </menu>
