@@ -102,9 +102,9 @@ class RegisterController extends Controller {
 			return $this->respondWithErrorMessage('This email has been exists', 2018);
 		}
 
-		if ($dataUsername) {
-			return $this->respondWithErrorMessage('This username has been exists', 2019);
-		}
+		// if ($dataUsername) {
+		// 	return $this->respondWithErrorMessage('This username has been exists', 2019);
+		// }
 
 		// $message = [
 		// 	'name.required' => 'The name is required',
