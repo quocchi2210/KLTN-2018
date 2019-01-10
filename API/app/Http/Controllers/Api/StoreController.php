@@ -1376,6 +1376,7 @@ class StoreController extends Controller {
 			$idUser = auth()->user()->idUser;
 
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+
 			Log::debug('idUser' . print_r($result_store, 1));
 			if ($result_store->count() > 0) {
 
@@ -1597,16 +1598,17 @@ class StoreController extends Controller {
 
 		//Log::debug('bill_of_lading' . print_r($bill_of_lading, 1));
 
-		$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
+		$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
+			
 		if ($result_shipper->count() > 0) {
 
-			$idShipper = $result_shipper[0]->idShipper;
+			$idStore = $result_store[0]->idStore;
 
 			$result_order = DB::table('orders')
 				->join('stores', 'stores.idStore', '=', 'orders.idStore')
 				->join('users', 'stores.idUser', '=', 'users.idUser')
-				->where('idShipper', $idShipper)
+				->where('idStore', $idStore)
 			//->where('billOfLading', $bill_of_lading);
 				->get();
 
