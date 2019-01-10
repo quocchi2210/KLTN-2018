@@ -948,6 +948,8 @@ class StoreController extends Controller {
 
 				$email = encrypt("EMAIL"); // Don't use
 
+				$money_send = encrypt($request->get('money_send'));
+
 				//////////////////////////////
 				$result_service_types = DB::table('service_types')
 					->where('idService', $id_service_type)
