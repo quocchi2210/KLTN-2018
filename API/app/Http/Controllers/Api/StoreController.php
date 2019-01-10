@@ -925,18 +925,18 @@ class StoreController extends Controller {
 
 			if ($result_store->count() > 0) {
 
-				$name_sender = encrypt($request->get('name_sender'));
-				$address_sender = encrypt($request->get('address_sender'));
-				$phone_sender = encrypt($request->get('phone_sender'));
+				$name_sender = $request->get('name_sender');
+				$address_sender = $request->get('address_sender');
+				$phone_sender = $request->get('phone_sender');
 
-				$name_receiver = encrypt($request->get('name_receiver'));
-				$address_receiver = encrypt($request->get('address_receiver'));
-				$phone = encrypt($request->get('phone_receiver'));
+				$name_receiver = $request->get('name_receiver');
+				$address_receiver = $request->get('address_receiver');
+				$phone = $request->get('phone_receiver');
 
-				$email = encrypt($request->get('email_receiver'));
-				$description = encrypt($request->get('description_order'));
-				$cod = encrypt($request->get('cod'));
-				$total_weight = encrypt($request->get('total_weight'));
+				$email = $request->get('email_receiver');
+				$description = $request->get('description_order');
+				$cod = $request->get('cod');
+				$total_weight = $request->get('total_weight');
 				$id_service_type = $request->get('id_service_type'); // CPN FAST 1 2 ....
 
 				$bill_of_lading = encrypt('LUX' . str_random(12));
@@ -967,24 +967,31 @@ class StoreController extends Controller {
 				$distance_shipping = floatval($distance_shipping['rows'][0]['elements'][0]['distance']['text']);
 				$distance_shipping = $this->milesToKilometers($distance_shipping);
 
+				Log::debug("call helper distance_shipping " . print_r($distance_shipping, 1));
+				Log::debug("call helper total_weight " . print_r($total_weight, 1));
+				Log::debug("call helper service_price" . print_r($service_price, 1));
+
 				$total_money = $this->calculateMoney($distance_shipping, $total_weight, $service_price);
 				$time_delivery = $this->getDelivery($distance_shipping, $id_service_type);
 
-				Log::debug("call helper test " . print_r($senderLat, 1));
-				Log::debug("call helper distance_shipping " . print_r($distance_shipping, 1));
-				Log::debug("call helper time_delivery " . print_r($time_delivery, 1));
-				Log::debug("call helper total_money" . print_r($total_money, 1));
+				//Log::debug("call helper test " . print_r($senderLat, 1));
+				//Log::debug("call helper distance_shipping " . print_r($distance_shipping, 1));
+				//Log::debug("call helper time_delivery " . print_r($time_delivery, 1));
 
-				$receiverLat = encrypt($receiverLat);
-				$receiverLong = encrypt($receiverLong);
+				// Log::debug("call helper service_price" . print_r($service_price, 1));
 
-				$senderLat = encrypt($senderLat);
-				$senderLong = encrypt($senderLong);
+				// Log::debug("call helper total_money" . print_r($total_money, 1));
+
+				// $receiverLat = encrypt($receiverLat);
+				// $receiverLong = encrypt($receiverLong);
+
+				// $senderLat = encrypt($senderLat);
+				// $senderLong = encrypt($senderLong);
 
 				//////////////////////////////////
 
 				$id_shipper = $request->get('id_shipper');
-				$id_order_status = $request->get('id_order_status'); // comfirm done .....
+				//$id_order_status = $request->get('id_order_status'); // comfirm done .....
 
 				$store_id = $result_store[0]->idStore;
 
@@ -1011,17 +1018,17 @@ class StoreController extends Controller {
 
 				// insert into orders (idStore, billOfLading,nameReceiver,addressReceiver,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus,dateCreated) values (1, 'LUXNONONON' , 'abc', '123', 11.3, 12.3, 123, 'email', 'des',123,'2018-12-11 00:00:00',1,1,123,400,123,1,'2018-12-06 03:24:41')
 
-				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameSender, addressSender,phoneSender,nameReceiver,addressReceiver,latitudeSender,longitudeSender,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus) values (?,?, ?,?,?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, $bill_of_lading, $name_sender, $address_sender, $phone_sender, $name_receiver, $address_receiver, $senderLat, $senderLong, $receiverLat, $receiverLong, $phone, $email, $description, $cod, $time_delivery, $distance_shipping, $id_service_type, $total_weight, $price_service, $total_money, Config::get('constants.status_type.pending')]);
+				$affected_order = DB::insert('insert into orders (idStore, billOfLading,nameSender, addressSender,phoneSender,nameReceiver,addressReceiver,latitudeSender,longitudeSender,latitudeReceiver,longitudeReceiver,phoneReceiver,emailReceiver,descriptionOrder,COD,timeDelivery,distanceShipping,idServiceType,totalWeight,priceService,totalMoney,idOrderStatus) values (?,?, ?,?,?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)', [$store_id, encrypt($bill_of_lading), encrypt($name_sender), encrypt($address_sender), encrypt($phone_sender), encrypt($name_receiver), encrypt($address_receiver), encrypt($senderLat), encrypt($senderLong), encrypt($receiverLat), encrypt($receiverLong), encrypt($phone), encrypt($email), encrypt($description), encrypt($cod), encrypt($time_delivery), encrypt($distance_shipping), $id_service_type, encrypt($total_weight), encrypt($price_service), encrypt($total_money), Config::get('constants.status_type.pending')]);
 
 				$affected_store = DB::table('stores')->where('idStore', $store_id)->update([
 
-					'nameStore' => $name_sender,
-					'addressStore' => $address_sender,
+					'nameStore' => encrypt($name_sender),
+					'addressStore' => encrypt($address_sender),
 
 				]);
 
 				$affected_user = DB::table('users')->where('idUser', $idUser)->update([
-					'phoneNumber' => $phone_sender,
+					'phoneNumber' => encrypt($phone_sender),
 				]);
 
 				if ($affected_order && $affected_store && $affected_store) {
@@ -1125,27 +1132,15 @@ class StoreController extends Controller {
 	 *     tags={"Store"},
 	 *   summary="Show Profile",
 	 *   @SWG\Parameter(
-	 *     name="name_receiver",
+	 *     name="name_sender",
 	 *     in="query",
 	 *     description="Your Name Store",
 	 *     type="string",
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     name="address_receiver",
+	 *     name="address_sender",
 	 *     in="query",
 	 *     description="Your Type Store",
-	 *     type="string",
-	 *   ),
-	 *   @SWG\Parameter(
-	 *     name="latitude_receiver",
-	 *     in="query",
-	 *     description="Your Address Store",
-	 *     type="string",
-	 *   ),
-	 *   @SWG\Parameter(
-	 *     name="longitude_receiver",
-	 *     in="query",
-	 *     description="Your Description Store",
 	 *     type="string",
 	 *   ),
 	 *   @SWG\Parameter(
@@ -1164,6 +1159,12 @@ class StoreController extends Controller {
 	 *     name="description_order",
 	 *     in="query",
 	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="address_receiver",
+	 *     in="query",
+	 *     description="Your Type Store",
 	 *     type="string",
 	 *   ),
 	 *   @SWG\Parameter(
@@ -1196,6 +1197,12 @@ class StoreController extends Controller {
 	 *     description="Your End Working Store",
 	 *     type="string",
 	 *   ),
+	 *   @SWG\Parameter(
+	 *     name="order_id",
+	 *     in="query",
+	 *     description="Your End Working Store",
+	 *     type="string",
+	 *   ),
 	 *   @SWG\Response(
 	 *     response=200,
 	 *     description="A list with products"
@@ -1209,6 +1216,7 @@ class StoreController extends Controller {
 	 */
 
 	public function updateOrderStore(Request $request) {
+		//Log::debug("id_order_fsdfsfsfsdfstatus ");
 		if ($request->isMethod('post')) {
 
 			// $idUser = $request->idUser;
@@ -1233,26 +1241,57 @@ class StoreController extends Controller {
 				$distance_shipping = $request->get('distance_shipping');
 				$id_service_type = $request->get('id_service_type');
 				$total_weight = $request->get('total_weight');
-				$price_service = 400;
 				$total_money = $request->get('total_money');
 				$id_shipper = $request->get('id_shipper');
-				$id_order_status = $request->get('id_order_status');
+				//$id_order_status = $request->get('id_order_status');
 
-				$lat = 11.3;
-				$long = 12.3;
+				$order_id = $request->get('order_id');
 
-				$time_delivery = '2018-12-11 00:00:00';
-				$distance_shipping = 12;
-				$store_id = $result_store[0]->idStore;
-				$order_id = 1;
-				$store_id = 1;
-				$total_money = 123;
+				$id_order_status = DB::table('orders')
+					->select('idOrderStatus')
+					->where('idOrder', $order_id)
+					->get();
 
-				$data_created = date('Y-m-d H:i:s');
+				$id_order_status_db = $id_order_status[0]->idOrderStatus;
+
+				// $lat = 11.3;
+				// $long = 12.3;
+
+				// $time_delivery = '2018-12-11 00:00:00';
+				// $distance_shipping = 12;
+				// $store_id = $result_store[0]->idStore;
+				// $order_id = 1;
+				// $store_id = 1;
+				// $total_money = 123;
+
+				//$data_created = date('Y-m-d H:i:s');
 
 				$email = "test@test.com";
+				Log::debug("order_id " . $order_id);
+				Log::debug("id_order_status " . print_r($id_order_status[0]->idOrderStatus, 1));
 
-				if ($id_order_status > Config::get('constants.status_type.pending')) {
+				$result_service_types = DB::table('service_types')
+					->where('idService', $id_service_type)
+					->get();
+
+				$service_price = $result_service_types[0]->price;
+
+				$sender = $this->getLatLong($request->get('address_sender'));
+				$senderLat = $sender['results'][0]['geometry']['location']['lat'];
+				$senderLong = $sender['results'][0]['geometry']['location']['lng'];
+
+				$receiver = $this->getLatLong($request->get('address_receiver'));
+				$receiverLat = $receiver['results'][0]['geometry']['location']['lat'];
+				$receiverLong = $receiver['results'][0]['geometry']['location']['lng'];
+
+				$distance_shipping = $this->getDistance($senderLat, $senderLong, $receiverLat, $receiverLong);
+				$distance_shipping = floatval($distance_shipping['rows'][0]['elements'][0]['distance']['text']);
+				$distance_shipping = $this->milesToKilometers($distance_shipping);
+
+				$total_money = $this->calculateMoney($distance_shipping, $total_weight, $service_price);
+				$time_delivery = $this->getDelivery($distance_shipping, $id_service_type);
+
+				if ($id_order_status_db > Config::get('constants.status_type.pending')) {
 					return response()->json([
 						'error' => true,
 						'data' => "data confirmed",
@@ -1275,7 +1314,7 @@ class StoreController extends Controller {
 					'timeDelivery' => encrypt($time_delivery),
 					'distanceShipping' => encrypt($distance_shipping),
 					'totalWeight' => encrypt($total_weight),
-					'priceService' => encrypt($price_service),
+					'priceService' => encrypt($service_price),
 					'totalMoney' => encrypt($total_money),
 					'idServiceType' => $id_service_type,
 					'idOrderStatus' => Config::get('constants.status_type.pending'),
