@@ -149,11 +149,9 @@ class RegisterController extends Controller {
 		$userDecypt = User::find($create->idUser);
         Mail::to($userDecypt->email)->send(new VerifyMail($userDecypt,$verifyUser));
 
-		
-
 		return response()->json([
 			'error' => false,
-			'data' => $create,
+			'data' => $userDecypt,
 			'errors' => null,
 		], 200);
 	}
