@@ -939,10 +939,10 @@ class StoreController extends Controller {
 				$total_weight = $request->get('total_weight');
 				$id_service_type = $request->get('id_service_type'); // CPN FAST 1 2 ....
 
-				$bill_of_lading = encrypt('LUX' . str_random(12));
+				$bill_of_lading = 'LUX' . str_random(12);
 
-				$time_delivery = encrypt($request->get('time_delivery'));
-				$distance_shipping = encrypt($request->get('distance_shipping'));
+				$time_delivery = $request->get('time_delivery');
+				$distance_shipping = $request->get('distance_shipping');
 
 				$price_service = encrypt("1111"); // Don't use
 
