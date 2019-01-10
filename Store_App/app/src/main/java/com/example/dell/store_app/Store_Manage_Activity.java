@@ -151,8 +151,9 @@ public class Store_Manage_Activity extends AppCompatActivity {
                 startActivity(intent);
                 break;
 
-            case R.id.menu_item_update_profile:
-                intent = new Intent(getBaseContext(), Updateprofile_Activity.class);
+            case R.id.menu_item_home:
+
+                intent = new Intent(getBaseContext(), Home_Activity.class);
                 startActivity(intent);
                 break;
 
