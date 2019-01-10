@@ -94,6 +94,8 @@ class RegisterController extends Controller {
 		$rules = new User;
 		$email = $request->get('email');
 		$username = $request->get('username');
+
+		$full_name = $request->get('full_name');
 		$dataEmail = User::where('email', $email)->first();
 		$dataUsername = User::where('username', $username)->first();
 		if ($dataEmail) {
@@ -123,9 +125,9 @@ class RegisterController extends Controller {
 //		 	return $this->errorWithValidation($validator);
 //		 }
 		$create = User::create([
-			'fullName' => encrypt($request['name']),
+			'fullName' => encrypt($full_name),
 			'email' => encrypt($request['email']),
-			'username' => encrypt($request['username']),
+			'username' => encrypt($full_name),
 			'password' => bcrypt($request['password']),
 			'dateOfBirth' => encrypt($request->input('date_of_birth')),
 			'gender' => encrypt($request->input('gender')),
@@ -149,9 +151,11 @@ class RegisterController extends Controller {
 		$userDecypt = User::find($create->idUser);
         Mail::to($userDecypt->email)->send(new VerifyMail($userDecypt,$verifyUser));
 
+		
+
 		return response()->json([
 			'error' => false,
-			'data' => $userDecypt->fullName,
+			'data' => $$userDecypt,
 			'errors' => null,
 		], 200);
 	}
