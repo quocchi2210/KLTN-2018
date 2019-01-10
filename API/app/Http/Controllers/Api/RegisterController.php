@@ -151,7 +151,7 @@ class RegisterController extends Controller {
 
 		return response()->json([
 			'error' => false,
-			'data' => $userDecypt,
+			'data' => $userDecrypt->fullName,
 			'errors' => null,
 		], 200);
 	}
