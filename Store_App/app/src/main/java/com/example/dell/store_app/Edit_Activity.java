@@ -502,6 +502,9 @@ public class Edit_Activity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
+                    Intent intent = getIntent();
+                    String id_order = intent.getStringExtra("id_order");
+
                     String service_id_type = null;
                     switch (spinner_service_type.getSelectedItem().toString()) {
 
@@ -545,6 +548,7 @@ public class Edit_Activity extends AppCompatActivity {
                             .addFormDataPart("total_weight", weight.getText().toString())
                             .addFormDataPart("id_service_type", service_id_type)
                             .addFormDataPart("email_receiver", "test@test.com")
+                            .addFormDataPart("order_id", id_order)
                             .build();
 
                     Request request = new Request.Builder()
@@ -567,14 +571,14 @@ public class Edit_Activity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 Log.w("Add_Activity", "Add success");
 
-                                Intent intent = new Intent(Edit_Activity.this, Store_Manage_Activity.class);
+                                Intent intent = new Intent(Edit_Activity.this, Home_Activity.class);
                                 intent.putExtra("check_edit",true);
                                 startActivity(intent);
 
                             } else {
                                 Log.w("Add_Activity", "Add faild " + yourResponse.toString());
 
-                                Intent intent = new Intent(Edit_Activity.this, Store_Manage_Activity.class);
+                                Intent intent = new Intent(Edit_Activity.this, Home_Activity.class);
                                 intent.putExtra("check_edit",false);
                                 startActivity(intent);
                             }

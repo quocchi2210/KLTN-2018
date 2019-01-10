@@ -1,6 +1,7 @@
 package com.example.dell.store_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -187,7 +188,7 @@ public class Pending_Fragment extends Fragment {
             TextView name_receive = (TextView) convertView.findViewById(R.id.name_receive);
             TextView total_money = (TextView) convertView.findViewById(R.id.total_money);
 
-            //Button btn_pick_up = (Button) convertView.findViewById(R.id.btn_pick_up);
+            Button btn_edit = (Button) convertView.findViewById(R.id.btn_edit);
 
             bill_of_lading.setText("Order " + arrayOrder.get(position).getBill_of_lading());
             address.setText(arrayOrder.get(position).getAddress());
@@ -204,6 +205,18 @@ public class Pending_Fragment extends Fragment {
             final View Testview = convertView;
 
             final int vitri = position;
+
+            btn_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(),Edit_Activity.class);
+////                    Log.w("Add_Activity", "Add faild " + vitri);
+////                    Log.w("Add_Activity", "Add faild " + arrayOrder.get(vitri).getId_order());
+//
+                    intent.putExtra("id_order",arrayOrder.get(vitri).getId_order());
+                    startActivity(intent);
+                }
+            });
 
             return convertView;
         }
