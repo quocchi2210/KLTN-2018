@@ -301,7 +301,7 @@ class StoreController extends Controller {
 
 				$affected = DB::table('stores')
 					->join('users', 'stores.idUser', '=', 'users.idUser')
-					->where('idStore', 1)
+					->where('idStore', $store_id)
 					->get();
 
 				myDecrypt($affected);
@@ -1598,9 +1598,8 @@ class StoreController extends Controller {
 
 		//Log::debug('bill_of_lading' . print_r($bill_of_lading, 1));
 
-
 		$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
-			
+
 		if ($result_store->count() > 0) {
 
 			$idStore = $result_store[0]->idStore;
