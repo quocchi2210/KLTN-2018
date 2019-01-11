@@ -94,6 +94,8 @@ class RegisterController extends Controller {
 		$rules = new User;
 		$email = $request->get('email');
 		$username = $request->get('username');
+		$name_store = $request->get('name_store');
+
 		$dataEmail = User::where('email', $email)->first();
 		$dataUsername = User::where('username', $username)->first();
 		if ($dataEmail) {
@@ -120,8 +122,8 @@ class RegisterController extends Controller {
 		// ];
 		// $validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USERS_CREATE'], $message);
 		// if ($validator->fails()) {
-//		 	return $this->errorWithValidation($validator);
-//		 }
+		//		 	return $this->errorWithValidation($validator);
+		//		 }
 		$create = User::create([
 			'fullName' => encrypt($request['name']),
 			'email' => encrypt($request['email']),
@@ -134,7 +136,7 @@ class RegisterController extends Controller {
 		if ($create->idUser) {
 			Store::create([
 				'idUser' => $create->idUser,
-				'nameStore' => encrypt($create['name']),
+				'nameStore' => encrypt($name_store),
 			]);
 			// $this->guard()->login($user);
 			// return redirect(route('home'));
@@ -147,9 +149,7 @@ class RegisterController extends Controller {
 		]);
 
 		$userDecypt = User::find($create->idUser);
-        Mail::to($userDecypt->email)->send(new VerifyMail($userDecypt,$verifyUser));
-
-		
+		Mail::to($userDecypt->email)->send(new VerifyMail($userDecypt, $verifyUser));
 
 		return response()->json([
 			'error' => false,
