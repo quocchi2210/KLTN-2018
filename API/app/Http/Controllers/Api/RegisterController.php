@@ -98,13 +98,13 @@ class RegisterController extends Controller {
 
 		$dataEmail = User::where('email', $email)->first();
 		$dataUsername = User::where('username', $username)->first();
-		if ($dataEmail) {
-			return $this->respondWithErrorMessage('This email has been exists', 2018);
-		}
+		// if ($dataEmail) {
+		// 	return $this->respondWithErrorMessage('This email has been exists', 2018);
+		// }
 
-		if ($dataUsername) {
-			return $this->respondWithErrorMessage('This username has been exists', 2019);
-		}
+		// if ($dataUsername) {
+		// 	return $this->respondWithErrorMessage('This username has been exists', 2019);
+		// }
 
 		// $message = [
 		// 	'name.required' => 'The name is required',

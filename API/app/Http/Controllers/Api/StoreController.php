@@ -8,6 +8,7 @@ use Config;
 use DB;
 use Illuminate\Http\Request;
 use Log;
+use Validator;
 
 class StoreController extends Controller {
 	/**
@@ -76,6 +77,33 @@ class StoreController extends Controller {
 	 */
 	public function insertProfileStore(Request $request) {
 		if ($request->isMethod('post')) {
+
+			$validate = Validator::make(
+				$request->all(),
+				[
+					'name_store' => 'required|min:5|max:255',
+					'type_store' => 'required|min:5|max:255',
+				],
+
+				[
+					'required' => ':attribute Không được để trống',
+					'min' => ':attribute Không được nhỏ hơn :min',
+					'max' => ':attribute Không được lớn hơn :max',
+				],
+
+				[
+					'name_store' => 'Tên cửa hàng',
+				]
+
+			);
+
+			if ($validate->fails()) {
+				return response()->json([
+					'validate' => true,
+					'success' => false,
+					'errors' => $validate->messages(),
+				]);
+			}
 
 			//Log::debug('testtttttt 1111'. print_r($request->all(),1));
 			$name_store = encrypt($request->get('name_store'));
