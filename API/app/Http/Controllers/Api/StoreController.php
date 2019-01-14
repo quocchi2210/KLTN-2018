@@ -204,6 +204,34 @@ class StoreController extends Controller {
 
 	public function updateProfileStore(Request $request) {
 		if ($request->isMethod('post')) {
+
+			$validate = Validator::make(
+				$request->all(),
+				[
+					'name_store' => 'required|min:5|max:255',
+					'type_store' => 'required|min:5|max:255',
+				],
+
+				[
+					'required' => ':attribute Không được để trống',
+					'min' => ':attribute Không được nhỏ hơn :min',
+					'max' => ':attribute Không được lớn hơn :max',
+				],
+
+				[
+					'name_store' => 'Tên cửa hàng',
+				]
+
+			);
+
+			if ($validate->fails()) {
+				return response()->json([
+					'data' => 'validate',
+					'success' => false,
+					'errors' => $validate->messages(),
+				]);
+			}
+
 			$name_store = $request->get('name_store');
 			$type_store = $request->get('type_store');
 			$address_store = $request->get('address_store');
