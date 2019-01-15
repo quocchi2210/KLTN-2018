@@ -10,6 +10,7 @@ use App\VerifyResetUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Log;
 
 class RegisterController extends Controller {
 	/**
@@ -95,9 +96,21 @@ class RegisterController extends Controller {
 		$email = $request->get('email');
 		$username = $request->get('username');
 		$name_store = $request->get('name_store');
+		$check_email_exist = false;
+		// $dataEmail = User::where('email', $email)->first();
+		// $dataUsername = User::where('username', $username)->first();
 
-		$dataEmail = User::where('email', $email)->first();
-		$dataUsername = User::where('username', $username)->first();
+		$users = User::all();
+
+		foreach ($users as $user) {
+
+			//Log::debug("123 " . print_r($user['idUser'], 1));
+			if ($email === $user['email']) {
+
+				$check_email_exist = true;
+			}
+		}
+
 		// if ($dataEmail) {
 		// 	return $this->respondWithErrorMessage('This email has been exists', 2018);
 		// }
@@ -153,7 +166,7 @@ class RegisterController extends Controller {
 
 		return response()->json([
 			'error' => false,
-			'data' => $create,
+			'check_email_exist' => $check_email_exist,
 			'errors' => null,
 		], 200);
 	}

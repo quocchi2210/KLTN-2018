@@ -5,14 +5,12 @@ namespace App;
 use App\Traits\Decryption;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Crypt;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
 
 class User extends Authenticatable implements JWTSubject {
 	use Notifiable;
 	protected $primaryKey = 'idUser';
-    use Decryption;
+	use Decryption;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -36,7 +34,7 @@ class User extends Authenticatable implements JWTSubject {
 		'password',
 		'pinCode',
 		'roleId',
-		'idUser'
+		'idUser',
 	];
 
 	/**
@@ -46,59 +44,61 @@ class User extends Authenticatable implements JWTSubject {
 	 */
 
 	public function token() {
-		return $this->hasOne('App\Token','user_token_id','idUser');
+		return $this->hasOne('App\Token', 'user_token_id', 'idUser');
 	}
 	public function role() {
-		return $this->belongsTo('App\Role','roleId','id');
+		return $this->belongsTo('App\Role', 'roleId', 'id');
 	}
 
-    public function decryptName()
-    {
-        return decrypt($this->attributes['fullName']);
+	public function decryptName() {
+
+		try {
+			return decrypt($this->attributes['fullName']);
+
+		} catch (Exception $e) {
+			Log::debug("myDecrypt " . print_r($e->getMessage(), 1));
+			Log::debug("myDecrypt " . print_r($key, 1));
+
+		}
+
 	}
 
+	/**
+	 * Get the identifier that will be stored in the subject claim of the JWT.
+	 *
+	 * @return mixed
+	 */
+	public function getJWTIdentifier() {
+		return $this->getKey();
+	}
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+	/**
+	 * Return a key value array, containing any custom claims to be added to the JWT.
+	 *
+	 * @return array
+	 */
+	public function getJWTCustomClaims() {
+		return [];
+	}
+	public function store() {
+		return $this->hasOne('App\Store', 'idUser', 'idUser');
+	}
+	public function verifyUser() {
+		return $this->hasOne('App\VerifyResetUser', 'user_id', 'idUser');
+	}
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-    public function store(){
-        return $this->hasOne('App\Store','idUser','idUser');
-    }
-    public function verifyUser()
-    {
-        return $this->hasOne('App\VerifyResetUser','user_id','idUser');
-    }
+	public function deliver() {
+		return $this->hasOne('App\Deliver', 'idUser', 'idUser');
+	}
 
-    public function deliver()
-    {
-        return $this->hasOne('App\Deliver','idUser','idUser');
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-
+	/**
+	 * Return a key value array, containing any custom claims to be added to the JWT.
+	 *
+	 * @return array
+	 */
 
 	protected $hidden = [
-		'password','tokenPasswordRecovery',
+		'password', 'tokenPasswordRecovery',
 	];
 	public $ruleCustom = [
 		'RULE_USERS_CREATE' => [
