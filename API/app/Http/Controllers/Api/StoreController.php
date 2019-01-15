@@ -86,9 +86,9 @@ class StoreController extends Controller {
 				],
 
 				[
-					'required' => ':attribute Không được để trống',
-					'min' => ':attribute Không được nhỏ hơn :min',
-					'max' => ':attribute Không được lớn hơn :max',
+					'required' => ':attribute không được để trống',
+					'min' => ':attribute không được nhỏ hơn :min',
+					'max' => ':attribute không được lớn hơn :max',
 				],
 
 				[
@@ -217,9 +217,9 @@ class StoreController extends Controller {
 				],
 
 				[
-					'required' => ':attribute Không được để trống',
-					'min' => ':attribute Không được nhỏ hơn :min',
-					'max' => ':attribute Không được lớn hơn :max',
+					'required' => ':attribute không được để trống',
+					'min' => ':attribute không được nhỏ hơn :min',
+					'max' => ':attribute không được lớn hơn :max',
 				],
 
 				[
@@ -998,7 +998,7 @@ class StoreController extends Controller {
 						'phone_sender' => 'required|max:255',
 						'name_receiver' => 'required|max:255',
 						'address_receiver' => 'required|max:255',
-						'phone' => 'required|max:255',
+						'phone_receiver' => 'required|max:255',
 						'email' => 'max:255',
 						'description' => 'max:255',
 						'cod' => 'max:255',
@@ -1010,9 +1010,9 @@ class StoreController extends Controller {
 					],
 
 					[
-						'required' => ':attribute Không được để trống',
-						'min' => ':attribute Không được nhỏ hơn :min',
-						'max' => ':attribute Không được lớn hơn :max',
+						'required' => ':attribute không được để trống',
+						'min' => ':attribute không được nhỏ hơn :min',
+						'max' => ':attribute không được lớn hơn :max',
 					],
 
 					[
@@ -1021,7 +1021,7 @@ class StoreController extends Controller {
 						'phone_sender' => 'Số điện thoại người gửi',
 						'name_receiver' => 'Tên người nhận',
 						'address_receiver' => 'Địa chỉ người nhận',
-						'phone' => 'Số điện thoại người nhận',
+						'phone_receiver' => 'Số điện thoại người nhận',
 						'email' => 'Email',
 						'description' => 'Mô tả',
 						'cod' => 'Cod',
@@ -1362,9 +1362,9 @@ class StoreController extends Controller {
 					],
 
 					[
-						'required' => ':attribute Không được để trống',
-						'min' => ':attribute Không được nhỏ hơn :min',
-						'max' => ':attribute Không được lớn hơn :max',
+						'required' => ':attribute không được để trống',
+						'min' => ':attribute không được nhỏ hơn :min',
+						'max' => ':attribute không được lớn hơn :max',
 					],
 
 					[
