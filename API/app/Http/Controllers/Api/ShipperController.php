@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Config;
 use DB;
 use Illuminate\Http\Request;
+use Validator;
 
 class ShipperController extends Controller {
 	/**
