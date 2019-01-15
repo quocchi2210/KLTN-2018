@@ -193,6 +193,38 @@ class ShipperController extends Controller {
 
 			$idUser = auth()->user()->idUser;
 
+			$validate = Validator::make(
+				$request->all(),
+				[
+					'license_plates' => 'required|max:255',
+					'date_of_Birth' => 'max:255',
+					'id_number' => 'required|max:255',
+					'full_name' => 'required|max:255',
+				],
+
+				[
+					'required' => ':attribute không được để trống',
+					'min' => ':attribute không được nhỏ hơn :min',
+					'max' => ':attribute không được lớn hơn :max',
+				],
+
+				[
+					'license_plates' => 'Biển số xe',
+					'date_of_Birth' => 'Ngày sinh nhật',
+					'id_number' => 'Số chứng minh nhân dân',
+					'full_name' => 'Họ và tên',
+				]
+
+			);
+
+			if ($validate->fails()) {
+				return response()->json([
+					'data' => 'validate',
+					'success' => false,
+					'errors' => $validate->messages(),
+				]);
+			}
+
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
 			if ($result_shipper->count() > 0) {
