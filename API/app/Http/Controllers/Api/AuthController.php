@@ -94,21 +94,49 @@ class AuthController extends Controller {
 		$errorCode = $this->apiErrorCodes;
 		$email = $request->get('email');
 		$password = $request->get('password');
-		$rules = new User;
-		$message = [
-			'email.required' => 'The email is required',
-			'email.email' => 'The email must be a valid email address.',
-			'email.regex' => 'The email is not correct format',
-			'password.required' => 'The password is required',
-		];
+		// $rules = new User;
+		// $message = [
+		// 	'email.required' => 'The email is required',
+		// 	'email.email' => 'The email must be a valid email address.',
+		// 	'email.regex' => 'The email is not correct format',
+		// 	'password.required' => 'The password is required',
+		// ];
 
-		$validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USER_CHECK'], $message);
-		if ($validator->fails()) {
-			return $this->errorWithValidation($validator);
+		// $validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USER_CHECK'], $message);
+
+		// if ($validator->fails()) {
+		// 	return $this->errorWithValidation($validator);
+		// }
+		$validate = Validator::make(
+			$request->all(),
+			[
+				'email' => 'required|max:255',
+				'password' => 'required|max:255',
+			],
+
+			[
+				'required' => ':attribute Không được để trống',
+				'min' => ':attribute Không được nhỏ hơn :min',
+				'max' => ':attribute Không được lớn hơn :max',
+			],
+
+			[
+				'email' => 'Email',
+				'password' => 'Mật khẩu',
+			]
+
+		);
+
+		if ($validate->fails()) {
+			return response()->json([
+				'data' => 'validate',
+				'success' => false,
+				'errors' => $validate->messages(),
+			]);
 		}
 
 		$input = $request->only('email', 'password');
-		   
+
 		$jwt_token = null;
 
 		if (!$jwt_token = JWTAuth::attempt($input)) {

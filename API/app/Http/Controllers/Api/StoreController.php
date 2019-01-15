@@ -208,8 +208,12 @@ class StoreController extends Controller {
 			$validate = Validator::make(
 				$request->all(),
 				[
-					'name_store' => 'required|min:5|max:255',
-					'type_store' => 'required|min:5|max:255',
+					'name_store' => 'required|max:255',
+					'type_store' => 'max:255',
+					'address_store' => 'max:255',
+					'description_store' => 'max:255',
+					'start_working_time' => 'max:255',
+					'end_working_time' => 'max:255',
 				],
 
 				[
@@ -220,6 +224,11 @@ class StoreController extends Controller {
 
 				[
 					'name_store' => 'Tên cửa hàng',
+					'type_store' => 'Loại cửa hàng',
+					'address_store' => 'Địa chỉ cửa hàng',
+					'description_store' => 'Mô tả cửa hàng',
+					'start_working_time' => 'Giờ mở cửa',
+					'end_working_time' => 'Giờ đóng cửa',
 				]
 
 			);
@@ -981,6 +990,55 @@ class StoreController extends Controller {
 
 			if ($result_store->count() > 0) {
 
+				$validate = Validator::make(
+					$request->all(),
+					[
+						'name_sender' => 'required|max:255',
+						'address_sender' => 'max:255',
+						'phone_sender' => 'max:255',
+						'name_receiver' => 'max:255',
+						'address_receiver' => 'max:255',
+						'phone' => 'max:255',
+						'email' => 'max:255',
+						'description' => 'max:255',
+						'cod' => 'max:255',
+						'total_weight' => 'min:0|max:255',
+						'id_service_type' => 'max:255',
+						// 'time_delivery' => 'max:255',
+						// 'distance_shipping' => 'max:255',
+						// 'price_service' => 'max:255',
+					],
+
+					[
+						'required' => ':attribute Không được để trống',
+						'min' => ':attribute Không được nhỏ hơn :min',
+						'max' => ':attribute Không được lớn hơn :max',
+					],
+
+					[
+						'name_sender' => 'Tên người gửi',
+						'address_sender' => 'Địa chỉ người gửi',
+						'phone_sender' => 'Số điện thoại người gửi',
+						'name_receiver' => 'Tên người nhận',
+						'address_receiver' => 'Địa chỉ người nhận',
+						'phone' => 'Số điện thoại người nhận',
+						'email' => 'Email',
+						'description' => 'Mô tả',
+						'cod' => 'Cod',
+						'total_weight' => 'Trọng lượng',
+						'id_service_type' => 'Loại dịch vụ',
+					]
+
+				);
+
+				if ($validate->fails()) {
+					return response()->json([
+						'data' => 'validate',
+						'success' => false,
+						'errors' => $validate->messages(),
+					]);
+				}
+
 				$name_sender = $request->get('name_sender');
 				$address_sender = $request->get('address_sender');
 				$phone_sender = $request->get('phone_sender');
@@ -997,8 +1055,9 @@ class StoreController extends Controller {
 
 				$bill_of_lading = 'LUX' . str_random(12);
 
-				$time_delivery = $request->get('time_delivery');
-				$distance_shipping = $request->get('distance_shipping');
+				$time_delivery = $request->get('time_delivery'); // Don't use
+
+				$distance_shipping = $request->get('distance_shipping'); // Don't use
 
 				$price_service = encrypt("1111"); // Don't use
 
@@ -1282,6 +1341,58 @@ class StoreController extends Controller {
 			$result_store = DB::table('stores')->select('idStore')->where('idUser', $idUser)->get();
 			//Log::debug("wtffffffffffffff");
 			if ($result_store->count() > 0) {
+
+				$validate = Validator::make(
+					$request->all(),
+					[
+						'name_sender' => 'required|max:255',
+						'address_sender' => 'max:255',
+						'phone_sender' => 'max:255',
+						'name_receiver' => 'max:255',
+						'address_receiver' => 'max:255',
+						'phone' => 'max:255',
+						'email' => 'max:255',
+						'description' => 'max:255',
+						'cod' => 'max:255',
+						'total_weight' => 'min:0|max:255',
+						'id_service_type' => 'max:255',
+						// 'time_delivery' => 'max:255',
+						// 'distance_shipping' => 'max:255',
+						// 'price_service' => 'max:255',
+					],
+
+					[
+						'required' => ':attribute Không được để trống',
+						'min' => ':attribute Không được nhỏ hơn :min',
+						'max' => ':attribute Không được lớn hơn :max',
+					],
+
+					[
+						'name_sender' => 'Tên người gửi',
+						'address_sender' => 'Địa chỉ người gửi',
+						'phone_sender' => 'Số điện thoại người gửi',
+						'name_receiver' => 'Tên người nhận',
+						'address_receiver' => 'Địa chỉ người nhận',
+						'phone' => 'Số điện thoại người nhận',
+						'email' => 'Email',
+						'description' => 'Mô tả',
+						'cod' => 'Cod',
+						'total_weight' => 'Trọng lượng',
+						'id_service_type' => 'Loại dịch vụ',
+						// 'time_delivery' => 'max:255',
+						// 'distance_shipping' => 'max:255',
+						// 'price_service' => 'max:255',
+					]
+
+				);
+
+				if ($validate->fails()) {
+					return response()->json([
+						'data' => 'validate',
+						'success' => false,
+						'errors' => $validate->messages(),
+					]);
+				}
 
 				$bill_of_lading = $request->get('bill_of_lading');
 				$bill_of_lading = 'LUX' . str_random(12);
