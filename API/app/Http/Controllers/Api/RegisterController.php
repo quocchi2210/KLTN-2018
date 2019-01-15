@@ -96,6 +96,9 @@ class RegisterController extends Controller {
 		$email = $request->get('email');
 		$username = $request->get('username');
 		$name_store = $request->get('name_store');
+		$password = $request->get('password');
+		$password_confirm = $request->get('password_confirm');
+
 		$check_email_exist = false;
 		// $dataEmail = User::where('email', $email)->first();
 		// $dataUsername = User::where('username', $username)->first();
@@ -119,24 +122,40 @@ class RegisterController extends Controller {
 		// 	return $this->respondWithErrorMessage('This username has been exists', 2019);
 		// }
 
-		// $message = [
-		// 	'name.required' => 'The name is required',
-		// 	'name.max' => 'The name may not be greater than 255',
-		// 	'email.required' => 'The email is required',
-		// 	'email.email' => 'The email must be a valid email address.',
-		// 	'email.regex' => 'The email is not correct format',
-		// 	'password.required' => 'The password is required',
-		// 	'password.min' => 'The password must be at least 6.',
-		// 	'date_of_birth.required' => 'The date of birth is required',
-		// 	'date_of_birth.date' => 'The date of birth is not correct format',
-		// 	'gender.required' => 'The gender is required',
-		// 	'gender.regex' => 'The gender must be male or female',
+		$validate = Validator::make(
+			$request->all(),
+			[
+				'email' => 'required|min:5|max:255',
+				'username' => 'required|min:5|max:255',
+				'name_store' => 'required|min:5|max:255',
+				'password' => 'required|min:5|max:255',
+				'password_confirm' => 'required|min:5|max:255',
+			],
 
-		// ];
-		// $validator = Validator::make($request->all(), $rules->ruleCustom['RULE_USERS_CREATE'], $message);
-		// if ($validator->fails()) {
-		//		 	return $this->errorWithValidation($validator);
-		//		 }
+			[
+				'required' => ':attribute không được để trống',
+				'min' => ':attribute không được nhỏ hơn :min',
+				'max' => ':attribute không được lớn hơn :max',
+			],
+
+			[
+				'email' => 'Email',
+				'username' => 'Tên người dùng',
+				'name_store' => 'Tên cửa hàng',
+				'password' => 'Mật khẩu',
+				'password_confirm' => 'Mật khẩu xác nhận',
+			]
+
+		);
+
+		if ($validate->fails()) {
+			return response()->json([
+				'validate' => true,
+				'success' => false,
+				'errors' => $validate->messages(),
+			]);
+		}
+
 		$create = User::create([
 			'fullName' => encrypt($request['name']),
 			'email' => encrypt($request['email']),
