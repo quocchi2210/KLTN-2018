@@ -157,7 +157,7 @@ class RegisterController extends Controller {
 		}
 
 		$create = User::create([
-			'fullName' => encrypt($request['name']),
+			'fullName' => encrypt($request->get("name")),
 			'email' => encrypt($request['email']),
 			'username' => encrypt($request['username']),
 			'password' => bcrypt($request['password']),
