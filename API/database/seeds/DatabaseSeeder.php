@@ -12,11 +12,6 @@ class DatabaseSeeder extends Seeder {
 		$this->call(RoleSeeder::class);
 		$this->call(ServiceTypeSeeder::class);
 		$this->call(OrderStatusSeeder::class);
-
-		$this->call(StoreSeeder::class);
-		$this->call(ShipperSeeder::class);
-		$this->call(OrderSeeder::class);
-
 		$this->call(AdminSeeder::class);
 	}
 }

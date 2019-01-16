@@ -59,6 +59,13 @@ class RegisterController extends Controller {
 	 *     enum={"male", "female"}
 	 *   ),
 	 *   @SWG\Parameter(
+	 *     name="name_store",
+	 *     in="query",
+	 *     description="Name store",
+	 *     type="string",
+	 *     required=true,
+	 *   ),
+	 *   @SWG\Parameter(
 	 *     name="password",
 	 *     in="query",
 	 *     description="Your Password",
@@ -66,7 +73,7 @@ class RegisterController extends Controller {
 	 *     format="password",
 	 *   ),
 	 *     @SWG\Parameter(
-	 *     name="confirm",
+	 *     name="password_confirm",
 	 *     in="query",
 	 *     description="Confirmed",
 	 *     type="string",
@@ -114,6 +121,7 @@ class RegisterController extends Controller {
 			}
 		}
 
+		Log::debug("123 " . print_r($request->get("name"), 1));
 		// if ($dataEmail) {
 		// 	return $this->respondWithErrorMessage('This email has been exists', 2018);
 		// }
