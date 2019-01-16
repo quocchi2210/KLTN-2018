@@ -245,8 +245,10 @@ class StoreController extends Controller {
 			$type_store = $request->get('type_store');
 			$address_store = $request->get('address_store');
 			$description_store = $request->get('description_store');
-			$latitude_store = $address_store['results'][0]['geometry']['location']['lat'];
-			$longitude_store = $address_store['results'][0]['geometry']['location']['lng'];
+
+			$sender = $this->getLatLong($address_store);
+			$latitude_store = $sender['results'][0]['geometry']['location']['lat'];
+			$longitude_store = $sender['results'][0]['geometry']['location']['lng'];
 			$start_working_time = $request->get('start_working_time');
 			$end_working_time = $request->get('end_working_time');
 
