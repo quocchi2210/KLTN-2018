@@ -18,7 +18,7 @@
     </style>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyBVLZZFaDU6nn96cbs59PfMBNXu9ZNdxYE&callback=initMap"
-    async defer"></script>
+    async defer></script>
 
 </head>
 <body>
@@ -71,15 +71,16 @@ var json = {
 function initialize() {
   var map = new google.maps.Map(
     document.getElementById("map"), {
-      center: new google.maps.LatLng(10.7667964, 106.6519856),
+      center: new google.maps.LatLng(13.7667964, 106.6519856),
       zoom: 18,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
   var polyline = new google.maps.Polyline({
-    path: google.maps.geometry.encoding.decodePath(json.overview_polyline.points),
-    map: map,
-    strokeWeight: 8,
-    strokeColor: 'blue',
+      path: google.maps.geometry.encoding.decodePath(json.overview_polyline.points),
+      map: map,
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.00001,
+      strokeWeight: 0
   });
   var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < polyline.getPath().getLength(); i++) {

@@ -47,10 +47,12 @@ class OrderController extends Controller
         if ($bill){
             $idOrderStatus = $this->getidOrderStatus($bill);
             $order = Order::find($idOrderStatus);
+            $store = $order->store;
             if ($order){
                 $status = DB::table('order_status')->where('idStatus',$order->idOrderStatus)->first();
                 if ($status)
-                    return view('tracking.trackingStatus', ['status' => $status->statusName,'bill'=>$bill,'nameReceiver'=>$order['nameReceiver']]);
+                    return view('tracking.trackingStatus', ['status' => $status->statusName,'bill'=>$bill,'nameReceiver'=>$order['nameReceiver'],
+                        'nameStore'=>$store['nameStore']]);
             }
             else
                 return view('handleError.notfoundbill',['bill'=>$bill]);

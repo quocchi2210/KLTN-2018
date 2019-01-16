@@ -55,6 +55,7 @@
                                             <th scope="col">Mã vận đơn</th>
                                             <th scope="col">Địa chỉ giao hàng</th>
                                             <th scope="col">Tổng số tiền</th>
+                                            <th scope="col">Ngày giao hàng dự kiến</th>
                                             <th scope="col">Ngày tạo đơn hàng</th>
                                             <th scope="col">Xóa</th>
                                         </tr>
@@ -68,6 +69,7 @@
                                                 <td>{{$statusOrder->billOfLading}}</td>
                                                 <td>{{$statusOrder->addressReceiver}}</td>
                                                 <td>{{number_format($statusOrder->totalMoney)}} VND</td>
+                                                <td>{{$statusOrder->timeDelivery}}</td>
                                                 <td>{{$statusOrder->created_at}}</td>
                                                 <td nowrap="">
                                                     @if($statusItem->idStatus == 1)
