@@ -40,7 +40,7 @@ class Order extends Model
     ];
     protected static function boot()
     {
-        if (auth()->user()->roleId == 1){
+        if (isset(auth()->user()->roleId) && auth()->user()->roleId == 1){
             parent::boot();
             static::addGlobalScope('idStore', function (Builder $builder) {
                 $builder->where('idStore',auth()->user()->store->idStore);
