@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title> @yield('title')Lux Express</title>
+    <title> @yield('title')Giao hàng C&K</title>
     <link href="{{ asset('layouts/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('layouts/css/icomoon.css') }}" rel="stylesheet">
     <link href="{{ asset('layouts/css/themify-icons.css') }}" rel="stylesheet">
@@ -26,7 +26,7 @@
     <meta name="twitter:image" content="" />
     <meta name="twitter:url" content="" />
     <meta name="twitter:card" content="" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&amp;subset=vietnamese" rel="stylesheet">
 </head><!--/head-->
 
 <style>
