@@ -6,7 +6,7 @@
             <div class="row top25 inboxMain">
                 <div class="row text-center alert alert-info">
                     <div class="col-md-3"><h3>Mã vận đơn: {{$bill}}</h3></div>
-                    <div class="col-md-3"><h3>Cửa hàng: {{$nameReceiver}}</h3></div>
+                    <div class="col-md-3"><h3>Cửa hàng: {{$nameStore}}</h3></div>
                     <div class="col-md-3"><h3>Khách hàng: {{$nameReceiver}}</h3></div>
                     <div class="col-md-3"><h3>Tình trạng: {{$status}}</h3></div>
                 </div>
