@@ -795,7 +795,6 @@ class ShipperController extends Controller {
 			$idShipper = $result_shipper[0]->idShipper;
 
 			$result_order = DB::table('orders')
-				->select('idStore,nameSender,addressReceiver,latitudeReceiver,longitudeSender')
 				->join('stores', 'stores.idStore', '=', 'orders.idStore')
 				->join('users', 'stores.idUser', '=', 'users.idUser')
 				->where('idShipper', $idShipper)
