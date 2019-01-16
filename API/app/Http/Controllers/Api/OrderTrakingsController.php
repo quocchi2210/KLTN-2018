@@ -30,10 +30,11 @@ class OrderTrakingsController extends Controller {
 			$long = $request->get('long');
 			$order_id = $request->get('order_id');
 
-			$idUser = $request->idUser;
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
 			// $lat = 10;
 			// $long = 10;
+			$idUser = auth()->user()->idUser;
 
 			$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
 
@@ -73,8 +74,9 @@ class OrderTrakingsController extends Controller {
 			$long = $request->get('long');
 			$order_id = $request->get('order_id');
 
-			$idUser = $request->idUser;
-			$idUser = 1;
+			// $idUser = $request->idUser;
+			// $idUser = 1;
+			$idUser = auth()->user()->idUser;
 			// $lat = 10;
 			// $long = 10;
 
