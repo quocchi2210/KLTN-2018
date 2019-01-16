@@ -30,7 +30,7 @@
 
                 @elseif($status=="Đã hủy")
 
-                <h1 align="center">Đơn hàng của bạn đã hủy bởi Quản trị</h1>
+                <h1 align="center" style="color: #DC143C">Đơn hàng của bạn đã hủy bởi Quản trị</h1>
 
                 @endif
 
