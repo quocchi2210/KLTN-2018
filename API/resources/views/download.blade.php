@@ -9,12 +9,12 @@
                     <div class="tab">
                         <div class="tab-content">
                             <div class="tab-content-inner active" data-content="signup">
-                                <h3>Get Lux Application</h3>
+                                <h3>Tải ứng dụng</h3>
                                 <a href="">
                                     <img id="getAndroid" src="images/icon-android.svg"/>
                                 </a>
-                                <p>Continue with
-                                <a href="{{route('home')}}">Create shipment on Website</a></p>
+                                <p>Hoặc tiếp tục
+                                <a href="{{route('home')}}">Tạo đơn hàng trên Website</a></p>
                             </div>
                         </div>
                     </div>
