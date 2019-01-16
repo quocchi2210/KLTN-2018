@@ -29,6 +29,8 @@ Route::group(['middleware' => 'jwt'], function () {
 		Route::post('updateProfileShipper', "Api\ShipperController@updateProfileShipper");
 		Route::post('showProfileShipper', "Api\ShipperController@showProfileShipper");
 		Route::post('searchBilloflading', "Api\ShipperController@searchBilloflading");
+		Route::post('showAllGeoStore', "Api\ShipperController@showAllGeoStore");
+
 	});
 
 	Route::group(['prefix' => 'store'], function () {

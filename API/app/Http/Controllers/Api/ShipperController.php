@@ -768,4 +768,55 @@ class ShipperController extends Controller {
 		}
 	}
 
+	/**
+	 * @SWG\POST(
+	 *   path="/api/shipper/showAllGeoStore",
+	 *     tags={"Shipper"},
+	 *   summary="Show Profile",
+	 *   @SWG\Response(
+	 *     response=200,
+	 *     description="A list with products"
+	 *   ),
+	 *   @SWG\Response(
+	 *     response="default",
+	 *     description="an ""unexpected"" error"
+	 *   ),
+	 *	 security={{"api_key":{}}}
+	 * )
+	 */
+
+	public function showAllGeoStore() {
+		$idUser = auth()->user()->idUser;
+
+		$result_shipper = DB::table('shippers')->select('idShipper')->where('idUser', $idUser)->get();
+
+		if ($result_shipper->count() > 0) {
+
+			$idShipper = $result_shipper[0]->idShipper;
+
+			$result_order = DB::table('orders')
+				->join('stores', 'stores.idStore', '=', 'orders.idStore')
+				->join('users', 'stores.idUser', '=', 'users.idUser')
+				->where('idShipper', $idShipper)
+				->get();
+
+			myDecrypt($result_order);
+
+			return response()->json([
+				'error' => false,
+				'data' => $result_order,
+				//'data' => $result_order,
+				'errors' => null,
+			], 200);
+
+		} else {
+			return response()->json([
+				'error' => true,
+				'data' => null,
+				'errors' => null,
+			], 400);
+		}
+
+	}
+
 }
