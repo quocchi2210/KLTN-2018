@@ -34,6 +34,7 @@ class Order extends Model
         'distanceShipping',
         'idOrderStatus',
         'idServiceType',
+        'idShipper',
         'totalWeight',
         'priceService',
         'totalMoney',
@@ -48,6 +49,10 @@ class Order extends Model
         }
     }
 
+    public function deliver()
+    {
+        return $this->belongsTo('App\Deliver','idShipper','idShipper');
+    }
 
     public function status()
     {

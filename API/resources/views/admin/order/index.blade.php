@@ -43,8 +43,12 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th scope="col">Cửa hàng</th>
+                                                            <th scope="col">Tên người nhận</th>
                                                             <th scope="col">Mã vận đơn</th>
+                                                            <th scope="col">Địa chỉ giao hàng</th>
+                                                            <th scope="col">Ngày giao hàng dự kiến</th>
                                                             <th scope="col">Tổng tiền</th>
+                                                            <th scope="col">Tên người giao hàng</th>
                                                             <th scope="col">Ngày tao đơn hàng</th>
                                                             <th scope="col">Xác nhận</th>
                                                         </tr>
@@ -54,8 +58,18 @@
                                                             <tr>
                                                                 <td scope="row">{{$key + 1}}</td>
                                                                 <td>{{$statusOrder->store->nameStore}}</td>
+                                                                <td>{{$statusOrder->nameReceiver}}</td>
                                                                 <td>{{$statusOrder->billOfLading}}</td>
-                                                                <td>{{$statusOrder->totalMoney}}</td>
+                                                                <td>{{$statusOrder->addressReceiver}}</td>
+                                                                <td>{{$statusOrder->timeDelivery}}</td>
+                                                                <td>{{number_format($statusOrder->totalMoney)}} VND</td>
+                                                                @if($statusOrder->idShipper)
+                                                                <td>{{$statusOrder->deliver->user->fullName}}</td>
+                                                                @endif
+                                                                @if(!$statusOrder->idShipper)
+                                                                <td></td>
+                                                                @endif
+                                                                <td>{{$statusOrder->timeDelivery}}</td>
                                                                 <td>{{$statusOrder->created_at}}</td>
                                                                 <td nowrap="">
                                                                     {{--@if($statusItem->id == 1)--}}
