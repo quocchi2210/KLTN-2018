@@ -18,17 +18,17 @@
                 @include('tracking.steps.confirm')
 
 
-                @elseif($status->status=="Đã lấy hàng")
+                @elseif($status=="Đã lấy hàng")
                 @include('tracking.steps.pickup')
 
 
-                @elseif($status->status=="Đang giao hàng")
+                @elseif($status=="Đang giao hàng")
                 @include('tracking.steps.delivery')
 
-                @elseif($status->status=="Đã giao hàng")
+                @elseif($status=="Đã giao hàng")
                 @include('tracking.steps.done')
 
-                @elseif($status->status=="Đã hủy")
+                @elseif($status=="Đã hủy")
 
                 <h1 align="center">Đơn hàng của bạn đã hủy bởi Quản trị</h1>
 

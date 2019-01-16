@@ -69,7 +69,6 @@
                                                                 @if(!$statusOrder->idShipper)
                                                                 <td></td>
                                                                 @endif
-                                                                <td>{{$statusOrder->timeDelivery}}</td>
                                                                 <td>{{$statusOrder->created_at}}</td>
                                                                 <td nowrap="">
                                                                     {{--@if($statusItem->id == 1)--}}
